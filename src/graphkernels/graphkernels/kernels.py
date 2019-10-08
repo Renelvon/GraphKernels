@@ -100,14 +100,19 @@ def CalculateKStepRandomWalkKernel(G, par=1):
 # === Advanced Kernels ===
 
 def CalculateWLKernel(G, par=5):
-    """Weisfeiler-Lehman Kernel Kernel"""
+    """Weisfeiler-Lehman Kernel
 
-    # Extract graph info
-    E, V_label, V_count, E_count, D_max = GetGKInput(G)
+    Parametres
+    ----------
+    par : number of WL iterations
+    """
+    if not isinstance(par, int):
+        raise TypeError('Number of WL iterations must be an integer')
 
-    #par = nuber of WL iterations
-    par = int(par)
+    if par < 0:
+        raise ValueError('Number of WL iterations must be non-negative')
 
+    E, V_label, V_count, E_count, D_max = GetGKInput(G) # Extract graph info.
     return gkCpy.WLKernelMatrix(E, V_label, V_count, E_count, D_max, par)
 
 
