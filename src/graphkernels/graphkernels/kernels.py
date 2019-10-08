@@ -134,24 +134,25 @@ def CalculateGraphletKernel(G, par=4):
 
 
 def CalculateConnectedGraphletKernel(G, par=4):
-    """Connected Graphlet Kernel"""
+    """Connected Graphlet Kernel
 
-    # If k<3 then assign k=3
-    if par < 3:
+    Parametres
+    ----------
+    par : size of graphlets used (k)
+    """
+    if not isinstance(par, int):
+        raise TypeError('Size of graphlets must be an integer')
 
-        par = 3
-        print("Warning: k=3 is used (k = 3, 4 or 5 is supported)")
+    if par not in (3, 4, 5):
+        raise ValueError(
+            "Connected Graphlet kernel supports only: k = 3, 4 or 5"
+        )
 
-    # If k>5 then assign k=5
-    if par > 5:
-
-        par = 5
-        print("Warning: k=5 is used (k = 3, 4 or 5 is supported)")
-
-    # Extract graph info
-    adj_mat, adj_list = GetAdjMatList(G)
-
+    adj_mat, adj_list = GetAdjMatList(G) # Extract graph info.
     return gkCpy.CalculateConnectedGraphletKernelPy(adj_mat, adj_list, par)
+
+
+
 
 
 def CalculateShortestPathKernel(G):
