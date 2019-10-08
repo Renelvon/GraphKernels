@@ -10,6 +10,8 @@ from setuptools import setup, Extension
 import pkgconfig
 import numpy
 
+import GKextCPy
+
 
 def get_include_dirs():
 
@@ -64,6 +66,6 @@ setup(
     python_requires='>=3.4',
     setup_requires=['pkgconfig', 'numpy'],
     url='https://github.com/BorgwardtLab/GraphKernels',
-    version='0.5.0', # TODO: Import version from init file.
+    version=GKextCPy.__version__,
     zip_safe=False
 )
