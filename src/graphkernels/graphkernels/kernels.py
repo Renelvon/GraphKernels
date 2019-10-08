@@ -117,24 +117,19 @@ def CalculateWLKernel(G, par=5):
 
 
 def CalculateGraphletKernel(G, par=4):
-    """Graphlet Kernel"""
+    """Graphlet Kernel
 
-    # If k<3 then assign k=3
-    if par < 3:
+    Parametres
+    ----------
+    par : size of graphlets used (k)
+    """
+    if not isinstance(par, int):
+        raise TypeError('Size of graphlets must be an integer')
 
-        par = 3
-        print("Warning: k=3 is used (k = 3 or 4 is supported)")
+    if par not in (3, 4):
+        raise ValueError("Graphlet kernel supports only: k = 3 or 4")
 
-    # If k>4 then assign k=4
-    if par > 4:
-
-        par = 4
-        print("Warning: k=4 is used (k = 3 or 4 is supported)")
-
-    # Extract graph info
-    adj_mat, adj_list = GetAdjMatList(G)
-    par = int(par)
-
+    adj_mat, adj_list = GetAdjMatList(G) # Extract graph info.
     return gkCpy.CalculateGraphletKernelPy(adj_mat, adj_list, par)
 
 
