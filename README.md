@@ -1,5 +1,7 @@
 # GraphKernels
 
+[![Build Status](https://travis-ci.org/Renelvon/GraphKernels.svg?branch=master)](https://travis-ci.org/Renelvon/GraphKernels)
+
 A large collection of source code for computing kernels on graph. The src folder contains the following elements:
 
 - graphkernels is a Python package for graph kernels. The Python interface is created from a C++ source code that is wrapped with SWIG (http://www.swig.org)
@@ -15,7 +17,7 @@ The Python and R packages are described at:
 
 - M. Sugiyama, M.E. Ghisu, F. Llinares-López and K. Borgwardt. **graphkernels: R and Python packages for graph comparison**. Bioinformatics, 2017. 
 
-The paper can be found [here](https://academic.oup.com/bioinformatics/advance-article/doi/10.1093/bioinformatics/btx602/4209994) 
+The paper can be found [here](https://academic.oup.com/bioinformatics/article/34/3/530/4209994/)
 
 # Installation
 
