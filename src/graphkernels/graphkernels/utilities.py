@@ -1,5 +1,5 @@
 """
-Utility funcitons for the graph kernels package
+Utility functions for the graph kernels package
 """
 
 import numpy as np
@@ -14,11 +14,11 @@ def GetGraphInfo(g):
     E = np.zeros(shape=(len(g.es), 2))
     for i in range(len(g.es)):
         E[i, :] = g.es[i].tuple
-    ## there are multiple edge attributes
+    # there are multiple edge attributes
     if len(g.es.attributes()) > 1:
         print("There are multiple edge attributes! The first attribute %s is used" % g.es.attributes()[0])
 
-    ## an edge attribute is missing
+    # an edge attribute is missing
     if len(g.es.attributes()) == 0:
         g.es["label"] = 1
 
