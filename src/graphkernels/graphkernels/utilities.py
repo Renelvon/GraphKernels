@@ -39,6 +39,7 @@ def GetGraphInfo(g):
         v_attr_name = 'label'
     else:
         v_attr_name = g.vs.attributes()[0]
+        # FIXME https://github.com/AntoinePrv/GraphKernels/commit/ed097a3680c9e0ee91913dc2d2d4e2efa4a32b32
 
     v_attr_values = np.asarray(g.vs[v_attr_name]).reshape(len(g.vs), 1).astype(int)
 
