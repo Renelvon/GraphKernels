@@ -169,17 +169,7 @@ def _floyd_transform(g):
 def CalculateShortestPathKernel(G):
     """Shortest Path Kernel"""
 
-    G_floyd = []
-    for i in range(len(G)):
-
-        g_floyd_am = G[i].shortest_paths_dijkstra()
-        g_floyd_am = np.asarray(g_floyd_am).reshape(len(g_floyd_am), len(g_floyd_am))
-        g = Graph.Adjacency((g_floyd_am > 0).tolist())
-        g.es['label'] = g_floyd_am[g_floyd_am.nonzero()]
-        g.vs['id'] = np.arange(len(G[i].vs['label']))
-        g.vs['label'] = G[i].vs['label']
-        G_floyd.append(g)
-
-    G_floyd = np.array(G_floyd)
+    floyd_graphs = tuple(_floyd_transform(g) for g in G)
+    G_floyd = np.array(floyd_graphs)
 
     return CalculateKStepRandomWalkKernel(G_floyd, par=(0, 1))
