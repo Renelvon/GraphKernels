@@ -1,13 +1,10 @@
 """
-In this demo we show how to
-calculate the kernel matrices
-on the MUTAG data
+In this demo we show how to calculate the kernel matrices on the MUTAG data.
 """
 
-import graphkernels.kernels as gk
-
-import IPython as ip
 import numpy as np
+
+from graphkernels import kernels as gk
 
 # Load data
 # comment next line if data.mutag is in a different folder
@@ -16,9 +13,9 @@ mutag_list = np.load("graphkernels/data.mutag")
 # Uncomment next line if data.mutag is in your current folder
 #mutag_list = np.load("data.mutag")
 
-### ALL KERNELS COMPUTE
+# Compute all kernels
 K1 = gk.CalculateEdgeHistKernel(mutag_list)
-K2 = gk.CalculateVertexHistKernel(mutag_list) 
+K2 = gk.CalculateVertexHistKernel(mutag_list)
 K3 = gk.CalculateVertexEdgeHistKernel(mutag_list)
 K4 = gk.CalculateVertexVertexEdgeHistKernel(mutag_list)
 K5 = gk.CalculateEdgeHistGaussKernel(mutag_list)
@@ -31,4 +28,3 @@ K11 = gk.CalculateWLKernel(mutag_list)
 K12 = gk.CalculateConnectedGraphletKernel(mutag_list, 4)
 K13 = gk.CalculateGraphletKernel(mutag_list, 4)
 K14 = gk.CalculateShortestPathKernel(mutag_list)
-
