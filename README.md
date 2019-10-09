@@ -2,103 +2,92 @@
 
 [![Build Status](https://travis-ci.org/Renelvon/GraphKernels.svg?branch=master)](https://travis-ci.org/Renelvon/GraphKernels)
 
-A large collection of source code for computing kernels on graph. The src folder contains the following elements:
+`graphkernels` is a Python package for computing various graph kernels. The [backend](see https://github.com/mahito-sugiyama/graph-kernels) is coded in C++ and exposed to Python through [SWIG](http://www.swig.org/).
 
-- graphkernels is a Python package for graph kernels. The Python interface is created from a C++ source code that is wrapped with SWIG (http://www.swig.org)
-- GKextCPy is the package created to build the extension module for the wrapper from C++ to Python
-
-# graphkernels 
-
-`graphkernels` is a Python package for computing various graph kernels. 
-
-For the C++ implementation and R package, please refer to https://github.com/mahito-sugiyama/graph-kernels.
+- `GKextCPy` is the extension created to build the extension module for the wrapper from C++ to Python
 
 The Python and R packages are described at:
 
-- M. Sugiyama, M.E. Ghisu, F. Llinares-López and K. Borgwardt. **graphkernels: R and Python packages for graph comparison**. Bioinformatics, 2017. 
+- M. Sugiyama, M.E. Ghisu, F. Llinares-López and K. Borgwardt. **graphkernels: R and Python packages for graph comparison**. Bioinformatics, 2017.
 
 The paper can be found [here](https://academic.oup.com/bioinformatics/article/34/3/530/4209994/)
 
-# Installation
+## Installation
 
-The users can installl the pakage via pip, by typing in a terminal
+### Installing dependencies
 
-    $ pip install graphkernels 
+`graphkernels` requires the following dependencies to be pre-installed in your local environment:
+
+- Python bindings for [igraph](https://pypi.org/project/python-igraph/)
+- [NumPy](https://pypi.org/project/numpy/)
+- [Eigen3](http://eigen.tuxfamily.org/)
+
+During setup, you will also need the following dependencies:
+
+- a C++ compiler (e.g. [gcc](http://gcc.gnu.org), [XCode](https://developer.apple.com/xcode/))
+- [pkg-config](https://www.freedesktop.org/wiki/Software/pkg-config/) and the respective [Python bindings](https://pypi.org/project/pkgconfig/)
+- [SWIG](http://www.swig.org)
+
+We recommend the following steps for installing the dependencies (except for the C++ compiler):
+
+- On Ubuntu 18.04 LTS:
+
+    `$ sudo apt-get install libeigen3-dev python3-igraph python3-numpy python3-pkgconfig swig`
+
+Some of the packages might not be available in older distributions.
+
+- On MacOSX:
+
+    `$ brew install eigen pkg-config`
+
+Some dependencies may be skipped without problem, because they are automatically downloaded and installed by `pip`.
+
+To install the package through [PyPI](https://pypi.org/), type:
+
+    $ pip3 install graphkernels
+
+It is recommended that version `10` or later of `pip` is used. To see which version is installed, type:
+
+    $ pip3 --version
+
+If you are using an older version, you can locally upgrade `pip` by typing:
+
+    $ python3 -m pip install --user --upgrade-pip
+
+and retrying the `graphkernels` installation.
 
 Alternatively, the package can be build from source. After downloading the source code from GitHub
 
-    $ git clone https://github.com/BorgwardtLab/GraphKernels.git
+    $ git clone https://github.com/Renelvon/GraphKernels.git
 
 users can use the `setup.py` script to install the package
 
-    $ cd GraphKernels/src/graphkernels
-    $ python setup.py build
-    $ python setup.py install --user
-
-
-In case of error in any of the above steps, please make sure that all requirements are satisfied. The install requirements section below provide instruction to install all the dependencies, in case you don't have them in your environment.
+    $ cd GraphKernels/
+    $ python3 setup.py build
+    $ python3 setup.py install --user
 
 You should also make sure that you're installing the latest release of our package, in case you've had a previous version installed. To make sure the extension and package are not taken from your cache, you can use the `--no-cache-dir` option and install the package as:
 
-`$ pip --no-cache-dir install graphkernels`
+    $ pip3 --no-cache-dir install graphkernels`
 
-# Installing the requirements
+## References
 
-Note that graphkernels is a Python library relying on C++ source code. The wrapper is built upon an extension  which need to be installed in order for the package to work (automatically handled). If you experience problems with the installation above, you might be missing one or more of the dependencies tools, which need to be pre-installed in your environment.  
+The following SWIG interface files (`.i`) were obtained from other projects:
 
-- a C++ compiler (e.g. gcc, http://gcc.gnu.org/install/, XCode)
-- eigen3 (http://eigen.tuxfamily.org/index.php?title=Main_Page#Download)
-- pkg-config (https://www.freedesktop.org/wiki/Software/pkg-config/)
+- `numpy.i` was obtained from the [SWIG guide](https://docs.scipy.org/doc/numpy/reference/swig.interface-file.html) of the SciPy project. We have used the version shipped with `numpy==1.11` to be as backwards compatible as possible.
+- A compatible `eigen.i` was obtained from the [Eigen to NumPy with SWIG](https://github.com/rdeits/swig-eigen-numpy) project.
 
-We recommend the following steps for installing the dependencies
+## Usage
 
-1) Install eigen3
-    
-    On Ubuntu:
-    
-    `$ sudo apt-get install libeigen3-dev`
-    
-    On MacOSX: 
-    
-    `$ brew install eigen`
-    
-2) Install pkg-config
+The `tutorial` folder should help with getting started using the package. There, you can also find an example script for computing graph kernels through our package on a benchmark dataset.
 
-    On Ubuntu:
-    
-    `$ sudo apt-get install pkg-config`
-    
-    On MacOSX
-    
-    `$ brew install pkg-config`
-  
-Additional Python dependencies are automatically handled when installing the `graphkernels` package: 
+## Compatibility
 
-- GKextCPy
-- igraph
-- numpy
+This version of `graphkernels` aims to be fast, user-friendly and backwards-compatible (in that order). Accordingly, support for Python 2 in `graphkernels` has been dropped because it is reaching [End-Of-Life](https://pythonclock.org/) very soon. If you care about speed enough to use a C++ backend for your project, you should care as much about future portability and give serious thought before continuing development on Python 2. Most of the [ML projects](https://python3statement.org/) will drop support for Python 2 soon.
 
-# GKextCPY
+## Citation
 
-`GKextCPy` is a python extension building the wrapper from C++ to Python and necesssary to compile the graphkernels package.
-
-# Installation
-
-If you install the `graphkernels` package this extension is automatically installed for you. However, you can install it independently via pip:
-
-`pip install GKextCPy`
-
-# References
-
-The interface files which allow the wrapping of eigen and numpy (files numpy.i and eigen.i) are imported from the `PyMesh` project at https://github.com/qnzhou/PyMesh/tree/master/eigen_wrapper
-
-# Usage
-
-We provide a short [tutorial](https://github.com/eghisu/GraphKernels/tree/master/Tutorial) for the basic usage of our package; there, you can also find an example script for computing graph kernels through our package on a benchmark dataset. 
-
-# Citation
-
-If you use the `graphkernels` package in your projects please cite our work
+If you use the `graphkernels` package in your projects please cite our work as follows:
 
 ```
 @article{Sugiyama-2017-Bioinformatics,
@@ -113,3 +102,5 @@ doi = {10.1093/bioinformatics/btx602},
 URL = {http://dx.doi.org/10.1093/bioinformatics/btx602},
 }
 ```
+
+If our project has made your life easier, we will be happy to receive your feedback, through e-mail or an issue on GitHub.
