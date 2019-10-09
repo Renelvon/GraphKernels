@@ -54,6 +54,7 @@ def main():
         ],
         description='Package for computing graph kernels',
         ext_modules=[GKextCPy_module],
+        include_package_data=True,
         install_requires=['numpy', 'pkgconfig', 'python-igraph'],
         license='ETH Zurich',
         long_description='', # TODO: Fill me!
