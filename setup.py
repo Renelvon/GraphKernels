@@ -64,13 +64,20 @@ def main():
         description='Package for computing graph kernels',
         ext_modules=[GKextCPy_module],
         include_package_data=True,
-        install_requires=['numpy', 'pkgconfig', 'python-igraph'],
+        install_requires=[
+            'numpy>=1.11',
+            'pkgconfig',
+            'python-igraph'
+        ],
         license='ETH Zurich',
         long_description='', # TODO: Fill me!
         name='GKextCPy',
         packages=['GKextCPy'],
         python_requires='>=3.4',
-        setup_requires=['pkgconfig', 'numpy'],
+        setup_requires=[
+            'numpy>=1.11',
+            'pkgconfig'
+        ],
         tests_require=['cpplint', 'pylint'],
         url='https://github.com/BorgwardtLab/GraphKernels',
         version=GKextCPy.__version__,
