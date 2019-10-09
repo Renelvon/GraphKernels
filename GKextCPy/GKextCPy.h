@@ -20,7 +20,6 @@
 
 typedef Eigen::Triplet<double> T;
 
-using namespace Eigen;
 
 using std::accumulate;
 using std::greater;
@@ -29,6 +28,13 @@ using std::max;
 using std::min;
 using std::set;
 using std::vector;
+
+using Eigen::FullPivLU;
+using Eigen::VectorXd;
+using Eigen::MatrixXd;
+using Eigen::MatrixXi;
+using Eigen::SelfAdjointEigenSolver;
+using Eigen::SparseMatrix;
 
 double selectLinearGaussian(vector<int>& h1, vector<int>& h2, double sigma);
 
