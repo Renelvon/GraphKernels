@@ -5,6 +5,7 @@
 *.o
 *.pyc
 *.so
+*_wrap.cpp
 
 *.egg-info
 build
