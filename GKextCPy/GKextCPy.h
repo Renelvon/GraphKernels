@@ -2,25 +2,29 @@
  * All rigths reserved.
  */
 
-#include <stdint.h>
-#define Int int32_t
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <set>
 #include <math.h>
-#include <algorithm>
-#include <iterator>
-#include <numeric>
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-#include <Eigen/Core>
-#include <Eigen/Sparse>
-#include <Eigen/LU>
-#include <Eigen/Eigenvalues>
+
+#include <algorithm>
+#include <fstream>
+#include <iostream>
+#include <iterator>
+#include <numeric>
+#include <set>
+#include <vector>
+
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/resource.h>
+
+#include <Eigen/Core>
+#include <Eigen/Eigenvalues>
+#include <Eigen/LU>
+#include <Eigen/Sparse>
+
+#define Int int32_t
 
 typedef Eigen::Triplet<double> T;
 
