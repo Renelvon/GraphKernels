@@ -4,6 +4,7 @@
 setup.py file for SWIG
 """
 
+from os import path
 from setuptools import setup, Extension
 
 import pkgconfig
@@ -24,9 +25,16 @@ def get_include_dirs():
     return [np_include_dir, eigen3_include_dir]
 
 
+here = path.abspath(path.dirname(__file__))
+gk_dir = path.join(here, 'GKextCPy')
+
+
 GKextCPy_module = Extension(
     '_GKextCPy',
-    sources=['GKextCPy_wrap.cxx', 'GKextCPy.cpp'],
+    sources=[
+        path.join(gk_dir, 'GKextCPy_wrap.cxx'),
+        path.join(gk_dir, 'GKextCPy.cpp'),
+    ],
     swig_opts=['-c++'],
     extra_compile_args=['-std=c++11', '-O3'],
     include_dirs=get_include_dirs()
@@ -51,6 +59,7 @@ setup(
     license='ETH Zurich',
     long_description='', # TODO: Fill me!
     name='GKextCPy',
+    package_dir={'': 'GKextCPy'},
     py_modules=['GKextCPy'],
     python_requires='>=3.4',
     setup_requires=['pkgconfig', 'numpy'],
