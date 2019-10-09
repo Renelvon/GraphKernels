@@ -1,45 +1,53 @@
 #!/usr/bin/env python3
 
 """
-Setup script for GKextCPy package. Uses by SWIG
+Setup script for GKextCPy package. Uses SWIG.
 """
 
 from os import path
-from setuptools import setup, Extension
+import sys
 
+import numpy as np
 import pkgconfig
-import numpy
+from setuptools import setup, Extension
 
 import GKextCPy
 
 
-def get_include_dirs():
-    if not pkgconfig.exists('eigen3'):
-        raise Exception('Missing `eigen3` library. Please install it using the package manager of your operating system')
+def get_eigen_include_dir():
+    try:
+        cflags = pkgconfig.cflags('eigen3')
+    except pkgconfig.PackageNotFoundError:
+        print(
+            """
+            Missing `eigen3` library. Please install it using the
+            package manager of your operating system.
+            """,
+            file=sys.stderr
+        )
+        raise
 
-    np_include_dir = numpy.get_include()
-
-    # Throw away the `-I` part of the `pkgconfig` output
-    # because it is not part of the include directory.
-    eigen3_include_dir = pkgconfig.cflags('eigen3')[2:]
-
-    return [np_include_dir, eigen3_include_dir]
+    # Throw away the `-I` part; it is not part of the include directory.
+    return cflags[2:]
 
 
-gk_dir = path.join(path.dirname(__file__), 'GKextCPy')
+GK_DIR = path.join(path.dirname(__file__), 'GKextCPy')
 
 GKextCPy_module = Extension(
     '_GKextCPy',
     sources=[
         # Interface file
-        path.join(gk_dir, 'GKextCPy.i'),
+        path.join(GK_DIR, 'GKextCPy.i'),
 
         # Implementation file
-        path.join(gk_dir, 'GKextCPy.cpp'),
+        path.join(GK_DIR, 'GKextCPy.cpp'),
     ],
     swig_opts=['-c++', '-Wall', '-builtin', '-O', '-py3'],
     extra_compile_args=['-std=c++11', '-O3'],
-    include_dirs=get_include_dirs()
+    include_dirs=[
+        get_eigen_include_dir(),
+        np.get_include(),
+    ]
 )
 
 
