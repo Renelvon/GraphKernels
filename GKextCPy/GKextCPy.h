@@ -5,22 +5,11 @@
 #ifndef GKEXTCPY_GKEXTCPY_H_
 #define GKEXTCPY_GKEXTCPY_H_
 
-#include <math.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <string.h>
-
 #include <algorithm>
-#include <fstream>
-#include <iostream>
-#include <iterator>
+#include <functional>
 #include <numeric>
 #include <set>
 #include <vector>
-
-#include <sys/types.h>
-#include <sys/time.h>
-#include <sys/resource.h>
 
 #include <Eigen/Core>
 #include <Eigen/Eigenvalues>
