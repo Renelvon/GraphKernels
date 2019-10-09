@@ -30,7 +30,13 @@ typedef Eigen::Triplet<double> T;
 
 using namespace Eigen;
 
-using namespace std;
+using std::accumulate;
+using std::greater;
+using std::iota;
+using std::max;
+using std::min;
+using std::set;
+using std::vector;
 
 double selectLinearGaussian(vector<int>& h1, vector<int>& h2, double sigma);
 
@@ -170,4 +176,3 @@ MatrixXd CalculateConnectedGraphletKernelPy(
     vector<MatrixXi>& graph_adj_all,
     vector<vector<vector<int>>>& graph_adjlist_all,
     int k);
-
