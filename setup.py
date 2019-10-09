@@ -26,9 +26,7 @@ def get_include_dirs():
     return [np_include_dir, eigen3_include_dir]
 
 
-here = path.abspath(path.dirname(__file__))
-gk_dir = path.join(here, 'GKextCPy')
-
+gk_dir = path.join(path.dirname(__file__), 'GKextCPy')
 
 GKextCPy_module = Extension(
     '_GKextCPy',
