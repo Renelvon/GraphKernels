@@ -2,6 +2,9 @@
  * All rigths reserved.
  */
 
+#ifndef GKEXTCPY_GKEXTCPY_H_
+#define GKEXTCPY_GKEXTCPY_H_
+
 #include <math.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -176,3 +179,5 @@ MatrixXd CalculateConnectedGraphletKernelPy(
     vector<MatrixXi>& graph_adj_all,
     vector<vector<vector<int>>>& graph_adjlist_all,
     int k);
+
+#endif  // GKEXTCPY_GKEXTCPY_H_
