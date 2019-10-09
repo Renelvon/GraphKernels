@@ -2,13 +2,7 @@
  * All rigths reserved.
  */
 
-#define Int int32_t
 #include "GKextCPy.h"
-
-using namespace Eigen;
-typedef Eigen::Triplet<double> T;
-
-using namespace std;
 
 // =================================================================== //
 // ==================== Functions used in kernels ==================== //
