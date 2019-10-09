@@ -1,6 +1,6 @@
-/*
-Header file for the graphkernels module
-*/
+/* Copyright (c) 2018-2019 the `graphkernels` developers
+ * All rigths reserved.
+ */
 
 #include <stdint.h>
 #define Int int32_t
