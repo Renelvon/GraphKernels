@@ -1,0 +1,8 @@
+recursive-include graphkernels *.py *.cpp *.cxx *.h *.i
+
+include AUTHORS.md
+include LICENSE.md
+include README.md
+
+include pyproject.toml
+include requirements.txt
