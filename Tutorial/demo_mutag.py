@@ -1,30 +1,54 @@
 """
-In this demo we show how to calculate the kernel matrices on the MUTAG data.
+Demo: Calculate the kernel matrices on the MUTAG data.
 """
 
-import numpy as np
+from os import path
+
+from igraph import Graph
 
 from graphkernels import kernels as gk
 
-# Load data
-# comment next line if mutag_pydata.npy is in a different folder
-mutag_list = np.load("graphkernels/mutag_pydata.npy")
+N_GRAPHS = 188
 
-# Uncomment next line if mutag_pydata.npy is in your current folder
-#mutag_list = np.load("mutag_pydata.npy")
+MUTAG_DIR = 'mutag'
+THIS_DIR = path.dirname(__file__)
 
-# Compute all kernels
-K1 = gk.CalculateEdgeHistKernel(mutag_list)
-K2 = gk.CalculateVertexHistKernel(mutag_list)
-K3 = gk.CalculateVertexEdgeHistKernel(mutag_list)
-K4 = gk.CalculateVertexVertexEdgeHistKernel(mutag_list)
-K5 = gk.CalculateEdgeHistGaussKernel(mutag_list)
-K6 = gk.CalculateVertexHistGaussKernel(mutag_list)
-K7 = gk.CalculateVertexEdgeHistGaussKernel(mutag_list)
-K8 = gk.CalculateGeometricRandomWalkKernel(mutag_list)
-K9 = gk.CalculateExponentialRandomWalkKernel(mutag_list)
-K10 = gk.CalculateKStepRandomWalkKernel(mutag_list)
-K11 = gk.CalculateWLKernel(mutag_list)
-K12 = gk.CalculateConnectedGraphletKernel(mutag_list, 4)
-K13 = gk.CalculateGraphletKernel(mutag_list, 4)
-K14 = gk.CalculateShortestPathKernel(mutag_list)
+
+def load_mutag_graphs():
+    paths = (
+        path.join(MUTAG_DIR, ('mutag_%d.graphml' % i))
+        for i in range(1, N_GRAPHS + 1)
+    )
+    return tuple(Graph.Read_GraphML(path) for path in paths)
+
+
+def compute_all_kernels(graphs):
+    return (
+        gk.CalculateEdgeHistKernel(graphs),
+        gk.CalculateVertexHistKernel(graphs),
+        gk.CalculateVertexEdgeHistKernel(graphs),
+        gk.CalculateVertexVertexEdgeHistKernel(graphs),
+        gk.CalculateEdgeHistGaussKernel(graphs),
+        gk.CalculateVertexHistGaussKernel(graphs),
+        gk.CalculateVertexEdgeHistGaussKernel(graphs),
+#        gk.CalculateGeometricRandomWalkKernel(graphs),
+#        gk.CalculateExponentialRandomWalkKernel(graphs),
+#        gk.CalculateKStepRandomWalkKernel(graphs),
+        gk.CalculateWLKernel(graphs),
+        gk.CalculateConnectedGraphletKernel(graphs, 4),
+        gk.CalculateGraphletKernel(graphs, 4),
+#        gk.CalculateShortestPathKernel(graphs)
+    )
+
+
+def main():
+    """
+    Compute all kernels.
+    """
+    graphs = load_mutag_graphs()
+    for result in  compute_all_kernels(graphs):
+        print(result.sum())
+
+
+if __name__ == '__main__':
+    main()
