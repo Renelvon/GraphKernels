@@ -8,11 +8,10 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.svm import SVC
 
 import graphkernels.kernels as gk
-import igraph as ig
 import numpy as np
 
-import os
-import sys
+import demo_mutag
+
 
 class KernelGridSearchCV:
     """
@@ -24,7 +23,7 @@ class KernelGridSearchCV:
     The class only supports scoring based on accuracy so far.
     """
 
-    def __init__(self, clf, param_grid, cv = None, random_state = None, refit = True):
+    def __init__(self, clf, param_grid, cv=None, random_state=None, refit=True):
         self.clf_             = clf
         self.grid_            = param_grid
         self.cv_              = cv
@@ -32,21 +31,22 @@ class KernelGridSearchCV:
         self.refit_           = refit
         self.best_estimator_  = None
         self.best_score_      = None
+        self.best_params_     = None
 
     def fit(self, X, y):
 
         # Use stratified k-folds with a user-specified number
         if self.cv_ is None:
             cv = KFold(
-                    n_splits = 3,
-                    shuffle = True,
-                    random_state = self.random_state_
+                n_splits=3,
+                shuffle=True,
+                random_state=self.random_state_
             )
         elif isinstance(self.cv_, int):
             cv = StratifiedKFold(
-                    n_splits = self.cv_,
-                    shuffle = True,
-                    random_state = self.random_state_
+                n_splits=self.cv_,
+                shuffle=True,
+                random_state=self.random_state_
             )
         else:
             cv = self.cv_
@@ -75,15 +75,10 @@ class KernelGridSearchCV:
                 self.best_score_     = score
                 self.best_params_    = parameters
 
-if __name__ == '__main__':
-    data_directory = 'mutag'
-    X = []
+
+def main():
+    X = demo_mutag.load_mutag_graphs()
     y = np.genfromtxt('mutag_labels.txt')
-    with open('mutag.list') as f:
-        for line in f:
-            filename = line.strip()
-            full_path = os.path.join(data_directory, filename)
-            X.append(ig.Graph.Read_GraphML(full_path))
 
     # Calculate kernel matrix for a few kernels. We are only using a few
     # kernels with a good runtime performance. Please refer to the other
@@ -112,7 +107,7 @@ if __name__ == '__main__':
         # Prepare a parameter grid to train an SVM classifier with
         # cross-validation.
         grid = {
-                'C': 10. ** np.arange(-2,3)
+            'C': 10. ** np.arange(-2, 3)
         }
 
         # Calling the classifier like this ensures that we can use
@@ -121,19 +116,19 @@ if __name__ == '__main__':
 
         grid_search = KernelGridSearchCV(
             clf,
-            param_grid = grid,
-            cv = 10, # 10-fold cross-validation; the interface also
-                     # supports your own cross-validator script for
-                     # more specific cases
+            param_grid=grid,
+            cv=10, # 10-fold cross-validation; the interface also
+                   # supports your own cross-validator script for
+                   # more specific cases
 
             # Make this tutorial reproducible
-            random_state = 42,
+            random_state=42,
         )
 
         # This runs the parameter search over the specified grid
         # according to the cross-validation that was selected in
         # the above code.
-        grid_search.fit(kernel_matrix,y)
+        grid_search.fit(kernel_matrix, y)
 
         # The grid search stores the best estimator, i.e. the one that
         # yielded the best accuracy. You can use it for subsequent ops
@@ -141,3 +136,6 @@ if __name__ == '__main__':
         clf = grid_search.best_estimator_
 
         print('10-fold cross-validation for {} yields an accuracy of {:2.2f}'.format(kernel_name, grid_search.best_score_ * 100.0))
+
+if __name__ == '__main__':
+    main()
