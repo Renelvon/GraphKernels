@@ -78,7 +78,7 @@ class KernelGridSearchCV:
 if __name__ == '__main__':
     data_directory = 'mutag'
     X = []
-    y = np.genfromtxt('mutag.label')
+    y = np.genfromtxt('mutag_labels.txt')
     with open('mutag.list') as f:
         for line in f:
             filename = line.strip()
