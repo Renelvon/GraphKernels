@@ -9,7 +9,7 @@ import sys
 
 import numpy as np
 import pkgconfig
-from setuptools import setup, Extension
+import setuptools
 
 import GKextCPy
 
@@ -36,7 +36,7 @@ def get_eigen_include_dir():
     return cflags[2:]
 
 
-GKextCPy_module = Extension(
+GKextCPy_module = setuptools.Extension(
     '_GKextCPy',
     sources=[
         # Interface file
@@ -58,7 +58,7 @@ def main():
     with open(README_PATH, 'r') as f_readme:
         long_description = f_readme.read()
 
-    setup(
+    setuptools.setup(
         author='Elisabetta Ghisu',
         author_email='elisabetta.ghisu@bsse.ethz.ch',
         classifiers=[
