@@ -14,12 +14,18 @@ MUTAG_DIR = 'mutag'
 THIS_DIR = path.dirname(__file__)
 
 
-def load_mutag_graphs():
-    paths = (
+def gen_mutag_graph_paths():
+    yield from (
         path.join(MUTAG_DIR, ('mutag_%d.graphml' % i))
         for i in range(1, N_GRAPHS + 1)
     )
-    return tuple(Graph.Read_GraphML(path) for path in paths)
+
+
+def load_mutag_graphs():
+    return tuple(
+        Graph.Read_GraphML(path)
+        for path in gen_mutag_graph_paths()
+    )
 
 
 def compute_all_kernels(graphs):
