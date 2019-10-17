@@ -13,6 +13,11 @@ from setuptools import setup, Extension
 
 import GKextCPy
 
+README = 'README.md'
+THIS_DIR = path.dirname(__file__)
+GK_DIR = path.join(THIS_DIR, 'GKextCPy')
+README_PATH = path.join(THIS_DIR, README)
+
 
 def get_eigen_include_dir():
     try:
@@ -30,8 +35,6 @@ def get_eigen_include_dir():
     # Throw away the `-I` part; it is not part of the include directory.
     return cflags[2:]
 
-
-GK_DIR = path.join(path.dirname(__file__), 'GKextCPy')
 
 GKextCPy_module = Extension(
     '_GKextCPy',
@@ -52,6 +55,9 @@ GKextCPy_module = Extension(
 
 
 def main():
+    with open(README_PATH, 'r') as f_readme:
+        long_description = f_readme.read()
+
     setup(
         author='Elisabetta Ghisu',
         author_email='elisabetta.ghisu@bsse.ethz.ch',
@@ -74,7 +80,10 @@ def main():
             'python-igraph'
         ],
         license='ETH Zurich',
-        long_description='', # TODO: Fill me!
+        long_description=long_description,
+        # NOTE: The following option may produce a harmless warning when
+        # building package using setuptools < 40.*
+        long_description_content_type='text/markdown',
         name='GKextCPy',
         packages=['GKextCPy'],
         python_requires='>=3.4',
