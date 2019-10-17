@@ -36,24 +36,6 @@ def get_eigen_include_dir():
     return cflags[2:]
 
 
-GKextCPy_module = setuptools.Extension(
-    '_GKextCPy',
-    sources=[
-        # Interface file
-        path.join(GK_DIR, 'GKextCPy.i'),
-
-        # Implementation file
-        path.join(GK_DIR, 'GKextCPy.cpp'),
-    ],
-    swig_opts=['-c++', '-Wall', '-builtin', '-O', '-py3'],
-    extra_compile_args=['-std=c++11', '-O3'],
-    include_dirs=[
-        get_eigen_include_dir(),
-        np.get_include(),
-    ]
-)
-
-
 def main():
     with open(README_PATH, 'r') as f_readme:
         long_description = f_readme.read()
@@ -72,7 +54,24 @@ def main():
             'Topic :: Scientific/Engineering :: Mathematics',
         ],
         description='Package for computing graph kernels',
-        ext_modules=[GKextCPy_module],
+        ext_modules=[
+            setuptools.Extension(
+                '_GKextCPy',
+                sources=[
+                    # Interface file
+                    path.join(GK_DIR, 'GKextCPy.i'),
+
+                    # Implementation file
+                    path.join(GK_DIR, 'GKextCPy.cpp'),
+                ],
+                swig_opts=['-c++', '-Wall', '-builtin', '-O', '-py3'],
+                extra_compile_args=['-std=c++11', '-O3'],
+                include_dirs=[
+                    get_eigen_include_dir(),
+                    np.get_include(),
+                ]
+            )
+        ],
         include_package_data=True,
         install_requires=[
             'numpy>=1.11',
