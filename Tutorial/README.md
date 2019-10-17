@@ -6,14 +6,11 @@ This is a tutorial for computing various kernel matrices using the
 
 The file `demo_mutag.py` can be executed as 
 
-    python demo_mutag.py
+    python3 demo_mutag.py
 
 The script will compute all the available kernels on the benchmark MUTAG dataset. 
 
-The data that the graph kernels functions require as input, should be
-a list of graphML objects, as provided in the file [`mutag_pydata.npy`](mutag_pydata.npy).
-This example file is available here in the tutorial, but is also
-included in the downloadable package.
+The data that the graph kernels functions require as input, should be a list of graphML objects.
 
 # Kernel computation in Python
 
@@ -22,18 +19,22 @@ Threee main steps are required in Python to compute a kernel matrix.
 1. Import the packages
 
 ```python
-    import numpy as np
+    from graphkernels import kernels as gk
 
-    import graphkernels.kernels as gk
+    from demo_mutag import load_mutag_graphs
 ```
 
-2. Load the data
+2. Assuming the `python-igraph` and `numpy` packages are correctly installed, load the GraphML data from the `mutag` folder
 
-    mutag_list = np.load('mutag_pydata.npy')
+```python
+    graphs = load_mutag_graphs()
+```
 
 3. Compute the kernels: example with the WL kernels
 
-    K_wl = gk.CalculateWLKernel(mutag_list, par = 3)
+```python
+    K_wl = gk.CalculateWLKernel(mutag_list, par=3)
+```
 
 The matrix `K_wl` is the kernel matrix, obtained with the WL kernel, and therefore is a square matrix of size equal to the number of samples.
 The `par` here represents the number of iterations of the WL kernels. Note that if no parameters is provided, a default value is used.  
