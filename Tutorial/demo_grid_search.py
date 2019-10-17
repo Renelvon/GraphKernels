@@ -7,9 +7,9 @@ from sklearn.model_selection import ParameterGrid
 from sklearn.model_selection import StratifiedKFold
 from sklearn.svm import SVC
 
-import GKextCPy.kernels as gk
 import numpy as np
 
+import GKextCPy.kernels as gk
 import demo_mutag
 
 
