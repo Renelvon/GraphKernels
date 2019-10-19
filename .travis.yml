@@ -1,0 +1,17 @@
+dist: bionic
+
+language: python
+
+os: linux
+
+python: 3.6
+
+virtualenv:
+    system_site_packages: true
+
+before_install:
+    - sudo apt-get install -yq libeigen3-dev python3-igraph python3-numpy python3-pkgconfig swig
+
+install: skip
+
+script: skip
