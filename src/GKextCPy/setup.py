@@ -6,23 +6,11 @@ setup.py file for SWIG
 
 from setuptools import setup, Extension
 
-import subprocess
-import sys
-
-# Solve the chicken-and-egg problem of requiring packages *before* the
-# script has been parsed.
-for package in ['numpy', 'pkgconfig']:
-    # Inside a `virtualenv`, we are *not* allowed to install packages as
-    # a regular user.
-    if hasattr(sys, 'real_prefix'):
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', package])
-    else:
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', '--user', package])
+import pkgconfig
+import numpy
 
 
 def get_include_dirs():
-    import pkgconfig
-    import numpy
 
     if not pkgconfig.exists('eigen3'):
         raise Exception('Missing `eigen3` library. Please install it using the package manager of your operating system')
@@ -67,6 +55,6 @@ setup(
     python_requires='>=3.4',
     setup_requires=['pkgconfig', 'numpy'],
     url='https://github.com/BorgwardtLab/GraphKernels',
-    version='0.4.1', # TODO: Import version from init file.
+    version='0.5.0', # TODO: Import version from init file.
     zip_safe=False
 )
