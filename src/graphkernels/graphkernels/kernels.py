@@ -3,181 +3,151 @@ Collect all the functions
 for computing the graph kernels
 """
 
-
-###################
-## Import packages 
-###################
-
 import numpy as np
-import GKextCPy as gkCpy
 from igraph import Graph
+
+import GKextCPy as gkCpy
 
 from .utilities import GetGKInput, GetAdjMatList
 
 
-
-
-#########################
-## Alla kernels calculate
-#########################
-
-
-### Edge Histogram Kernel
-def CalculateEdgeHistKernel(G, par = -1.0):
+def CalculateEdgeHistKernel(G, par=-1.0):
+    """Edge Histogram Kernel"""
 
     # Extract graph info
     E, V_label, V_count, E_count, D_max = GetGKInput(G)
 
     par = gkCpy.DoubleVector([par])
 
-    K = gkCpy.CalculateKernelPy(E, V_label, V_count, E_count, D_max, par, 1)
-    return K
+    return gkCpy.CalculateKernelPy(E, V_label, V_count, E_count, D_max, par, 1)
 
 
-###########################
-### Vertex Histogram Kernel
-def CalculateVertexHistKernel(G, par = -1.0):
-    
+def CalculateVertexHistKernel(G, par=-1.0):
+    """Vertex Histogram Kernel"""
+
     # Extract graph info
     E, V_label, V_count, E_count, D_max = GetGKInput(G)
 
     par = gkCpy.DoubleVector([par])
-        
-    K = gkCpy.CalculateKernelPy(E, V_label, V_count, E_count, D_max, par, 2)
-    
-    return K
+
+    return gkCpy.CalculateKernelPy(E, V_label, V_count, E_count, D_max, par, 2)
 
 
-################################
-### Vertex Edge Histogram Kernel
-def CalculateVertexEdgeHistKernel(G, par = -1.0):
+def CalculateVertexEdgeHistKernel(G, par=-1.0):
+    """Vertex Edge Histogram Kernel"""
 
     # Extract graph info
     E, V_label, V_count, E_count, D_max = GetGKInput(G)
     par = gkCpy.DoubleVector([par])
 
-    K = gkCpy.CalculateKernelPy(E, V_label, V_count, E_count, D_max, par, 3)
-    return K
+    return gkCpy.CalculateKernelPy(E, V_label, V_count, E_count, D_max, par, 3)
 
 
+def CalculateVertexVertexEdgeHistKernel(G, par=1):
+    """Vertex Vertex Edge Histogram Kernel"""
 
-#######################################
-### Vertex Vertex Edge Histogram Kernel
-def CalculateVertexVertexEdgeHistKernel(G, par = 1):
-    
     # Extract graph info
     E, V_label, V_count, E_count, D_max = GetGKInput(G)
 
     par = gkCpy.DoubleVector([par])
-        
-    K = gkCpy.CalculateKernelPy(E, V_label, V_count, E_count, D_max, par, 4)
-    
-    return K
+
+    return gkCpy.CalculateKernelPy(E, V_label, V_count, E_count, D_max, par, 4)
 
 
-def CalculateEdgeHistGaussKernel(G, par = 1):
-    
+def CalculateEdgeHistGaussKernel(G, par=1):
+    """Edge Histogram RBF Kernel"""
+
     # Extract graph info
     E, V_label, V_count, E_count, D_max = GetGKInput(G)
 
     par = gkCpy.DoubleVector([par])
-        
-    K = gkCpy.CalculateKernelPy(E, V_label, V_count, E_count, D_max, par, 5)
 
-    return K
+    return gkCpy.CalculateKernelPy(E, V_label, V_count, E_count, D_max, par, 5)
 
 
+def CalculateVertexHistGaussKernel(G, par=1):
+    """Vertex Histogram RBF Kernel"""
 
-def CalculateVertexHistGaussKernel(G, par = 1):
-    
     # Extract graph info
     E, V_label, V_count, E_count, D_max = GetGKInput(G)
 
     par = gkCpy.DoubleVector([par])
-        
-    K = gkCpy.CalculateKernelPy(E, V_label, V_count, E_count, D_max, par, 6)
-    
-    return K
+
+    return gkCpy.CalculateKernelPy(E, V_label, V_count, E_count, D_max, par, 6)
 
 
-def CalculateVertexEdgeHistGaussKernel(G, par = 1):
-    
+def CalculateVertexEdgeHistGaussKernel(G, par=1):
+    """Vertex Edge Histogram RBF Kernel"""
+
     # Extract graph info
     E, V_label, V_count, E_count, D_max = GetGKInput(G)
 
     par = gkCpy.DoubleVector([par])
-        
-    K = gkCpy.CalculateKernelPy(E, V_label, V_count, E_count, D_max, par, 7)
-    
-    return K
+
+    return gkCpy.CalculateKernelPy(E, V_label, V_count, E_count, D_max, par, 7)
 
 
+def CalculateGeometricRandomWalkKernel(G, par=1):
+    """Geometric Random Walk Kernel"""
 
-def CalculateGeometricRandomWalkKernel(G, par = 1):
-    
     # Extract graph info
     E, V_label, V_count, E_count, D_max = GetGKInput(G)
 
     par = gkCpy.DoubleVector([par])
-        
-    K = gkCpy.CalculateKernelPy(E, V_label, V_count, E_count, D_max, par, 8)
-    
-    return K
 
+    return gkCpy.CalculateKernelPy(E, V_label, V_count, E_count, D_max, par, 8)
 
 
 def CalculateExponentialRandomWalkKernel(G, par=1):
-    
+    """Exponential Random Walk Kernel"""
+
     # Extract graph info
     E, V_label, V_count, E_count, D_max = GetGKInput(G)
 
     par = gkCpy.DoubleVector([par])
-        
-    K = gkCpy.CalculateKernelPy(E, V_label, V_count, E_count, D_max, par, 9)
-    
-    return K
+
+    return gkCpy.CalculateKernelPy(E, V_label, V_count, E_count, D_max, par, 9)
+
 
 def CalculateKStepRandomWalkKernel(G, par=1):
-    
+    """K-step Random Walk Kernel"""
+
     # Extract graph info
     E, V_label, V_count, E_count, D_max = GetGKInput(G)
-    
+
     if isinstance(par, (int, float, complex)):
         par = gkCpy.DoubleVector([par])
 
     else:
         par = gkCpy.DoubleVector(par)
-        
-    K = gkCpy.CalculateKernelPy(E, V_label, V_count, E_count, D_max, par, 10)
-    
-    return K
+
+    return gkCpy.CalculateKernelPy(E, V_label, V_count, E_count, D_max, par, 10)
 
 
-
-def CalculateWLKernel(G, par = 5):
+def CalculateWLKernel(G, par=5):
+    """Weisfeiler-Lehman Kernel Kernel"""
 
     # Extract graph info
     E, V_label, V_count, E_count, D_max = GetGKInput(G)
-    
+
     #par = nuber of WL iterations
-    par = int(par)  
-    
-    K = gkCpy.WLKernelMatrix(E, V_label, V_count, E_count, D_max, par)
-    
-    return K
+    par = int(par)
+
+    return gkCpy.WLKernelMatrix(E, V_label, V_count, E_count, D_max, par)
 
 
-def CalculateGraphletKernel(G, par = 4):
+def CalculateGraphletKernel(G, par=4):
+    """Graphlet Kernel"""
 
     # If k<3 then assign k=3
     if par < 3:
 
         par = 3
         print("Warning: k=3 is used (k = 3 or 4 is supported)")
-    
+
     # If k>4 then assign k=4
     if par > 4:
-        
+
         par = 4
         print("Warning: k=4 is used (k = 3 or 4 is supported)")
 
@@ -185,37 +155,33 @@ def CalculateGraphletKernel(G, par = 4):
     adj_mat, adj_list = GetAdjMatList(G)
     par = int(par)
 
-    K = gkCpy.CalculateGraphletKernelPy(adj_mat, adj_list, par)
-
-    return K
+    return gkCpy.CalculateGraphletKernelPy(adj_mat, adj_list, par)
 
 
-
-def CalculateConnectedGraphletKernel(G, par = 4):
+def CalculateConnectedGraphletKernel(G, par=4):
+    """Connected Graphlet Kernel"""
 
     # If k<3 then assign k=3
     if par < 3:
 
         par = 3
         print("Warning: k=3 is used (k = 3, 4 or 5 is supported)")
-    
+
     # If k>5 then assign k=5
     if par > 5:
-        
+
         par = 5
         print("Warning: k=5 is used (k = 3, 4 or 5 is supported)")
 
     # Extract graph info
     adj_mat, adj_list = GetAdjMatList(G)
 
-    K = gkCpy.CalculateConnectedGraphletKernelPy(adj_mat, adj_list, par)
-
-    return K
-
+    return gkCpy.CalculateConnectedGraphletKernelPy(adj_mat, adj_list, par)
 
 
 def CalculateShortestPathKernel(G):
-    
+    """Shortest Path Kernel"""
+
     G_floyd = []
     for i in range(len(G)):
 
@@ -223,13 +189,10 @@ def CalculateShortestPathKernel(G):
         g_floyd_am = np.asarray(g_floyd_am).reshape(len(g_floyd_am), len(g_floyd_am))
         g = Graph.Adjacency((g_floyd_am > 0).tolist())
         g.es['label'] = g_floyd_am[g_floyd_am.nonzero()]
-        g.vs['id']= np.arange(len(G[i].vs['label']))
+        g.vs['id'] = np.arange(len(G[i].vs['label']))
         g.vs['label'] = G[i].vs['label']
         G_floyd.append(g)
 
-
     G_floyd = np.array(G_floyd)
 
-    K = CalculateKStepRandomWalkKernel(G_floyd, par = (0,1))
-    return K
-
+    return CalculateKStepRandomWalkKernel(G_floyd, par=(0, 1))
