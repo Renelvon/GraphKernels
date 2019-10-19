@@ -1,5 +1,5 @@
 """
-Utility funcitons for the graph kernels package
+Utility functions for the graph kernels package
 """
 
 import numpy as np
@@ -14,11 +14,11 @@ def GetGraphInfo(g):
     E = np.zeros(shape=(len(g.es), 2))
     for i in range(len(g.es)):
         E[i, :] = g.es[i].tuple
-    ## there are multiple edge attributes
+    # there are multiple edge attributes
     if len(g.es.attributes()) > 1:
         print("There are multiple edge attributes! The first attribute %s is used" % g.es.attributes()[0])
 
-    ## an edge attribute is missing
+    # an edge attribute is missing
     if len(g.es.attributes()) == 0:
         g.es["label"] = 1
 
@@ -39,6 +39,7 @@ def GetGraphInfo(g):
         v_attr_name = 'label'
     else:
         v_attr_name = g.vs.attributes()[0]
+        # FIXME https://github.com/AntoinePrv/GraphKernels/commit/ed097a3680c9e0ee91913dc2d2d4e2efa4a32b32
 
     v_attr_values = np.asarray(g.vs[v_attr_name]).reshape(len(g.vs), 1).astype(int)
 
@@ -93,3 +94,28 @@ def GetAdjMatList(G):
         adj_list.append(gkCpy.IntIntVector(al_cur))
 
     return adj_mat, adj_list
+
+
+def normalizekm(K):
+    """
+    Normalize the kernel matrix.
+    Based on a funciton from here
+    http://members.cbio.mines-paristech.fr/~nshervashidze/code/
+    which was originally Karsten Borgwardt
+
+    Normalize the kernel matrix such that
+    diag(result) = 1, i.e. K(x,y) / sqrt(K(x,x) * K(y,y))
+
+    K:
+        a kernel matrix
+
+    returns:
+        the normalized result
+    """
+    nv = np.sqrt(np.diag(K))
+    nm = nv[:, np.newaxis] * nv[:, np.newaxis].T
+    Knm = nm**-1
+
+    Knm[np.where(np.isnan(Knm))] = 0
+
+    return (K * Knm)

@@ -51,8 +51,7 @@ setup(
     classifiers=[
         'Development Status :: 4 - Beta',
         'Programming Language :: C++',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3 :: Only',
         'Topic :: Scientific/Engineering :: Mathematics',
     ],
     description="""
@@ -65,7 +64,7 @@ setup(
     long_description='', # TODO: Fill me!
     name='GKextCPy',
     py_modules=['GKextCPy'],
-    python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
+    python_requires='>=3.4',
     setup_requires=['pkgconfig', 'numpy'],
     url='https://github.com/BorgwardtLab/GraphKernels',
     version='0.4.1', # TODO: Import version from init file.

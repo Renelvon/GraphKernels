@@ -9,8 +9,7 @@ def main():
         author_email='elisabetta.ghisu@bsse.ethz.ch',
         classifiers=[
             'Development Status :: 4 - Beta',
-            'Programming Language :: Python :: 2.7',
-            'Programming Language :: Python :: 3',
+            'Programming Language :: Python :: 3 :: Only',
             'Topic :: Scientific/Engineering :: Mathematics',
         ],
         description='Package for computing graph kernels',
@@ -20,7 +19,7 @@ def main():
         name='graphkernels',
         packages=['graphkernels'],
         package_data={'graphkernels': ['data.mutag']},
-        python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
+        python_requires='>=3.4',
         version=graphkernels.__version__,
         url='https://github.com/BorgwardtLab/GraphKernels',
         zip_safe=False
