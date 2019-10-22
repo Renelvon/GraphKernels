@@ -18,7 +18,6 @@ def main():
         long_description='', # TODO: Fill me!
         name='graphkernels',
         packages=['graphkernels'],
-        package_data={'graphkernels': ['data.mutag']},
         python_requires='>=3.4',
         version=graphkernels.__version__,
         url='https://github.com/BorgwardtLab/GraphKernels',
