@@ -31,10 +31,13 @@ gk_dir = path.join(path.dirname(__file__), 'GKextCPy')
 GKextCPy_module = Extension(
     '_GKextCPy',
     sources=[
-        path.join(gk_dir, 'GKextCPy_wrap.cpp'),
+        # Interface file
+        path.join(gk_dir, 'GKextCPy.i'),
+
+        # Implementation file
         path.join(gk_dir, 'GKextCPy.cpp'),
     ],
-    swig_opts=['-c++'],
+    swig_opts=['-c++', '-Wall', '-builtin', '-O', '-py3'],
     extra_compile_args=['-std=c++11', '-O3'],
     include_dirs=get_include_dirs()
 )
