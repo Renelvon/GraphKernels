@@ -15,5 +15,7 @@ before_install:
 install:
     - cd src
     - python3 setup.py install
+    - cd graphkernels
+    - python3 setup.py install
 
 script: skip
