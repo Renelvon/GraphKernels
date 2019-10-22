@@ -1,50 +1,53 @@
-# Tutorial: how to compute graph kernels
+# Tutorial: how to compute graph kernels in Python 3
 
 This is a tutorial for computing various kernel matrices using the
-*graphkernels* package. An example script is given in
-[`demo_mutag.py`](demo_mutag.py).
+`graphkernels` package. A demo script is given in
+[`demo_mutag.py`](demo_mutag.py); it can be executed as:
 
-The file `demo_mutag.py` can be executed as 
+    python3 demo_mutag.py
 
-    python demo_mutag.py
+The script will compute all the available kernels on the benchmark MUTAG
+dataset. The data that the graph kernels functions require as input should be a
+list of [`Graph`](https://igraph.org/python/doc/igraph.Graph-class.html)
+objects.
 
-The script will compute all the available kernels on the benchmark MUTAG dataset. 
+## Example: Compute the WL kernel
 
-The data that the graph kernels functions require as input, should be
-a list of graphML objects, as provided in the file [`data.mutag`](data.mutag).
-This example file is available here in the tutorial, but is also
-included in the downloadable package.
-
-# Kernel computation in Python
-
-Threee main steps are required in Python to compute a kernel matrix. 
+We assume all dependencies are already properly installed. Threee main steps
+are required in Python to compute a kernel matrix.
 
 1. Import the packages
 
 ```python
-    import numpy as np
+    from graphkernels import kernels as gk
 
-    import graphkernels.kernels as gk
+    from demo_mutag import load_mutag_graphs
 ```
 
-2. Load the data
+2. Load the GraphML data from the `mutag` folder
 
-    mutag_list = np.load('data.mutag')
+```python
+    graphs = load_mutag_graphs()
+```
 
 3. Compute the kernels: example with the WL kernels
 
-    K_wl = gk.CalculateWLKernel(mutag_list, par = 3)
+```python
+    K_wl = gk.CalculateWLKernel(mutag_list, par=3)
+```
 
-The matrix `K_wl` is the kernel matrix, obtained with the WL kernel, and therefore is a square matrix of size equal to the number of samples.
-The `par` here represents the number of iterations of the WL kernels. Note that if no parameters is provided, a default value is used.  
+The matrix `K_wl` is the kernel matrix, obtained with the WL kernel, and
+therefore is a square matrix of size equal to the number of samples.  The `par`
+here represents the number of iterations of the WL kernels. Note that if no
+parameters is provided, a default value is used.
 
-# List of Graph Kernels
+## Reference list of all available Graph Kernels
 
-Here is a complete list of all the graph kernels that can be computed with our package, the python functions to use and corresponding kernels parameters. 
-
+Here is a complete list of all the graph kernels that can be computed with our
+package, the python functions to use and corresponding kernels parameters.
 
 | Graph Kernel      | Function           | Par  |
-| ------------- |:-------------:| -----:|
+| ------------- |:-------------| -----:|
 | Linear kernel between edge histograms	| CalculateEdgeHistKernel |	None |
 | Linear kernel between vertex histograms | CalculateVertexHistKernel|	None |
 | Linear kernel between vertex-edge histograms | CalculateVertexEdgeHistKernel |	None |
@@ -59,4 +62,3 @@ Here is a complete list of all the graph kernels that can be computed with our p
 | Weisfeiler-Lehman subtree kernel | CalculateWLKernel | h | 
 | Graphlet kernel | CalculateGraphletKernel | k |
 | Graphlet kernel with connected graphlets | CalculateConnectedGraphletKernel | k |
-
