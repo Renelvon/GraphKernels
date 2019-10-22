@@ -1,3 +1,5 @@
+cpplint
 numpy
 pkgconfig
+pylint
 python-igraph

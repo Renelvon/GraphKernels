@@ -1,9 +1,6 @@
-
-
 /* Define the SWIG module: graphkernels */
 
 %module GKextCPy
-
 
 %{
 /* line for specifying that the C file should be built as a python extension */
@@ -38,7 +35,7 @@ namespace std {
     %template(IntVector) vector<int>;
     %template(IntIntVector) vector<vector<int>>;
     %template(IntIntIntVector) vector<vector<vector<int>>>;
-    %template(FloatVector) vector<float>;
+/*    %template(FloatVector) vector<float>; */
     %template(DoubleVector) vector<double>;
     %template(VecMatrixXi) vector<Eigen::MatrixXi>;
 

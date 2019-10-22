@@ -63,6 +63,7 @@ def main():
         packages=['GKextCPy'],
         python_requires='>=3.4',
         setup_requires=['pkgconfig', 'numpy'],
+        tests_require=['cpplint', 'pylint'],
         url='https://github.com/BorgwardtLab/GraphKernels',
         version=GKextCPy.__version__,
         zip_safe=False

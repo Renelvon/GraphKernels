@@ -10,13 +10,18 @@ virtualenv:
     system_site_packages: true
 
 before_install:
-    - sudo apt-get install -yq libeigen3-dev python3-igraph python3-numpy python3-pkgconfig swig
+    - sudo apt-get install -yq python3-pkgconfig swig # setup/build
+    - sudo apt-get install -yq libeigen3-dev python3-igraph python3-numpy # install
+    - sudo apt-get install -yq pylint3 # test
+    - pip3 install --upgrade cpplint # test
 
 install:
     - python3 setup.py install
     - python3 setup.py sdist
 
 script:
+    - pylint3 setup.py GKextCPy
+    - cpplint --verbose=5 --recursive GKextCPy/GKextCPy.h GKextCPy/GKextCPy.cpp
     - cd ./Tutorial
     - python3 demo_mutag.py
     # The following requires sklearn package
