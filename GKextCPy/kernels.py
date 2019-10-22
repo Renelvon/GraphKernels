@@ -5,7 +5,8 @@ Functions for computing the graph kernels
 import numpy as np
 from igraph import Graph
 
-import GKextCPy as gkCpy
+# FIXME: Avoid double-import by exporting names in __init__
+from GKextCPy import GKextCPy as gkCpy
 
 from .utilities import GetGKInput, GetAdjMatList
 
