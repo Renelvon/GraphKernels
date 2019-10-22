@@ -6,7 +6,7 @@ from os import path
 
 from igraph import Graph
 
-from graphkernels import kernels as gk
+from GKextCPy import kernels as gk
 
 N_GRAPHS = 188
 

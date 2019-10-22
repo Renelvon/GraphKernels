@@ -13,13 +13,11 @@ before_install:
     - sudo apt-get install -yq libeigen3-dev python3-igraph python3-numpy python3-pkgconfig swig
 
 install:
-    - cd src
     - python3 setup.py install
-    - cd graphkernels
-    - python3 setup.py install
+    - python3 setup.py sdist
 
 script:
-    - cd ../../Tutorial
+    - cd ./Tutorial
     - python3 demo_mutag.py
     # The following requires sklearn package
     #- python3 demo_grid_search.py
