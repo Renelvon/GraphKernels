@@ -1,4 +1,4 @@
-recursive-include graphkernels *.py *.cpp *.cxx *.h *.i
+recursive-include graphkernels *.py *.cpp *.h *.i
 
 include AUTHORS.md
 include LICENSE.md

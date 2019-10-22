@@ -34,7 +34,7 @@ gk_dir = path.join(here, 'GKextCPy')
 GKextCPy_module = Extension(
     '_GKextCPy',
     sources=[
-        path.join(gk_dir, 'GKextCPy_wrap.cxx'),
+        path.join(gk_dir, 'GKextCPy_wrap.cpp'),
         path.join(gk_dir, 'GKextCPy.cpp'),
     ],
     swig_opts=['-c++'],
