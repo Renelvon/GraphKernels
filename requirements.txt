@@ -1,5 +1,5 @@
 cpplint
-numpy
+numpy>=1.11
 pkgconfig
 pylint
 python-igraph
