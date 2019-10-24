@@ -274,8 +274,8 @@
    * PyArrayObject using the original data, flag it as a new object
    * and return the pointer.
    */
-  PyArrayObject* make_fortran(PyArrayObject* ary, int* is_new_object,
-                              int min_dims, int max_dims)
+  PyArrayObject* make_fortran(PyArrayObject* ary,
+                              int*           is_new_object)
   {
     PyArrayObject* result;
     if (array_is_fortran(ary))
@@ -337,7 +337,7 @@
                                                         &is_new1);
     if (ary1)
     {
-      ary2 = make_fortran(ary1, &is_new2, 0, 0);
+      ary2 = make_fortran(ary1, &is_new2);
       if (is_new1 && is_new2)
       {
         Py_DECREF(ary1);
