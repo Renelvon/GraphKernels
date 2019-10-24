@@ -36,35 +36,35 @@ Know problems:
     };
 
     template<> struct NumpyType<double> {
-        static int getCode() {return PyArray_DOUBLE;}
+        static int getCode() {return NPY_DOUBLE;}
     };
 
     template<> struct NumpyType<float> {
-        static int getCode() {return PyArray_FLOAT;}
+        static int getCode() {return NPY_FLOAT;}
     };
 
     template<> struct NumpyType<int> {
-        static int getCode() {return PyArray_INT;}
+        static int getCode() {return NPY_INT;}
     };
 
     template<> struct NumpyType<long> {
-        static int getCode() {return PyArray_LONG;}
+        static int getCode() {return NPY_LONG;}
     };
 
     template<> struct NumpyType<short> {
-        static int getCode() {return PyArray_SHORT;}
+        static int getCode() {return NPY_SHORT;}
     };
 
     template<> struct NumpyType<char> {
-        static int getCode() {return PyArray_CHAR;}
+        static int getCode() {return NPY_STRING;}
     };
 
     template<> struct NumpyType<unsigned char> {
-        static int getCode() {return PyArray_UBYTE;}
+        static int getCode() {return NPY_UBYTE;}
     };
 
     template<> struct NumpyType<signed char> {
-        static int getCode() {return PyArray_BYTE;}
+        static int getCode() {return NPY_BYTE;}
     };
 
     /**
@@ -89,17 +89,16 @@ Know problems:
             array = PyArray_SimpleNewFromData(2, dims,
                         NumpyType<typename Derived::Scalar>::getCode(),
                         data);
-            if (!array) return NULL;
+            if (!array) return nullptr;
             if (!row_major) {
-                array = PyArray_Transpose((PyArrayObject*) array, NULL);
+                array = PyArray_Transpose((PyArrayObject*) array, nullptr);
             }
         } else {
             array = PyArray_SimpleNew(2, dims,
                         NumpyType<typename Derived::Scalar>::getCode());
-            if (!array) return NULL;
+            if (!array) return nullptr;
             // Copy data over.
-            typename Derived::Scalar* py_data = static_cast<typename Derived::Scalar*>(PyArray_DATA(array));
-            typename Derived::Scalar* cpp_data= static_cast<typename Derived::Scalar*>(data);
+            typename Derived::Scalar* py_data = static_cast<typename Derived::Scalar*>(PyArray_DATA((PyArrayObject*)array));
             for (int i = 0; i != dims[0]; ++i)
                 for (int j = 0; j != dims[1]; ++j)
                     py_data[i*dims[1]+j] = in->coeff(i,j);
@@ -142,7 +141,7 @@ Know problems:
         }
         else if (array_numdims(in) == 1)
         {
-            rows = py_array_size(in,0);
+            rows = array_size(in,0);
             cols = 1;
             if ((Derived::RowsAtCompileTime != Eigen::Dynamic) && (Derived::RowsAtCompileTime != rows))
             {
@@ -157,14 +156,14 @@ Know problems:
         }
         else if (array_numdims(in) == 2)
         {
-            rows = py_array_size(in,0);
-            cols = py_array_size(in,1);
-            if ((Derived::RowsAtCompileTime != Eigen::Dynamic) && (Derived::RowsAtCompileTime != py_array_size(in,0)))
+            rows = array_size(in,0);
+            cols = array_size(in,1);
+            if ((Derived::RowsAtCompileTime != Eigen::Dynamic) && (Derived::RowsAtCompileTime != array_size(in,0)))
             {
                 PyErr_SetString(PyExc_ValueError, "Row dimension mismatch between NumPy and Eigen objects (2D).");
                 return;
             }
-            else if ((Derived::ColsAtCompileTime != Eigen::Dynamic) && (Derived::ColsAtCompileTime != py_array_size(in,1)))
+            else if ((Derived::ColsAtCompileTime != Eigen::Dynamic) && (Derived::ColsAtCompileTime != array_size(in,1)))
             {
                 PyErr_SetString(PyExc_ValueError, "Column dimension mismatch between NumPy and Eigen objects (2D).");
                 return;
@@ -172,9 +171,7 @@ Know problems:
         }
         
         bool eigen_is_row_major = out->Flags & Eigen::RowMajorBit;
-        bool numpy_is_row_major = array_is_contiguous(in);
         int eigen_type_code = NumpyType<typename Derived::Scalar>::getCode();
-        int numpy_type_code = array_type(in);
 
         int eigen_order = NPY_ARRAY_BEHAVED | NPY_ARRAY_FORCECAST;
         if (eigen_is_row_major) {
@@ -185,9 +182,9 @@ Know problems:
 
         PyArray_Descr* dtype = PyArray_DescrFromType(eigen_type_code);
         PyArrayObject* arr = (PyArrayObject*)PyArray_FromAny(
-                in, dtype, 0, 0, eigen_order, NULL);
+                in, dtype, 0, 0, eigen_order, nullptr);
 
-        if (arr == NULL) {
+        if (arr == nullptr) {
             // Error already set by PyArray_FromAny
             return;
         }
@@ -219,11 +216,7 @@ Know problems:
     PyObject* array = ConvertFromEigenToNumpyMatrix($1, $1->data());
     if (!array) SWIG_fail;
 
-    ((PyArrayObject* )array)->flags &= (~NPY_WRITEABLE);
-    /**
-     * The following code should be valid once I port numpy 1.7 into my machine.
-     */
-    //((PyArrayObject* )array)->flags &= (~NPY_ARRAY_WRITEABLE);
+    array_clearflags(array, NPY_ARRAY_WRITEABLE);
     $result = array;
 }
 
@@ -234,7 +227,7 @@ Know problems:
 %typemap(out, fragment="NumPy_Fragments",
         fragment="eigen_type_map") EigenType {
     PyObject* array = ConvertFromEigenToNumpyMatrix(&$1, $1.data(), true);
-    if (PyErr_Occurred() != NULL) return NULL;
+    if (PyErr_Occurred()) return nullptr;
     if (!array) SWIG_fail;
     $result = array;
 }
@@ -250,7 +243,7 @@ Know problems:
 %typemap(argout, fragment="NumPy_Fragments",
         fragments="eigen_type_map") EigenType& ARGOUT {
     PyObject* array = ConvertFromEigenToNumpyMatrix(&temp$argnum, temp$argnum.data(), true);
-    if (PyErr_Occurred() != NULL) array=NULL;
+    if (PyErr_Occurred()) array = nullptr;
     if (!array) SWIG_fail;
     $result = SWIG_Python_AppendOutput($result,array);
 }
@@ -268,7 +261,8 @@ Know problems:
         EigenType& (EigenType temp),
         const EigenType& (EigenType temp) {
     ConvertFromNumpyToEigenMatrix(&temp, $input);
-    if (PyErr_Occurred() != NULL) return NULL;
+    // FIXME: This doesn't work, for some reason...
+    //if (PyErr_Occurred()) return nullptr;
     $1 = &temp;
 }
 
@@ -279,7 +273,7 @@ Know problems:
 %typemap(in, fragment="NumPy_Fragments", fragment="eigen_type_map")
         EigenType {
     ConvertFromNumpyToEigenMatrix(&$1, $input);
-    if (PyErr_Occurred() != NULL) return NULL;
+    if (PyErr_Occurred()) return nullptr;
 }
 %enddef
 
@@ -288,49 +282,33 @@ Know problems:
   Because Eigen is a heavily templated library, each template instantiation
   creates a new type, which has to be enumerated here.
 **/
+/*
 %EigenTypeMap(Eigen::Vector3d)
 %EigenTypeMap(Eigen::Vector4d)
+*/
 %EigenTypeMap(Eigen::VectorXd)
+/*
 %EigenTypeMap(Eigen::Matrix3d)
 %EigenTypeMap(Eigen::Matrix4d)
+*/
 %EigenTypeMap(Eigen::MatrixXd)
 
+/*
 %EigenTypeMap(Eigen::Vector3f)
 %EigenTypeMap(Eigen::Vector4f)
 %EigenTypeMap(Eigen::VectorXf)
 %EigenTypeMap(Eigen::Matrix3f)
 %EigenTypeMap(Eigen::Matrix4f)
 %EigenTypeMap(Eigen::MatrixXf)
+*/
 
+/*
 %EigenTypeMap(Eigen::Vector3i)
 %EigenTypeMap(Eigen::Vector4i)
+*/
 %EigenTypeMap(Eigen::VectorXi)
+/*
 %EigenTypeMap(Eigen::Matrix3i)
 %EigenTypeMap(Eigen::Matrix4i)
+*/
 %EigenTypeMap(Eigen::MatrixXi)
-
-
-
-
-
-/**
-  The following typemap statements map types defined in EigenTypedef.h.
-
-%EigenTypeMap(PyMesh::Vector2F)
-%EigenTypeMap(PyMesh::Vector3F)
-%EigenTypeMap(PyMesh::Vector4F)
-%EigenTypeMap(PyMesh::VectorF)
-%EigenTypeMap(PyMesh::Matrix3F)
-%EigenTypeMap(PyMesh::Matrix4F)
-%EigenTypeMap(PyMesh::MatrixF)
-%EigenTypeMap(PyMesh::MatrixFr)
-
-%EigenTypeMap(PyMesh::Vector2I)
-%EigenTypeMap(PyMesh::Vector3I)
-%EigenTypeMap(PyMesh::Vector4I)
-%EigenTypeMap(PyMesh::VectorI)
-%EigenTypeMap(PyMesh::Matrix3I)
-%EigenTypeMap(PyMesh::Matrix4I)
-%EigenTypeMap(PyMesh::MatrixI)
-%EigenTypeMap(PyMesh::MatrixIr)
-**/
