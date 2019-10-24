@@ -2,8 +2,8 @@
  * All rigths reserved.
  */
 
-#ifndef GKEXTCPY_GKEXTCPY_H_
-#define GKEXTCPY_GKEXTCPY_H_
+#ifndef GRAPHKERNELS_GRAPHKERNELS_H_
+#define GRAPHKERNELS_GRAPHKERNELS_H_
 
 #include <algorithm>
 #include <functional>
@@ -175,4 +175,4 @@ MatrixXd CalculateConnectedGraphletKernelPy(
     vector<vector<vector<int>>>& graph_adjlist_all,
     int k);
 
-#endif  // GKEXTCPY_GKEXTCPY_H_
+#endif  // GRAPHKERNELS_GRAPHKERNELS_H_

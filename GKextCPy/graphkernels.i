@@ -1,6 +1,6 @@
 /* Define the SWIG module: graphkernels */
 
-%module GKextCPy
+%module graphkernels
 
 %{
 /* line for specifying that the C file should be built as a python extension */
@@ -9,7 +9,7 @@
 # define SWIG_FILE_WITH_INIT 
 #include <Python.h>
 # define ITPP_EXPORT
-# include "GKextCPy.h"
+# include "graphkernels.h"
 %}
 
 

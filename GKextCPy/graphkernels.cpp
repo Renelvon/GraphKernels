@@ -2,7 +2,7 @@
  * All rigths reserved.
  */
 
-#include "GKextCPy.h"
+#include "graphkernels.h"
 
 // =================================================================== //
 // ==================== Functions used in kernels ==================== //

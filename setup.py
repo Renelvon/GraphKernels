@@ -59,10 +59,10 @@ def main():
                 '_GKextCPy',
                 sources=[
                     # Interface file
-                    path.join(GK_DIR, 'GKextCPy.i'),
+                    path.join(GK_DIR, 'graphkernels.i'),
 
                     # Implementation file
-                    path.join(GK_DIR, 'GKextCPy.cpp'),
+                    path.join(GK_DIR, 'graphkernels.cpp'),
                 ],
                 swig_opts=['-c++', '-Wall', '-builtin', '-O', '-py3'],
                 extra_compile_args=['-std=c++11', '-O3'],
