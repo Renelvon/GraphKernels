@@ -219,7 +219,7 @@ Know problems:
     PyObject* array = ConvertFromEigenToNumpyMatrix($1, $1->data());
     if (!array) SWIG_fail;
 
-    ((PyArrayObject* )array)->flags &= (~NPY_ARRAY_WRITEABLE);
+    array_clearflags(array, NPY_ARRAY_WRITEABLE);
     $result = array;
 }
 
