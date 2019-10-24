@@ -9,7 +9,7 @@ from sklearn.svm import SVC
 
 import numpy as np
 
-import GKextCPy.kernels as gk
+import graphkernels.kernels as gk
 import demo_mutag
 
 

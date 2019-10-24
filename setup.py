@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-Setup script for GKextCPy package. Uses SWIG.
+Setup script for graphkernels package. Uses SWIG.
 """
 
 from os import path
@@ -11,11 +11,11 @@ import numpy as np
 import pkgconfig
 import setuptools
 
-import GKextCPy
+import graphkernels
 
 README = 'README.md'
 THIS_DIR = path.dirname(__file__)
-GK_DIR = path.join(THIS_DIR, 'GKextCPy')
+GK_DIR = path.join(THIS_DIR, 'graphkernels')
 README_PATH = path.join(THIS_DIR, README)
 
 
@@ -56,7 +56,7 @@ def main():
         description='Package for computing graph kernels',
         ext_modules=[
             setuptools.Extension(
-                '_GKextCPy',
+                '_graphkernels',
                 sources=[
                     # Interface file
                     path.join(GK_DIR, 'graphkernels.i'),
@@ -83,8 +83,8 @@ def main():
         # NOTE: The following option may produce a harmless warning when
         # building package using setuptools < 40.*
         long_description_content_type='text/markdown',
-        name='GKextCPy',
-        packages=['GKextCPy'],
+        name='graphkernels',
+        packages=['graphkernels'],
         python_requires='>=3.4',
         setup_requires=[
             'numpy>=1.11',
@@ -92,7 +92,7 @@ def main():
         ],
         tests_require=['cpplint', 'pylint'],
         url='https://github.com/BorgwardtLab/GraphKernels',
-        version=GKextCPy.__version__,
+        version=graphkernels.__version__,
         zip_safe=False
     )
 

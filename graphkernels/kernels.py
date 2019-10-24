@@ -6,7 +6,7 @@ import numpy as np
 from igraph import Graph
 
 # FIXME: Avoid double-import by exporting names in __init__
-from GKextCPy import graphkernels as gkCpy
+from graphkernels import graphkernels as gkCpy
 
 from .utilities import GetGKInput, GetAdjMatList
 
