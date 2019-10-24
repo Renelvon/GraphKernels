@@ -119,4 +119,4 @@ def normalizekm(K):
 
     Knm[np.where(np.isnan(Knm))] = 0
 
-    return (K * Knm)
+    return K * Knm
