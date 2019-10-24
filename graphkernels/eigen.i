@@ -284,49 +284,33 @@ Know problems:
   Because Eigen is a heavily templated library, each template instantiation
   creates a new type, which has to be enumerated here.
 **/
+/*
 %EigenTypeMap(Eigen::Vector3d)
 %EigenTypeMap(Eigen::Vector4d)
+*/
 %EigenTypeMap(Eigen::VectorXd)
+/*
 %EigenTypeMap(Eigen::Matrix3d)
 %EigenTypeMap(Eigen::Matrix4d)
+*/
 %EigenTypeMap(Eigen::MatrixXd)
 
+/*
 %EigenTypeMap(Eigen::Vector3f)
 %EigenTypeMap(Eigen::Vector4f)
 %EigenTypeMap(Eigen::VectorXf)
 %EigenTypeMap(Eigen::Matrix3f)
 %EigenTypeMap(Eigen::Matrix4f)
 %EigenTypeMap(Eigen::MatrixXf)
+*/
 
+/*
 %EigenTypeMap(Eigen::Vector3i)
 %EigenTypeMap(Eigen::Vector4i)
+*/
 %EigenTypeMap(Eigen::VectorXi)
+/*
 %EigenTypeMap(Eigen::Matrix3i)
 %EigenTypeMap(Eigen::Matrix4i)
+*/
 %EigenTypeMap(Eigen::MatrixXi)
-
-
-
-
-
-/**
-  The following typemap statements map types defined in EigenTypedef.h.
-
-%EigenTypeMap(PyMesh::Vector2F)
-%EigenTypeMap(PyMesh::Vector3F)
-%EigenTypeMap(PyMesh::Vector4F)
-%EigenTypeMap(PyMesh::VectorF)
-%EigenTypeMap(PyMesh::Matrix3F)
-%EigenTypeMap(PyMesh::Matrix4F)
-%EigenTypeMap(PyMesh::MatrixF)
-%EigenTypeMap(PyMesh::MatrixFr)
-
-%EigenTypeMap(PyMesh::Vector2I)
-%EigenTypeMap(PyMesh::Vector3I)
-%EigenTypeMap(PyMesh::Vector4I)
-%EigenTypeMap(PyMesh::VectorI)
-%EigenTypeMap(PyMesh::Matrix3I)
-%EigenTypeMap(PyMesh::Matrix4I)
-%EigenTypeMap(PyMesh::MatrixI)
-%EigenTypeMap(PyMesh::MatrixIr)
-**/
