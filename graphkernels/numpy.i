@@ -39,7 +39,7 @@
 %#define NPY_VOID          PyArray_VOID
 %#define NPY_NTYPES        PyArray_NTYPES
 %#define NPY_NOTYPE        PyArray_NOTYPE
-%#define NPY_CHAR          PyArray_CHAR
+%#define NPY_STRING        PyArray_STRING
 %#define NPY_USERDEF       PyArray_USERDEF
 %#define npy_intp          intp
 

@@ -56,7 +56,7 @@ Know problems:
     };
 
     template<> struct NumpyType<char> {
-        static int getCode() {return PyArray_CHAR;}
+        static int getCode() {return PyArray_STRING;}
     };
 
     template<> struct NumpyType<unsigned char> {
