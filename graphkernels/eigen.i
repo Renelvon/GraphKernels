@@ -261,7 +261,8 @@ Know problems:
         EigenType& (EigenType temp),
         const EigenType& (EigenType temp) {
     ConvertFromNumpyToEigenMatrix(&temp, $input);
-    if (PyErr_Occurred()) return nullptr;
+    // FIXME: This doesn't work, for some reason...
+    //if (PyErr_Occurred()) return nullptr;
     $1 = &temp;
 }
 
