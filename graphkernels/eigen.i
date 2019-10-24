@@ -36,35 +36,35 @@ Know problems:
     };
 
     template<> struct NumpyType<double> {
-        static int getCode() {return PyArray_DOUBLE;}
+        static int getCode() {return NPY_DOUBLE;}
     };
 
     template<> struct NumpyType<float> {
-        static int getCode() {return PyArray_FLOAT;}
+        static int getCode() {return NPY_FLOAT;}
     };
 
     template<> struct NumpyType<int> {
-        static int getCode() {return PyArray_INT;}
+        static int getCode() {return NPY_INT;}
     };
 
     template<> struct NumpyType<long> {
-        static int getCode() {return PyArray_LONG;}
+        static int getCode() {return NPY_LONG;}
     };
 
     template<> struct NumpyType<short> {
-        static int getCode() {return PyArray_SHORT;}
+        static int getCode() {return NPY_SHORT;}
     };
 
     template<> struct NumpyType<char> {
-        static int getCode() {return PyArray_STRING;}
+        static int getCode() {return NPY_STRING;}
     };
 
     template<> struct NumpyType<unsigned char> {
-        static int getCode() {return PyArray_UBYTE;}
+        static int getCode() {return NPY_UBYTE;}
     };
 
     template<> struct NumpyType<signed char> {
-        static int getCode() {return PyArray_BYTE;}
+        static int getCode() {return NPY_BYTE;}
     };
 
     /**

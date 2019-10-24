@@ -14,38 +14,10 @@
 
 %fragment("NumPy_Backward_Compatibility", "header")
 {
-/* Support older NumPy data type names
-*/
-%#if NDARRAY_VERSION < 0x01000000
-%#define NPY_BOOL          PyArray_BOOL
-%#define NPY_BYTE          PyArray_BYTE
-%#define NPY_UBYTE         PyArray_UBYTE
-%#define NPY_SHORT         PyArray_SHORT
-%#define NPY_USHORT        PyArray_USHORT
-%#define NPY_INT           PyArray_INT
-%#define NPY_UINT          PyArray_UINT
-%#define NPY_LONG          PyArray_LONG
-%#define NPY_ULONG         PyArray_ULONG
-%#define NPY_LONGLONG      PyArray_LONGLONG
-%#define NPY_ULONGLONG     PyArray_ULONGLONG
-%#define NPY_FLOAT         PyArray_FLOAT
-%#define NPY_DOUBLE        PyArray_DOUBLE
-%#define NPY_LONGDOUBLE    PyArray_LONGDOUBLE
-%#define NPY_CFLOAT        PyArray_CFLOAT
-%#define NPY_CDOUBLE       PyArray_CDOUBLE
-%#define NPY_CLONGDOUBLE   PyArray_CLONGDOUBLE
-%#define NPY_OBJECT        PyArray_OBJECT
-%#define NPY_STRING        PyArray_STRING
-%#define NPY_UNICODE       PyArray_UNICODE
-%#define NPY_VOID          PyArray_VOID
-%#define NPY_NTYPES        PyArray_NTYPES
-%#define NPY_NOTYPE        PyArray_NOTYPE
-%#define NPY_STRING        PyArray_STRING
-%#define NPY_USERDEF       PyArray_USERDEF
-%#define npy_intp          intp
-
-%#define NPY_FARRAY        FARRAY
-%#define NPY_F_CONTIGUOUS  F_CONTIGUOUS
+%#if NPY_API_VERSION < 0x00000007
+%#define NPY_ARRAY_DEFAULT NPY_DEFAULT
+%#define NPY_ARRAY_FARRAY  NPY_FARRAY
+%#define NPY_FORTRANORDER  NPY_FORTRAN
 %#endif
 }
 
