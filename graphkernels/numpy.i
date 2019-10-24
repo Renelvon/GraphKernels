@@ -1,4 +1,38 @@
 /* -*- C -*-  (not really, but good for syntax highlighting) */
+
+/*
+ * Copyright (c) 2005-2015, NumPy Developers.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *        notice, this list of conditions and the following disclaimer.
+ *
+ *     * Redistributions in binary form must reproduce the above
+ *        copyright notice, this list of conditions and the following
+ *        disclaimer in the documentation and/or other materials provided
+ *        with the distribution.
+ *
+ *     * Neither the name of the NumPy Developers nor the names of any
+ *        contributors may be used to endorse or promote products derived
+ *        from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 #ifdef SWIGPYTHON
 
 %{
@@ -70,11 +104,13 @@
 
 /**********************************************************************/
 
-%fragment("NumPy_Utilities", "header")
+%fragment("NumPy_Utilities",
+          "header")
 {
   /* Given a PyObject, return a string describing its type.
    */
-  const char* pytype_string(PyObject* py_obj) {
+  const char* pytype_string(PyObject* py_obj)
+  {
     if (py_obj == NULL          ) return "C NULL value";
     if (py_obj == Py_None       ) return "Python None" ;
     if (PyCallable_Check(py_obj)) return "callable"    ;
@@ -90,36 +126,55 @@
 %#endif
     if (PyModule_Check(  py_obj)) return "module"      ;
 
-    return "unkown type";
+    return "unknown type";
   }
 
   /* Given a NumPy typecode, return a string describing the type.
    */
-  const char* typecode_string(int typecode) {
-    static const char* type_names[25] = {"bool", "byte", "unsigned byte",
-                                   "short", "unsigned short", "int",
-                                   "unsigned int", "long", "unsigned long",
-                                   "long long", "unsigned long long",
-                                   "float", "double", "long double",
-                                   "complex float", "complex double",
-                                   "complex long double", "object",
-                                   "string", "unicode", "void", "ntypes",
-                                   "notype", "char", "unknown"};
+  const char* typecode_string(int typecode)
+  {
+    static const char* type_names[25] = {"bool",
+                                         "byte",
+                                         "unsigned byte",
+                                         "short",
+                                         "unsigned short",
+                                         "int",
+                                         "unsigned int",
+                                         "long",
+                                         "unsigned long",
+                                         "long long",
+                                         "unsigned long long",
+                                         "float",
+                                         "double",
+                                         "long double",
+                                         "complex float",
+                                         "complex double",
+                                         "complex long double",
+                                         "object",
+                                         "string",
+                                         "unicode",
+                                         "void",
+                                         "ntypes",
+                                         "notype",
+                                         "char",
+                                         "unknown"};
     return typecode < 24 ? type_names[typecode] : type_names[24];
   }
 
-  /* Make sure input has correct numpy type.  Allow character and byte
-   * to match.  Also allow int and long to match.  This is deprecated.
-   * You should use PyArray_EquivTypenums() instead.
+  /* Make sure input has correct numpy type.  This now just calls
+     PyArray_EquivTypenums().
    */
-  int type_match(int actual_type, int desired_type) {
+  int type_match(int actual_type,
+                 int desired_type)
+  {
     return PyArray_EquivTypenums(actual_type, desired_type);
   }
 }
 
 /**********************************************************************/
 
-%fragment("NumPy_Object_to_Array", "header",
+%fragment("NumPy_Object_to_Array",
+          "header",
           fragment="NumPy_Backward_Compatibility",
           fragment="NumPy_Macros",
           fragment="NumPy_Utilities")
@@ -128,7 +183,8 @@
    * legal.  If not, set the python error string appropriately and
    * return NULL.
    */
-  PyArrayObject* obj_to_array_no_conversion(PyObject* input, int typecode)
+  PyArrayObject* obj_to_array_no_conversion(PyObject* input,
+                                            int        typecode)
   {
     PyArrayObject* ary = NULL;
     if (is_array(input) && (typecode == NPY_NOTYPE ||
@@ -147,11 +203,12 @@
     }
     else
     {
-      const char * desired_type = typecode_string(typecode);
-      const char * actual_type  = pytype_string(input);
+      const char* desired_type = typecode_string(typecode);
+      const char* actual_type  = pytype_string(input);
       PyErr_Format(PyExc_TypeError,
                    "Array of type '%s' required.  A '%s' was given",
-                   desired_type, actual_type);
+                   desired_type,
+                   actual_type);
       ary = NULL;
     }
     return ary;
@@ -162,8 +219,9 @@
    * correct type.  On failure, the python error string will be set and
    * the routine returns NULL.
    */
-  PyArrayObject* obj_to_array_allow_conversion(PyObject* input, int typecode,
-                                               int* is_new_object)
+  PyArrayObject* obj_to_array_allow_conversion(PyObject* input,
+                                               int       typecode,
+                                               int*      is_new_object)
   {
     PyArrayObject* ary = NULL;
     PyObject* py_obj;
@@ -188,8 +246,10 @@
    * not contiguous, create a new PyArrayObject using the original data,
    * flag it as a new object and return the pointer.
    */
-  PyArrayObject* make_contiguous(PyArrayObject* ary, int* is_new_object,
-                                 int min_dims, int max_dims)
+  PyArrayObject* make_contiguous(PyArrayObject* ary,
+                                 int*           is_new_object,
+                                 int            min_dims,
+                                 int            max_dims)
   {
     PyArrayObject* result;
     if (array_is_contiguous(ary))
@@ -200,9 +260,9 @@
     else
     {
       result = (PyArrayObject*) PyArray_ContiguousFromObject((PyObject*)ary,
-                                                             array_type(ary),
-                                                             min_dims,
-                                                             max_dims);
+                                                              array_type(ary),
+                                                              min_dims,
+                                                              max_dims);
       *is_new_object = 1;
     }
     return result;
@@ -238,13 +298,14 @@
    * will be set.
    */
   PyArrayObject* obj_to_array_contiguous_allow_conversion(PyObject* input,
-                                                          int typecode,
-                                                          int* is_new_object)
+                                                          int       typecode,
+                                                          int*      is_new_object)
   {
     int is_new1 = 0;
     int is_new2 = 0;
     PyArrayObject* ary2;
-    PyArrayObject* ary1 = obj_to_array_allow_conversion(input, typecode,
+    PyArrayObject* ary1 = obj_to_array_allow_conversion(input,
+                                                        typecode,
                                                         &is_new1);
     if (ary1)
     {
@@ -265,13 +326,14 @@
    * will be set.
    */
   PyArrayObject* obj_to_array_fortran_allow_conversion(PyObject* input,
-                                                       int typecode,
-                                                       int* is_new_object)
+                                                       int       typecode,
+                                                       int*      is_new_object)
   {
     int is_new1 = 0;
     int is_new2 = 0;
     PyArrayObject* ary2;
-    PyArrayObject* ary1 = obj_to_array_allow_conversion(input, typecode,
+    PyArrayObject* ary1 = obj_to_array_allow_conversion(input,
+                                                        typecode,
                                                         &is_new1);
     if (ary1)
     {
@@ -285,13 +347,12 @@
     *is_new_object = is_new1 || is_new2;
     return ary1;
   }
-
 } /* end fragment */
-
 
 /**********************************************************************/
 
-%fragment("NumPy_Array_Requirements", "header",
+%fragment("NumPy_Array_Requirements",
+          "header",
           fragment="NumPy_Backward_Compatibility",
           fragment="NumPy_Macros")
 {
@@ -332,14 +393,16 @@
    * dimensions.  If the array has the specified number of dimensions,
    * return 1.  Otherwise, set the python error string and return 0.
    */
-  int require_dimensions(PyArrayObject* ary, int exact_dimensions)
+  int require_dimensions(PyArrayObject* ary,
+                         int            exact_dimensions)
   {
     int success = 1;
     if (array_numdims(ary) != exact_dimensions)
     {
       PyErr_Format(PyExc_TypeError,
                    "Array must have %d dimensions.  Given array has %d dimensions",
-                   exact_dimensions, array_numdims(ary));
+                   exact_dimensions,
+                   array_numdims(ary));
       success = 0;
     }
     return success;
@@ -350,7 +413,9 @@
    * of dimensions, return 1.  Otherwise, set the python error string
    * and return 0.
    */
-  int require_dimensions_n(PyArrayObject* ary, int* exact_dimensions, int n)
+  int require_dimensions_n(PyArrayObject* ary,
+                           int*           exact_dimensions,
+                           int            n)
   {
     int success = 0;
     int i;
@@ -374,7 +439,8 @@
       strcat(dims_str,s);
       PyErr_Format(PyExc_TypeError,
                    "Array must have %s dimensions.  Given array has %d dimensions",
-                   dims_str, array_numdims(ary));
+                   dims_str,
+                   array_numdims(ary));
     }
     return success;
   }
@@ -383,7 +449,9 @@
    * array has the specified shape, return 1.  Otherwise, set the python
    * error string and return 0.
    */
-  int require_size(PyArrayObject* ary, npy_intp* size, int n)
+  int require_size(PyArrayObject* ary,
+                   npy_intp*      size,
+                   int            n)
   {
     int i;
     int success = 1;
@@ -423,14 +491,15 @@
       actual_dims[len-1] = ']';
       PyErr_Format(PyExc_TypeError,
                    "Array must have shape of %s.  Given array has shape of %s",
-                   desired_dims, actual_dims);
+                   desired_dims,
+                   actual_dims);
     }
     return success;
   }
 
-  /* Require the given PyArrayObject to to be FORTRAN ordered.  If the
-   * the PyArrayObject is already FORTRAN ordered, do nothing.  Else,
-   * set the FORTRAN ordering flag and recompute the strides.
+  /* Require the given PyArrayObject to to be Fortran ordered.  If the
+   * the PyArrayObject is already Fortran ordered, do nothing.  Else,
+   * set the Fortran ordering flag and recompute the strides.
    */
   int require_fortran(PyArrayObject* ary)
   {
@@ -449,12 +518,15 @@
 }
 
 /* Combine all NumPy fragments into one for convenience */
-%fragment("NumPy_Fragments", "header",
+%fragment("NumPy_Fragments",
+          "header",
           fragment="NumPy_Backward_Compatibility",
           fragment="NumPy_Macros",
           fragment="NumPy_Utilities",
           fragment="NumPy_Object_to_Array",
-          fragment="NumPy_Array_Requirements") { }
+          fragment="NumPy_Array_Requirements")
+{
+}
 
 /* End John Hunter translation (with modifications by Bill Spotz)
  */
@@ -520,7 +592,7 @@
  * where "DATA_TYPE" is any type supported by the NumPy module, and
  * "DIM_TYPE" is any int-like type suitable for specifying dimensions.
  * The difference between "ARRAY" typemaps and "FARRAY" typemaps is
- * that the "FARRAY" typemaps expect FORTRAN ordering of
+ * that the "FARRAY" typemaps expect Fortran ordering of
  * multidimensional arrays.  In python, the dimensions will not need
  * to be specified (except for the "DATA_TYPE* ARGOUT_ARRAY1"
  * typemaps).  The IN_ARRAYs can be a numpy array or any sequence that
@@ -580,7 +652,8 @@
   (PyArrayObject* array=NULL, int is_new_object=0)
 {
   npy_intp size[1] = { $1_dim0 };
-  array = obj_to_array_contiguous_allow_conversion($input, DATA_TYPECODE,
+  array = obj_to_array_contiguous_allow_conversion($input,
+                                                   DATA_TYPECODE,
                                                    &is_new_object);
   if (!array || !require_dimensions(array, 1) ||
       !require_size(array, size, 1)) SWIG_fail;
@@ -607,7 +680,8 @@
   (PyArrayObject* array=NULL, int is_new_object=0)
 {
   npy_intp size[1] = { -1 };
-  array = obj_to_array_contiguous_allow_conversion($input, DATA_TYPECODE,
+  array = obj_to_array_contiguous_allow_conversion($input,
+                                                   DATA_TYPECODE,
                                                    &is_new_object);
   if (!array || !require_dimensions(array, 1) ||
       !require_size(array, size, 1)) SWIG_fail;
@@ -635,7 +709,8 @@
   (PyArrayObject* array=NULL, int is_new_object=0)
 {
   npy_intp size[1] = {-1};
-  array = obj_to_array_contiguous_allow_conversion($input, DATA_TYPECODE,
+  array = obj_to_array_contiguous_allow_conversion($input,
+                                                   DATA_TYPECODE,
                                                    &is_new_object);
   if (!array || !require_dimensions(array, 1) ||
       !require_size(array, size, 1)) SWIG_fail;
@@ -663,7 +738,8 @@
   (PyArrayObject* array=NULL, int is_new_object=0)
 {
   npy_intp size[2] = { $1_dim0, $1_dim1 };
-  array = obj_to_array_contiguous_allow_conversion($input, DATA_TYPECODE,
+  array = obj_to_array_contiguous_allow_conversion($input,
+                                                   DATA_TYPECODE,
                                                    &is_new_object);
   if (!array || !require_dimensions(array, 2) ||
       !require_size(array, size, 2)) SWIG_fail;
@@ -719,7 +795,8 @@
   (PyArrayObject* array=NULL, int is_new_object=0)
 {
   npy_intp size[2] = { -1, -1 };
-  array = obj_to_array_contiguous_allow_conversion($input, DATA_TYPECODE,
+  array = obj_to_array_contiguous_allow_conversion($input,
+                                                   DATA_TYPECODE,
                                                    &is_new_object);
   if (!array || !require_dimensions(array, 2) ||
       !require_size(array, size, 2)) SWIG_fail;
@@ -748,7 +825,8 @@
   (PyArrayObject* array=NULL, int is_new_object=0)
 {
   npy_intp size[2] = { -1, -1 };
-  array = obj_to_array_fortran_allow_conversion($input, DATA_TYPECODE,
+  array = obj_to_array_fortran_allow_conversion($input,
+                                                DATA_TYPECODE,
                                                 &is_new_object);
   if (!array || !require_dimensions(array, 2) ||
       !require_size(array, size, 2) || !require_fortran(array)) SWIG_fail;
@@ -777,7 +855,8 @@
   (PyArrayObject* array=NULL, int is_new_object=0)
 {
   npy_intp size[2] = { -1, -1 };
-  array = obj_to_array_contiguous_allow_conversion($input, DATA_TYPECODE,
+  array = obj_to_array_fortran_allow_conversion($input,
+                                                   DATA_TYPECODE,
                                                    &is_new_object);
   if (!array || !require_dimensions(array, 2) ||
       !require_size(array, size, 2) || !require_fortran(array)) SWIG_fail;
@@ -806,7 +885,8 @@
   (PyArrayObject* array=NULL, int is_new_object=0)
 {
   npy_intp size[3] = { $1_dim0, $1_dim1, $1_dim2 };
-  array = obj_to_array_contiguous_allow_conversion($input, DATA_TYPECODE,
+  array = obj_to_array_contiguous_allow_conversion($input,
+                                                   DATA_TYPECODE,
                                                    &is_new_object);
   if (!array || !require_dimensions(array, 3) ||
       !require_size(array, size, 3)) SWIG_fail;
@@ -927,8 +1007,9 @@
   (PyArrayObject* array=NULL, int is_new_object=0)
 {
   npy_intp size[3] = { -1, -1, -1 };
-  array = obj_to_array_contiguous_allow_conversion($input, DATA_TYPECODE,
-                                                   &is_new_object);
+  array = obj_to_array_fortran_allow_conversion($input,
+                                                DATA_TYPECODE,
+                                                &is_new_object);
   if (!array || !require_dimensions(array, 3) ||
       !require_size(array, size, 3) || !require_fortran(array)) SWIG_fail;
   $1 = (DIM_TYPE) array_size(array,0);
@@ -1247,7 +1328,7 @@
 %typemap(in,numinputs=0,
          fragment="NumPy_Backward_Compatibility,NumPy_Macros")
   (DATA_TYPE ARGOUT_ARRAY1[ANY])
-  (PyObject * array = NULL)
+  (PyObject* array = NULL)
 {
   npy_intp dims[1] = { $1_dim0 };
   array = PyArray_SimpleNew(1, dims, DATA_TYPECODE);
@@ -1265,7 +1346,7 @@
 %typemap(in,numinputs=1,
          fragment="NumPy_Fragments")
   (DATA_TYPE* ARGOUT_ARRAY1, DIM_TYPE DIM1)
-  (PyObject * array = NULL)
+  (PyObject* array = NULL)
 {
   npy_intp dims[1];
   if (!PyInt_Check($input))
@@ -1293,7 +1374,7 @@
 %typemap(in,numinputs=1,
          fragment="NumPy_Fragments")
   (DIM_TYPE DIM1, DATA_TYPE* ARGOUT_ARRAY1)
-  (PyObject * array = NULL)
+  (PyObject* array = NULL)
 {
   npy_intp dims[1];
   if (!PyInt_Check($input))
@@ -1321,7 +1402,7 @@
 %typemap(in,numinputs=0,
          fragment="NumPy_Backward_Compatibility,NumPy_Macros")
   (DATA_TYPE ARGOUT_ARRAY2[ANY][ANY])
-  (PyObject * array = NULL)
+  (PyObject* array = NULL)
 {
   npy_intp dims[2] = { $1_dim0, $1_dim1 };
   array = PyArray_SimpleNew(2, dims, DATA_TYPECODE);
@@ -1339,7 +1420,7 @@
 %typemap(in,numinputs=0,
          fragment="NumPy_Backward_Compatibility,NumPy_Macros")
   (DATA_TYPE ARGOUT_ARRAY3[ANY][ANY][ANY])
-  (PyObject * array = NULL)
+  (PyObject* array = NULL)
 {
   npy_intp dims[3] = { $1_dim0, $1_dim1, $1_dim2 };
   array = PyArray_SimpleNew(3, dims, DATA_TYPECODE);
@@ -1360,7 +1441,7 @@
  */
 %typemap(in,numinputs=0)
   (DATA_TYPE** ARGOUTVIEW_ARRAY1, DIM_TYPE* DIM1    )
-  (DATA_TYPE*  data_temp        , DIM_TYPE  dim_temp)
+  (DATA_TYPE*  data_temp = NULL , DIM_TYPE  dim_temp)
 {
   $1 = &data_temp;
   $2 = &dim_temp;
@@ -1379,7 +1460,7 @@
  */
 %typemap(in,numinputs=0)
   (DIM_TYPE* DIM1    , DATA_TYPE** ARGOUTVIEW_ARRAY1)
-  (DIM_TYPE  dim_temp, DATA_TYPE*  data_temp        )
+  (DIM_TYPE  dim_temp, DATA_TYPE*  data_temp = NULL )
 {
   $1 = &dim_temp;
   $2 = &data_temp;
@@ -1398,7 +1479,7 @@
  */
 %typemap(in,numinputs=0)
   (DATA_TYPE** ARGOUTVIEW_ARRAY2, DIM_TYPE* DIM1     , DIM_TYPE* DIM2     )
-  (DATA_TYPE*  data_temp        , DIM_TYPE  dim1_temp, DIM_TYPE  dim2_temp)
+  (DATA_TYPE*  data_temp = NULL , DIM_TYPE  dim1_temp, DIM_TYPE  dim2_temp)
 {
   $1 = &data_temp;
   $2 = &dim1_temp;
@@ -1418,7 +1499,7 @@
  */
 %typemap(in,numinputs=0)
   (DIM_TYPE* DIM1     , DIM_TYPE* DIM2     , DATA_TYPE** ARGOUTVIEW_ARRAY2)
-  (DIM_TYPE  dim1_temp, DIM_TYPE  dim2_temp, DATA_TYPE*  data_temp        )
+  (DIM_TYPE  dim1_temp, DIM_TYPE  dim2_temp, DATA_TYPE*  data_temp = NULL )
 {
   $1 = &dim1_temp;
   $2 = &dim2_temp;
@@ -1438,7 +1519,7 @@
  */
 %typemap(in,numinputs=0)
   (DATA_TYPE** ARGOUTVIEW_FARRAY2, DIM_TYPE* DIM1     , DIM_TYPE* DIM2     )
-  (DATA_TYPE*  data_temp        , DIM_TYPE  dim1_temp, DIM_TYPE  dim2_temp)
+  (DATA_TYPE*  data_temp = NULL  , DIM_TYPE  dim1_temp, DIM_TYPE  dim2_temp)
 {
   $1 = &data_temp;
   $2 = &dim1_temp;
@@ -1449,8 +1530,9 @@
   (DATA_TYPE** ARGOUTVIEW_FARRAY2, DIM_TYPE* DIM1, DIM_TYPE* DIM2)
 {
   npy_intp dims[2] = { *$2, *$3 };
-  PyObject * obj = PyArray_SimpleNewFromData(2, dims, DATA_TYPECODE, (void*)(*$1));
-  PyArrayObject * array = (PyArrayObject*) obj;
+  PyObject* obj = PyArray_SimpleNewFromData(2, dims, DATA_TYPECODE, (void*)(*$1));
+  PyArrayObject* array = (PyArrayObject*) obj;
+
   if (!array || !require_fortran(array)) SWIG_fail;
   $result = SWIG_Python_AppendOutput($result,obj);
 }
@@ -1459,7 +1541,7 @@
  */
 %typemap(in,numinputs=0)
   (DIM_TYPE* DIM1     , DIM_TYPE* DIM2     , DATA_TYPE** ARGOUTVIEW_FARRAY2)
-  (DIM_TYPE  dim1_temp, DIM_TYPE  dim2_temp, DATA_TYPE*  data_temp        )
+  (DIM_TYPE  dim1_temp, DIM_TYPE  dim2_temp, DATA_TYPE*  data_temp = NULL  )
 {
   $1 = &dim1_temp;
   $2 = &dim2_temp;
@@ -1470,8 +1552,9 @@
   (DIM_TYPE* DIM1, DIM_TYPE* DIM2, DATA_TYPE** ARGOUTVIEW_FARRAY2)
 {
   npy_intp dims[2] = { *$1, *$2 };
-  PyObject * obj = PyArray_SimpleNewFromData(2, dims, DATA_TYPECODE, (void*)(*$3));
-  PyArrayObject * array = (PyArrayObject*) obj;
+  PyObject* obj = PyArray_SimpleNewFromData(2, dims, DATA_TYPECODE, (void*)(*$3));
+  PyArrayObject* array = (PyArrayObject*) obj;
+
   if (!array || !require_fortran(array)) SWIG_fail;
   $result = SWIG_Python_AppendOutput($result,obj);
 }
@@ -1480,8 +1563,8 @@
                       DIM_TYPE* DIM3)
  */
 %typemap(in,numinputs=0)
-  (DATA_TYPE** ARGOUTVIEW_ARRAY3, DIM_TYPE* DIM1, DIM_TYPE* DIM2, DIM_TYPE* DIM3)
-  (DATA_TYPE* data_temp, DIM_TYPE dim1_temp, DIM_TYPE dim2_temp, DIM_TYPE dim3_temp)
+  (DATA_TYPE** ARGOUTVIEW_ARRAY3, DIM_TYPE* DIM1    , DIM_TYPE* DIM2    , DIM_TYPE* DIM3    )
+  (DATA_TYPE* data_temp = NULL  , DIM_TYPE dim1_temp, DIM_TYPE dim2_temp, DIM_TYPE dim3_temp)
 {
   $1 = &data_temp;
   $2 = &dim1_temp;
@@ -1503,7 +1586,7 @@
  */
 %typemap(in,numinputs=0)
   (DIM_TYPE* DIM1, DIM_TYPE* DIM2, DIM_TYPE* DIM3, DATA_TYPE** ARGOUTVIEW_ARRAY3)
-  (DIM_TYPE dim1_temp, DIM_TYPE dim2_temp, DIM_TYPE dim3_temp, DATA_TYPE* data_temp)
+  (DIM_TYPE dim1_temp, DIM_TYPE dim2_temp, DIM_TYPE dim3_temp, DATA_TYPE* data_temp = NULL)
 {
   $1 = &dim1_temp;
   $2 = &dim2_temp;
@@ -1524,8 +1607,8 @@
                       DIM_TYPE* DIM3)
  */
 %typemap(in,numinputs=0)
-  (DATA_TYPE** ARGOUTVIEW_FARRAY3, DIM_TYPE* DIM1, DIM_TYPE* DIM2, DIM_TYPE* DIM3)
-  (DATA_TYPE* data_temp, DIM_TYPE dim1_temp, DIM_TYPE dim2_temp, DIM_TYPE dim3_temp)
+  (DATA_TYPE** ARGOUTVIEW_FARRAY3, DIM_TYPE* DIM1    , DIM_TYPE* DIM2    , DIM_TYPE* DIM3    )
+  (DATA_TYPE* data_temp = NULL   , DIM_TYPE dim1_temp, DIM_TYPE dim2_temp, DIM_TYPE dim3_temp)
 {
   $1 = &data_temp;
   $2 = &dim1_temp;
@@ -1537,9 +1620,10 @@
   (DATA_TYPE** ARGOUTVIEW_FARRAY3, DIM_TYPE* DIM1, DIM_TYPE* DIM2, DIM_TYPE* DIM3)
 {
   npy_intp dims[3] = { *$2, *$3, *$4 };
-  PyObject * obj = PyArray_SimpleNewFromData(3, dims, DATA_TYPECODE, (void*)(*$1));
-  PyArrayObject * array = (PyArrayObject*) obj;
-  if (!array || require_fortran(array)) SWIG_fail;
+  PyObject* obj = PyArray_SimpleNewFromData(3, dims, DATA_TYPECODE, (void*)(*$1));
+  PyArrayObject* array = (PyArrayObject*) obj;
+
+  if (!array || !require_fortran(array)) SWIG_fail;
   $result = SWIG_Python_AppendOutput($result,obj);
 }
 
@@ -1547,8 +1631,8 @@
                       DATA_TYPE** ARGOUTVIEW_FARRAY3)
  */
 %typemap(in,numinputs=0)
-  (DIM_TYPE* DIM1, DIM_TYPE* DIM2, DIM_TYPE* DIM3, DATA_TYPE** ARGOUTVIEW_FARRAY3)
-  (DIM_TYPE dim1_temp, DIM_TYPE dim2_temp, DIM_TYPE dim3_temp, DATA_TYPE* data_temp)
+  (DIM_TYPE* DIM1    , DIM_TYPE* DIM2    , DIM_TYPE* DIM3    , DATA_TYPE** ARGOUTVIEW_FARRAY3)
+  (DIM_TYPE dim1_temp, DIM_TYPE dim2_temp, DIM_TYPE dim3_temp, DATA_TYPE* data_temp = NULL   )
 {
   $1 = &dim1_temp;
   $2 = &dim2_temp;
