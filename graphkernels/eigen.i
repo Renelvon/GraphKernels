@@ -219,11 +219,7 @@ Know problems:
     PyObject* array = ConvertFromEigenToNumpyMatrix($1, $1->data());
     if (!array) SWIG_fail;
 
-    ((PyArrayObject* )array)->flags &= (~NPY_WRITEABLE);
-    /**
-     * The following code should be valid once I port numpy 1.7 into my machine.
-     */
-    //((PyArrayObject* )array)->flags &= (~NPY_ARRAY_WRITEABLE);
+    ((PyArrayObject* )array)->flags &= (~NPY_ARRAY_WRITEABLE);
     $result = array;
 }
 
