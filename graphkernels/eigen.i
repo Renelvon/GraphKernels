@@ -98,7 +98,7 @@ Know problems:
                         NumpyType<typename Derived::Scalar>::getCode());
             if (!array) return nullptr;
             // Copy data over.
-            typename Derived::Scalar* py_data = static_cast<typename Derived::Scalar*>(PyArray_DATA(array));
+            typename Derived::Scalar* py_data = static_cast<typename Derived::Scalar*>(PyArray_DATA((PyArrayObject*)array));
             for (int i = 0; i != dims[0]; ++i)
                 for (int j = 0; j != dims[1]; ++j)
                     py_data[i*dims[1]+j] = in->coeff(i,j);
