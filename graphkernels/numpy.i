@@ -122,9 +122,9 @@
     if (PyTuple_Check(   py_obj)) return "tuple"       ;
 %#if PY_MAJOR_VERSION < 3
     if (PyFile_Check(    py_obj)) return "file"        ;
+    if (PyModule_Check(  py_obj)) return "module"      ;
     if (PyInstance_Check(py_obj)) return "instance"    ;
 %#endif
-    if (PyModule_Check(  py_obj)) return "module"      ;
 
     return "unknown type";
   }
@@ -169,6 +169,16 @@
   {
     return PyArray_EquivTypenums(actual_type, desired_type);
   }
+
+%#ifdef SWIGPY_USE_CAPSULE
+  void free_cap(PyObject * cap)
+  {
+    void* array = (void*) PyCapsule_GetPointer(cap,SWIGPY_CAPSULE_NAME);
+    if (array != NULL) free(array);
+  }
+%#endif
+
+
 }
 
 /**********************************************************************/
@@ -285,8 +295,14 @@
     }
     else
     {
-      Py_INCREF(ary->descr);
-      result = (PyArrayObject*) PyArray_FromArray(ary, ary->descr, NPY_FORTRANORDER);
+      Py_INCREF(array_descr(ary));
+      result = (PyArrayObject*) PyArray_FromArray(ary,
+                                                  array_descr(ary),
+%#if NPY_API_VERSION < 0x00000007
+                                                  NPY_FORTRANORDER);
+%#else
+                                                  NPY_ARRAY_F_CONTIGUOUS);
+%#endif
       *is_new_object = 1;
     }
     return result;
@@ -506,13 +522,20 @@
     int success = 1;
     int nd = array_numdims(ary);
     int i;
+    npy_intp * strides = array_strides(ary);
     if (array_is_fortran(ary)) return success;
-    /* Set the FORTRAN ordered flag */
-    ary->flags = NPY_ARRAY_FARRAY;
+    int n_non_one = 0;
+    /* Set the Fortran ordered flag */
+    const npy_intp *dims = array_dimensions(ary);
+    for (i=0; i < nd; ++i)
+      n_non_one += (dims[i] != 1) ? 1 : 0;
+    if (n_non_one > 1)
+      array_clearflags(ary,NPY_ARRAY_CARRAY);
+    array_enableflags(ary,NPY_ARRAY_FARRAY);
     /* Recompute the strides */
-    ary->strides[0] = ary->strides[nd-1];
+    strides[0] = strides[nd-1];
     for (i=1; i < nd; ++i)
-      ary->strides[i] = ary->strides[i-1] * array_size(ary,i-1);
+      strides[i] = strides[i-1] * array_size(ary,i-1);
     return success;
   }
 }
