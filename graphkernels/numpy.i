@@ -175,7 +175,7 @@
     }
     else
     {
-      py_obj = PyArray_FROMANY(input, typecode, 0, 0, NPY_DEFAULT);
+      py_obj = PyArray_FROMANY(input, typecode, 0, 0, NPY_ARRAY_DEFAULT);
       /* If NULL, PyArray_FromObject will have set python error value.*/
       ary = (PyArrayObject*) py_obj;
       *is_new_object = 1;
@@ -226,7 +226,7 @@
     else
     {
       Py_INCREF(ary->descr);
-      result = (PyArrayObject*) PyArray_FromArray(ary, ary->descr, NPY_FORTRAN);
+      result = (PyArrayObject*) PyArray_FromArray(ary, ary->descr, NPY_FORTRANORDER);
       *is_new_object = 1;
     }
     return result;
@@ -439,7 +439,7 @@
     int i;
     if (array_is_fortran(ary)) return success;
     /* Set the FORTRAN ordered flag */
-    ary->flags = NPY_FARRAY;
+    ary->flags = NPY_ARRAY_FARRAY;
     /* Recompute the strides */
     ary->strides[0] = ary->strides[nd-1];
     for (i=1; i < nd; ++i)
