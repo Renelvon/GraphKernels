@@ -99,7 +99,6 @@ Know problems:
             if (!array) return NULL;
             // Copy data over.
             typename Derived::Scalar* py_data = static_cast<typename Derived::Scalar*>(PyArray_DATA(array));
-            typename Derived::Scalar* cpp_data= static_cast<typename Derived::Scalar*>(data);
             for (int i = 0; i != dims[0]; ++i)
                 for (int j = 0; j != dims[1]; ++j)
                     py_data[i*dims[1]+j] = in->coeff(i,j);
@@ -172,9 +171,7 @@ Know problems:
         }
         
         bool eigen_is_row_major = out->Flags & Eigen::RowMajorBit;
-        bool numpy_is_row_major = array_is_contiguous(in);
         int eigen_type_code = NumpyType<typename Derived::Scalar>::getCode();
-        int numpy_type_code = array_type(in);
 
         int eigen_order = NPY_ARRAY_BEHAVED | NPY_ARRAY_FORCECAST;
         if (eigen_is_row_major) {
