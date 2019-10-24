@@ -89,14 +89,14 @@ Know problems:
             array = PyArray_SimpleNewFromData(2, dims,
                         NumpyType<typename Derived::Scalar>::getCode(),
                         data);
-            if (!array) return NULL;
+            if (!array) return nullptr;
             if (!row_major) {
-                array = PyArray_Transpose((PyArrayObject*) array, NULL);
+                array = PyArray_Transpose((PyArrayObject*) array, nullptr);
             }
         } else {
             array = PyArray_SimpleNew(2, dims,
                         NumpyType<typename Derived::Scalar>::getCode());
-            if (!array) return NULL;
+            if (!array) return nullptr;
             // Copy data over.
             typename Derived::Scalar* py_data = static_cast<typename Derived::Scalar*>(PyArray_DATA(array));
             for (int i = 0; i != dims[0]; ++i)
@@ -182,9 +182,9 @@ Know problems:
 
         PyArray_Descr* dtype = PyArray_DescrFromType(eigen_type_code);
         PyArrayObject* arr = (PyArrayObject*)PyArray_FromAny(
-                in, dtype, 0, 0, eigen_order, NULL);
+                in, dtype, 0, 0, eigen_order, nullptr);
 
-        if (arr == NULL) {
+        if (arr == nullptr) {
             // Error already set by PyArray_FromAny
             return;
         }
@@ -227,7 +227,7 @@ Know problems:
 %typemap(out, fragment="NumPy_Fragments",
         fragment="eigen_type_map") EigenType {
     PyObject* array = ConvertFromEigenToNumpyMatrix(&$1, $1.data(), true);
-    if (PyErr_Occurred() != NULL) return NULL;
+    if (PyErr_Occurred()) return nullptr;
     if (!array) SWIG_fail;
     $result = array;
 }
@@ -243,7 +243,7 @@ Know problems:
 %typemap(argout, fragment="NumPy_Fragments",
         fragments="eigen_type_map") EigenType& ARGOUT {
     PyObject* array = ConvertFromEigenToNumpyMatrix(&temp$argnum, temp$argnum.data(), true);
-    if (PyErr_Occurred() != NULL) array=NULL;
+    if (PyErr_Occurred()) array = nullptr;
     if (!array) SWIG_fail;
     $result = SWIG_Python_AppendOutput($result,array);
 }
@@ -261,7 +261,7 @@ Know problems:
         EigenType& (EigenType temp),
         const EigenType& (EigenType temp) {
     ConvertFromNumpyToEigenMatrix(&temp, $input);
-    if (PyErr_Occurred() != NULL) return NULL;
+    if (PyErr_Occurred()) return nullptr;
     $1 = &temp;
 }
 
@@ -272,7 +272,7 @@ Know problems:
 %typemap(in, fragment="NumPy_Fragments", fragment="eigen_type_map")
         EigenType {
     ConvertFromNumpyToEigenMatrix(&$1, $input);
-    if (PyErr_Occurred() != NULL) return NULL;
+    if (PyErr_Occurred()) return nullptr;
 }
 %enddef
 
