@@ -6,9 +6,6 @@
 [backend](https://github.com/mahito-sugiyama/graph-kernels) is coded in C++ and
 exposed to Python through [SWIG](http://www.swig.org/).
 
-- `GKextCPy` is the extension created to build the extension module for the
-  wrapper from C++ to Python
-
 The Python and R packages are described at:
 
 - M. Sugiyama, M.E. Ghisu, F. Llinares-López and K. Borgwardt. **graphkernels:
