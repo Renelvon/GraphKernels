@@ -13,8 +13,8 @@ objects.
 
 ## Example: Compute the WL kernel
 
-We assume all dependencies are already properly installed. Threee main steps
-are required in Python to compute a kernel matrix.
+We assume all dependencies are already properly installed. Three main steps are
+required in Python to compute a kernel matrix.
 
 1. Import the packages
 
