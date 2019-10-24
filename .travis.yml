@@ -9,10 +9,17 @@ python: 3.6
 virtualenv:
     system_site_packages: true
 
+addons:
+    apt:
+        packages:
+            - python3-pkgconfig # setup/build
+            - swig              # setup/build
+            - libeigen3-dev     # setup/build/install
+            - python3-igraph    # install
+            - python3-numpy     # setup/build/install
+            - pylint3           # test
+
 before_install:
-    - sudo apt-get install -yq python3-pkgconfig swig # setup/build
-    - sudo apt-get install -yq libeigen3-dev python3-igraph python3-numpy # install
-    - sudo apt-get install -yq pylint3 # test
     - pip3 install --upgrade cpplint # test
 
 install:
