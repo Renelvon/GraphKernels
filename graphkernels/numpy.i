@@ -44,24 +44,6 @@
 %#define NPY_USERDEF       PyArray_USERDEF
 %#define npy_intp          intp
 
-%#define NPY_MAX_BYTE      MAX_BYTE
-%#define NPY_MIN_BYTE      MIN_BYTE
-%#define NPY_MAX_UBYTE     MAX_UBYTE
-%#define NPY_MAX_SHORT     MAX_SHORT
-%#define NPY_MIN_SHORT     MIN_SHORT
-%#define NPY_MAX_USHORT    MAX_USHORT
-%#define NPY_MAX_INT       MAX_INT
-%#define NPY_MIN_INT       MIN_INT
-%#define NPY_MAX_UINT      MAX_UINT
-%#define NPY_MAX_LONG      MAX_LONG
-%#define NPY_MIN_LONG      MIN_LONG
-%#define NPY_MAX_ULONG     MAX_ULONG
-%#define NPY_MAX_LONGLONG  MAX_LONGLONG
-%#define NPY_MIN_LONGLONG  MIN_LONGLONG
-%#define NPY_MAX_ULONGLONG MAX_ULONGLONG
-%#define NPY_MAX_INTP      MAX_INTP
-%#define NPY_MIN_INTP      MIN_INTP
-
 %#define NPY_FARRAY        FARRAY
 %#define NPY_F_CONTIGUOUS  F_CONTIGUOUS
 %#endif
