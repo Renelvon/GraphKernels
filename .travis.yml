@@ -23,12 +23,13 @@ before_install:
     - pip3 install --upgrade cpplint # test
 
 install:
+    - python3 setup.py build_ext
     - python3 setup.py install
     - python3 setup.py sdist
 
 script:
-    - pylint3 setup.py GKextCPy
-    - cpplint --verbose=5 --recursive GKextCPy/GKextCPy.h GKextCPy/GKextCPy.cpp
+    - pylint3 setup.py graphkernels
+    - cpplint --verbose=5 --recursive graphkernels/graphkernels.h graphkernels/graphkernels.cpp
     - cd ./Tutorial
     - python3 demo_mutag.py
     # The following requires sklearn package
