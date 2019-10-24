@@ -3,7 +3,7 @@
 
 %{
 #ifndef SWIG_FILE_WITH_INIT
-#  define NO_IMPORT_ARRAY
+#define NO_IMPORT_ARRAY
 #endif
 #include "stdio.h"
 #include <numpy/arrayobject.h>
