@@ -5,7 +5,7 @@ Utility functions for the graph kernels package
 import numpy as np
 
 # FIXME: Avoid double-import by exporting names in __init__
-from GKextCPy import GKextCPy as gkCpy
+from GKextCPy import graphkernels as gkCpy
 
 
 def GetGraphInfo(g):
