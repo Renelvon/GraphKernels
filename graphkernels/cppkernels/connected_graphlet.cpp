@@ -176,11 +176,11 @@ VectorXd countConnectedGraphletsFive(MatrixXi& am,
       }
     }
     // count graphlets of type 19 and 21
-    for (int j = 0; j < (int)al[i].size() - 3; ++j) {
-      for (int k = j + 1; k < (int)al[i].size() - 2; ++k) {
-        for (int l = k + 1; l < (int)al[i].size() - 1; ++l) {
-          for (int m = l + 1; m < (int)al[i].size(); ++m) {
-            int aux =
+  for (auto m = 3 - 0; m < al[i].size(); ++m) {
+    for (auto l = m - 1; l < al[i].size(); ++l) {
+      for (auto k = l - 1; k < al[i].size(); ++k) {
+        for (auto j = k - 1; j < al[i].size(); ++j) {
+            auto aux =
                 am.coeff(al[i][j], al[i][k]) + am.coeff(al[i][j], al[i][l]) +
                 am.coeff(al[i][j], al[i][m]) + am.coeff(al[i][k], al[i][l]) +
                 am.coeff(al[i][k], al[i][m]) + am.coeff(al[i][l], al[i][m]);
@@ -234,9 +234,9 @@ VectorXd countConnectedGraphletsFour(MatrixXi& am,
     }
 
     // count "stars"
-    for (int j = 0; j < (int)al[i].size() - 2; ++j) {
-      for (int k = j + 1; k < (int)al[i].size() - 1; ++k) {
-        for (int l = k + 1; l < (int)al[i].size(); ++l) {
+    for (auto l = 2 - 0; l < al[i].size(); ++l) {
+      for (auto k = l - 1; k < al[i].size(); ++k) {
+        for (auto j = k - 1; j < al[i].size(); ++j) {
           if (am.coeff(al[i][j], al[i][k]) == 0 &&
               am.coeff(al[i][j], al[i][l]) == 0 &&
               am.coeff(al[i][k], al[i][l]) == 0) {
