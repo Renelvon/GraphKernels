@@ -19,14 +19,10 @@ def _do_calculate(G, gk_par, kernel_id=None):
         raise ValueError('Kernel index must be positive')
 
     # Extract graph info.
-    E, V_label, V_count, E_count, D_max = GetGKInput(G)
+    E, V_label, _, _, _ = GetGKInput(G)
 
     # Compute designated kernel
-    return gkCpy.CalculateKernelPy(
-        E, V_label, V_count, E_count, D_max,
-        gk_par,
-        kernel_id
-    )
+    return gkCpy.CalculateKernelPy(E, V_label, gk_par, kernel_id)
 
 
 # === Linear Kernels on Histograms ===

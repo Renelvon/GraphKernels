@@ -533,9 +533,6 @@ double computeKernelValue(MatrixXi& e1,
 
 MatrixXd CalculateKernelPy(vector<MatrixXi>& E,
                            vector<vector<int>>& V_label,
-                           vector<int>& V_count,
-                           vector<int>& E_count,
-                           vector<int>& D_max,
                            vector<double>& par,
                            int kernel_type) {
   MatrixXd K(V_label.size(), V_label.size());

@@ -92,9 +92,6 @@ double computeKernelValue(Eigen::MatrixXi& e1,
 
 Eigen::MatrixXd CalculateKernelPy(vector<Eigen::MatrixXi>& E,
                                   vector<vector<int>>& V_label,
-                                  vector<int>& V_count,
-                                  vector<int>& E_count,
-                                  vector<int>& D_max,
                                   vector<double>& par,
                                   int kernel_type);
 
