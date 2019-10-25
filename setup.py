@@ -35,7 +35,17 @@ def get_eigen_include_dir():
 
 
 def main():
-    # Rest of options are specified in `setup.cfg`
+    cppflags = [
+        '-flto',
+        '-g0',
+        '-march=native',
+        '-O3',
+        '-std=c++14',
+        '-Wall',
+        '-Wextra',
+        '-Wpedantic'
+    ]
+
     setuptools.setup(
         ext_modules=[
             setuptools.Extension(
@@ -48,11 +58,14 @@ def main():
                     path.join(GK_DIR, 'graphkernels.cpp'),
                 ],
                 swig_opts=['-c++', '-Wall', '-builtin', '-O', '-py3'],
-                extra_compile_args=['-std=c++11', '-O3'],
+                extra_compile_args=cppflags,
+                extra_link_args=cppflags,
                 include_dirs=[
                     get_eigen_include_dir(),
                     np.get_include(),
-                ]
+                ],
+                language='c++',
+                optional=False
             )
         ],
         # NOTE: The following option may produce a harmless warning when
@@ -60,6 +73,7 @@ def main():
         long_description_content_type='text/markdown',
         version=graphkernels.__version__,
     )
+    # Rest of options are specified in `setup.cfg`
 
 
 if __name__ == '__main__':

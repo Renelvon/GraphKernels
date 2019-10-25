@@ -18,19 +18,13 @@ C++, it is copied.
 Note:
 Eigen store vector as either row matrix or column matrix, so when converting
 Eigen data structure to ndarray, the result will always be 2 dimensional.
-
-Know problems:
-* Only works with numpy version < 1.7.
-
 **/
 
 /**
    numpy.i should have been included and initialized before
 **/
 
-%fragment("eigen_type_map", "header",
-        fragment="NumPy_Fragments") {
-
+%fragment("eigen_type_map", "header", fragment="NumPy_Fragments") {
     template <typename T> struct NumpyType {
         static int getCode() {return -1;}
     };
@@ -77,7 +71,7 @@ Know problems:
      */
     template <class Derived>
     PyObject* ConvertFromEigenToNumpyMatrix(Eigen::MatrixBase<Derived>* in,
-            void* data, bool copy_data=false) {
+            void* data, bool copy_data = false) {
         npy_intp dims[2] = {in->rows(), in->cols()};
         bool row_major = in->Flags & Eigen::RowMajorBit;
         PyObject* array;
@@ -101,7 +95,7 @@ Know problems:
             typename Derived::Scalar* py_data = static_cast<typename Derived::Scalar*>(PyArray_DATA((PyArrayObject*)array));
             for (int i = 0; i != dims[0]; ++i)
                 for (int j = 0; j != dims[1]; ++j)
-                    py_data[i*dims[1]+j] = in->coeff(i,j);
+                    py_data[i*dims[1]+j] = in->coeff(i, j);
         }
 
         return array;
@@ -123,53 +117,38 @@ Know problems:
      */
     template <class Derived>
        void ConvertFromNumpyToEigenMatrix(Eigen::MatrixBase<Derived>* out,
-                PyObject* in)
-    {
+                PyObject* in) {
         int rows = 0;
         int cols = 0;
         // Check object type
-        if (!is_array(in))
-        {
+        if (!is_array(in)) {
             PyErr_SetString(PyExc_ValueError, "The given input is not known as a NumPy array or matrix.");
             return;
-        }
-        // Check dimensions
-        else if (array_numdims(in) > 2)
-        {
+        } else if (array_numdims(in) > 2) {  // Check dimensions
             PyErr_SetString(PyExc_ValueError, "Eigen only support 1D or 2D array.");
             return;
-        }
-        else if (array_numdims(in) == 1)
-        {
-            rows = array_size(in,0);
+        } else if (array_numdims(in) == 1) {
+            rows = array_size(in, 0);
             cols = 1;
-            if ((Derived::RowsAtCompileTime != Eigen::Dynamic) && (Derived::RowsAtCompileTime != rows))
-            {
+            if ((Derived::RowsAtCompileTime != Eigen::Dynamic) && (Derived::RowsAtCompileTime != rows)) {
                 PyErr_SetString(PyExc_ValueError, "Row dimension mismatch between NumPy and Eigen objects (1D).");
                 return;
-            }
-            else if ((Derived::ColsAtCompileTime != Eigen::Dynamic) && (Derived::ColsAtCompileTime != 1))
-            {
+            } else if ((Derived::ColsAtCompileTime != Eigen::Dynamic) && (Derived::ColsAtCompileTime != 1)) {
                 PyErr_SetString(PyExc_ValueError, "Column dimension mismatch between NumPy and Eigen objects (1D).");
                 return;
             }
-        }
-        else if (array_numdims(in) == 2)
-        {
-            rows = array_size(in,0);
-            cols = array_size(in,1);
-            if ((Derived::RowsAtCompileTime != Eigen::Dynamic) && (Derived::RowsAtCompileTime != array_size(in,0)))
-            {
+        } else if (array_numdims(in) == 2) {
+            rows = array_size(in, 0);
+            cols = array_size(in, 1);
+            if ((Derived::RowsAtCompileTime != Eigen::Dynamic) && (Derived::RowsAtCompileTime != array_size(in, 0))) {
                 PyErr_SetString(PyExc_ValueError, "Row dimension mismatch between NumPy and Eigen objects (2D).");
                 return;
-            }
-            else if ((Derived::ColsAtCompileTime != Eigen::Dynamic) && (Derived::ColsAtCompileTime != array_size(in,1)))
-            {
+            } else if ((Derived::ColsAtCompileTime != Eigen::Dynamic) && (Derived::ColsAtCompileTime != array_size(in, 1))) {
                 PyErr_SetString(PyExc_ValueError, "Column dimension mismatch between NumPy and Eigen objects (2D).");
                 return;
             }
         }
-        
+
         bool eigen_is_row_major = out->Flags & Eigen::RowMajorBit;
         int eigen_type_code = NumpyType<typename Derived::Scalar>::getCode();
 
@@ -245,7 +224,7 @@ Know problems:
     PyObject* array = ConvertFromEigenToNumpyMatrix(&temp$argnum, temp$argnum.data(), true);
     if (PyErr_Occurred()) array = nullptr;
     if (!array) SWIG_fail;
-    $result = SWIG_Python_AppendOutput($result,array);
+    $result = SWIG_Python_AppendOutput($result, array);
 }
 
 /**
@@ -254,7 +233,7 @@ Know problems:
  * Data will always be copied over.
  */
 %typemap(in, fragment="NumPy_Fragments", fragment="eigen_type_map"
-        //warning="999: Danger! C++ code wants pointer or reference of python memory.  I am going to do a copy of memory!"
+        // warning="999: Danger! C++ code wants pointer or reference of python memory.  I am going to do a copy of memory!"
         )
         EigenType* (EigenType temp),
         const EigenType* (EigenType temp),
@@ -262,7 +241,7 @@ Know problems:
         const EigenType& (EigenType temp) {
     ConvertFromNumpyToEigenMatrix(&temp, $input);
     // FIXME: This doesn't work, for some reason...
-    //if (PyErr_Occurred()) return nullptr;
+    // if (PyErr_Occurred()) return nullptr;
     $1 = &temp;
 }
 

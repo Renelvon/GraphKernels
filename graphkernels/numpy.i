@@ -112,18 +112,18 @@
   const char* pytype_string(PyObject* py_obj)
   {
     if (py_obj == nullptr       ) return "C++ nullptr value";
-    if (py_obj == Py_None       ) return "Python None" ;
-    if (PyCallable_Check(py_obj)) return "callable"    ;
-    if (PyString_Check(  py_obj)) return "string"      ;
-    if (PyInt_Check(     py_obj)) return "int"         ;
-    if (PyFloat_Check(   py_obj)) return "float"       ;
-    if (PyDict_Check(    py_obj)) return "dict"        ;
-    if (PyList_Check(    py_obj)) return "list"        ;
-    if (PyTuple_Check(   py_obj)) return "tuple"       ;
+    if (py_obj == Py_None       ) return "Python None";
+    if (PyCallable_Check(py_obj)) return "callable";
+    if (PyString_Check(  py_obj)) return "string";
+    if (PyInt_Check(     py_obj)) return "int";
+    if (PyFloat_Check(   py_obj)) return "float";
+    if (PyDict_Check(    py_obj)) return "dict";
+    if (PyList_Check(    py_obj)) return "list";
+    if (PyTuple_Check(   py_obj)) return "tuple";
 %#if PY_MAJOR_VERSION < 3
-    if (PyFile_Check(    py_obj)) return "file"        ;
-    if (PyModule_Check(  py_obj)) return "module"      ;
-    if (PyInstance_Check(py_obj)) return "instance"    ;
+    if (PyFile_Check(    py_obj)) return "file";
+    if (PyModule_Check(  py_obj)) return "module";
+    if (PyInstance_Check(py_obj)) return "instance";
 %#endif
 
     return "unknown type";
@@ -177,8 +177,6 @@
     if (array != nullptr) free(array);
   }
 %#endif
-
-
 }
 
 /**********************************************************************/
@@ -201,18 +199,14 @@
                             PyArray_EquivTypenums(array_type(input), typecode)))
     {
       ary = (PyArrayObject*) input;
-    }
-    else if is_array(input)
-    {
+    } else if (is_array(input)) {
       const char* desired_type = typecode_string(typecode);
       const char* actual_type  = typecode_string(array_type(input));
       PyErr_Format(PyExc_TypeError,
                    "Array of type '%s' required.  Array of type '%s' given",
                    desired_type, actual_type);
       ary = nullptr;
-    }
-    else
-    {
+    } else {
       const char* desired_type = typecode_string(typecode);
       const char* actual_type  = pytype_string(input);
       PyErr_Format(PyExc_TypeError,
@@ -236,13 +230,10 @@
     PyArrayObject* ary = nullptr;
     PyObject* py_obj;
     if (is_array(input) && (typecode == NPY_NOTYPE ||
-                            PyArray_EquivTypenums(array_type(input),typecode)))
-    {
+                            PyArray_EquivTypenums(array_type(input),typecode))) {
       ary = (PyArrayObject*) input;
       *is_new_object = 0;
-    }
-    else
-    {
+    } else {
       py_obj = PyArray_FROMANY(input, typecode, 0, 0, NPY_ARRAY_DEFAULT);
       /* If nullptr, PyArray_FromObject will have set python error value.*/
       ary = (PyArrayObject*) py_obj;
@@ -266,9 +257,7 @@
     {
       result = ary;
       *is_new_object = 0;
-    }
-    else
-    {
+    } else {
       result = (PyArrayObject*) PyArray_ContiguousFromObject((PyObject*)ary,
                                                               array_type(ary),
                                                               min_dims,
@@ -292,9 +281,7 @@
     {
       result = ary;
       *is_new_object = 0;
-    }
-    else
-    {
+    } else {
       Py_INCREF(array_descr(ary));
       result = (PyArrayObject*) PyArray_FromArray(ary,
                                                   array_descr(ary),
@@ -491,7 +478,7 @@
     char desired_dims[255] = "[";
     char s[255];
     char actual_dims[255] = "[";
-    for(i=0; i < n;i++)
+    for (i = 0; i < n; i++)
     {
       if (size[i] != -1 &&  size[i] != array_size(ary,i))
       {
@@ -505,9 +492,7 @@
         if (size[i] == -1)
         {
           sprintf(s, "*,");
-        }
-        else
-        {
+        } else {
           sprintf(s, "%ld,", (long int)size[i]);
         }
         strcat(desired_dims,s);
@@ -1691,7 +1676,8 @@
       !require_contiguous(temp_array) ||
       !require_native(temp_array) ||
       !PyArray_EquivTypenums(array_type(temp_array), DATA_TYPECODE)
-    ) SWIG_fail;
+    )
+        SWIG_fail;
 
     /* store the size of the first array in the list, then use that for comparison. */
     if (i == 0)
@@ -1875,7 +1861,8 @@
       !require_contiguous(temp_array) ||
       !require_native(temp_array) ||
       !PyArray_EquivTypenums(array_type(temp_array), DATA_TYPECODE)
-    ) SWIG_fail;
+    )
+        SWIG_fail;
 
     /* store the size of the first array in the list, then use that for comparison. */
     if (i == 0)

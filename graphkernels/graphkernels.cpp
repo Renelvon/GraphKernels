@@ -26,9 +26,7 @@ double selectLinearGaussian(vector<int>& h1, vector<int>& h2, double sigma) {
 }
 
 // map each product (v_1, v_2) of vertics to a number H(v_1, v_2)
-int productMapping(MatrixXi& e1,
-                   MatrixXi& e2,
-                   vector<int>& v1_label,
+int productMapping(vector<int>& v1_label,
                    vector<int>& v2_label,
                    MatrixXi& H) {
   int n_vx = 0;
@@ -217,7 +215,7 @@ double geometricRandomWalkKernel(MatrixXi& e1,
                                  double lambda) {
   // map each product (v_1, v_2) of vertics to a number H(v_1, v_2)
   MatrixXi H(v1_label.size(), v2_label.size());
-  int n_vx = productMapping(e1, e2, v1_label, v2_label, H);
+  int n_vx = productMapping(v1_label, v2_label, H);
 
   // prepare identity matrix
   SparseMatrix<double> I(n_vx, n_vx);
@@ -261,7 +259,7 @@ double exponentialRandomWalkKernel(MatrixXi& e1,
                                    double beta) {
   // map each product (v_1, v_2) of vertics to a number H(v_1, v_2)
   MatrixXi H(v1_label.size(), v2_label.size());
-  int n_vx = productMapping(e1, e2, v1_label, v2_label, H);
+  int n_vx = productMapping(v1_label, v2_label, H);
 
   // compute the adjacency matrix Ax of the direct product graph
   SparseMatrix<double> Ax(n_vx, n_vx);
@@ -301,7 +299,7 @@ double kstepRandomWalkKernel(MatrixXi& e1,
                              vector<double>& lambda_list) {
   // map each product (v_1, v_2) of vertics to a number H(v_1, v_2)
   MatrixXi H(v1_label.size(), v2_label.size());
-  int n_vx = productMapping(e1, e2, v1_label, v2_label, H);
+  int n_vx = productMapping(v1_label, v2_label, H);
 
   // prepare identity matrix
   SparseMatrix<double> I(n_vx, n_vx);
@@ -1186,7 +1184,7 @@ MatrixXd CalculateGraphletKernelPy(
   // for (auto&& vec : X)
   // for (auto&& x : vec) x--;
 
-  int freq_size;
+  int freq_size = 0;
 
   switch (k) {
     case 3:
@@ -1240,7 +1238,7 @@ MatrixXd CalculateConnectedGraphletKernelPy(
   // for (auto&& x : vec) x--;
 
   // MatrixXd freq;
-  int freq_size;
+  int freq_size = 0;
 
   switch (k) {
     case 3:
