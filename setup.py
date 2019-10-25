@@ -15,6 +15,7 @@ import graphkernels
 
 THIS_DIR = path.dirname(__file__)
 GK_DIR = path.join(THIS_DIR, 'graphkernels')
+CPP_DIR = path.join(GK_DIR, 'cppkernels')
 
 
 def get_eigen_include_dir():
@@ -54,8 +55,10 @@ def main():
                     # Interface file
                     path.join(GK_DIR, 'graphkernels.i'),
 
-                    # Implementation file
-                    path.join(GK_DIR, 'graphkernels.cpp'),
+                    # Implementation files
+                    path.join(CPP_DIR, 'connected_graphlet.cpp'),
+                    path.join(CPP_DIR, 'graphlet.cpp'),
+                    path.join(CPP_DIR, 'rest.cpp'),
                 ],
                 swig_opts=['-c++', '-Wall', '-builtin', '-O', '-py3'],
                 extra_compile_args=cppflags,
@@ -63,6 +66,7 @@ def main():
                 include_dirs=[
                     get_eigen_include_dir(),
                     np.get_include(),
+                    GK_DIR # For "graphkernels.h"
                 ],
                 language='c++',
                 optional=False
