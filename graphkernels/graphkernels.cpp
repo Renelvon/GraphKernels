@@ -1186,7 +1186,7 @@ MatrixXd CalculateGraphletKernelPy(
   // for (auto&& vec : X)
   // for (auto&& x : vec) x--;
 
-  int freq_size;
+  int freq_size = 0;
 
   switch (k) {
     case 3:
@@ -1240,7 +1240,7 @@ MatrixXd CalculateConnectedGraphletKernelPy(
   // for (auto&& x : vec) x--;
 
   // MatrixXd freq;
-  int freq_size;
+  int freq_size = 0;
 
   switch (k) {
     case 3:
