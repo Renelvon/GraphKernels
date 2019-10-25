@@ -12,7 +12,7 @@ void getMinValue(MatrixXi& iam, vector<int>& idx, vector<int>& sums) {
   sums.clear();
   sums.resize(idx.size());
   fill(sums.begin(), sums.end(), 0);
-  for (int i = 0; i < (int)idx.size(); ++i) {
+  for (auto i = 0; i < idx.size(); ++i) {
     Int k = idx[i];
     for (SparseMatrix<int>::InnerIterator it(am, k); it; ++it) {
       if (find(idx.begin(), idx.end(), it.row()) != idx.end()) {
@@ -26,7 +26,7 @@ void getMinValue(MatrixXi& iam, vector<int>& idx, vector<int>& sums) {
 VectorXd countConnectedGraphletsFive(MatrixXi& am,
                                      vector<vector<int>>& al,
                                      VectorXd& count_gr) {
-  int n = (int)al.size();
+  auto n = int{al.size()};
 
   vector<double> w = {
       1.0 / 120.0, 1.0 / 72.0, 1.0 / 48.0, 1.0 / 36.0, 1.0 / 28.0, 1.0 / 20.0,
@@ -104,7 +104,7 @@ VectorXd countConnectedGraphletsFive(MatrixXi& am,
                         count_gr[10] += w[10];
                       } else {
                         vector<int> ind;
-                        for (int ii = 0; ii < (int)sums.size(); ++ii) {
+                        for (auto ii = 0; ii < sums.size(); ++ii) {
                           if (sums[ii] == 3)
                             ind.push_back(ii);
                         }
@@ -133,11 +133,11 @@ VectorXd countConnectedGraphletsFive(MatrixXi& am,
                       count_gr[17] += w[17];
                     } else {
                       vector<int> ind;
-                      for (int ii = 0; ii < (int)sums.size(); ++ii) {
+                      for (auto ii = 0; ii < sums.size(); ++ii) {
                         if (sums[ii] == 3)
                           ind.push_back(ii);
                       }
-                      for (int ii = 0; ii < (int)sums.size(); ++ii) {
+                      for (auto ii = 0; ii < sums.size(); ++ii) {
                         if (sums[ii] == 1)
                           ind.push_back(ii);
                       }
@@ -203,7 +203,7 @@ VectorXd countConnectedGraphletsFour(MatrixXi& am,
                                      VectorXd& count_gr) {
   vector<double> w = {1.0 / 24.0, 1.0 / 12.0, 1.0 / 4.0,
                       0.0,        1.0 / 8.0,  1.0 / 2.0};
-  int n = (int)am.rows();
+  auto n = int{am.rows()};
   vector<int> L1(n);
   iota(L1.begin(), L1.end(), 0);
 
@@ -254,7 +254,7 @@ VectorXd countConnectedGraphletsThree(MatrixXi& am,
                                       vector<vector<int>>& al,
                                       VectorXd& count_gr) {
   vector<double> w = {1.0 / 2.0, 1.0 / 6.0};
-  int n = (int)am.rows();
+  auto n = int{am.rows()};
   vector<int> L1(n);
   iota(L1.begin(), L1.end(), 0);
 
