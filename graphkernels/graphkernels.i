@@ -42,19 +42,6 @@ namespace std {
 %template(VecMatrixXi) vector<Eigen::MatrixXi>;
 };
 
-double selectLinearGaussian(vector<int>& h1, vector<int>& h2, double sigma);
-int productMapping(vector<int>& v1_label,
-                   vector<int>& v2_label,
-                   Eigen::MatrixXi& H);
-
-Eigen::MatrixXd productAdjacency(Eigen::MatrixXi& e1,
-                                 Eigen::MatrixXi& e2,
-                                 vector<int>& v1_label,
-                                 vector<int>& v2_label,
-                                 Eigen::MatrixXi& H);
-
-void bucketsort(vector<int>& x, vector<int>& index, int label_max);
-
 // All the kernel functions
 double edgeHistogramKernel(Eigen::MatrixXi& e1,
                            Eigen::MatrixXi& e2,
@@ -105,36 +92,14 @@ double computeKernelValue(Eigen::MatrixXi& e1,
 
 Eigen::MatrixXd CalculateKernelPy(vector<Eigen::MatrixXi>& E,
                                   vector<vector<int>>& V_label,
-                                  vector<int>& V_count,
-                                  vector<int>& E_count,
-                                  vector<int>& D_max,
                                   vector<double>& par,
                                   int kernel_type);
-
-int find_min(int a, int b, int c);
-
-void card_ThreeInter(vector<int>& L1,
-                     vector<int>& L2,
-                     vector<int>& L3,
-                     vector<int>& card);
-
-void getIndices(vector<int>& o_set1,
-                vector<int>& o_set2,
-                vector<int>& inter,
-                vector<int>& diff1,
-                vector<int>& diff2);
 
 Eigen::VectorXd countGraphletsFour(vector<vector<int>>& al,
                                    Eigen::VectorXd& count_gr);
 
-void getCardinality(vector<int>& o_set1,
-                    vector<int>& o_set2,
-                    vector<double>& card);
-
 Eigen::VectorXd countGraphletsThree(vector<vector<int>>& al,
                                     Eigen::VectorXd& count_gr);
-
-void getMinValue(Eigen::MatrixXi& iam, vector<int>& idx, vector<int>& sums);
 
 Eigen::VectorXd countConnectedGraphletsFive(Eigen::MatrixXi& am,
                                             vector<vector<int>>& al,
@@ -149,7 +114,6 @@ Eigen::VectorXd countConnectedGraphletsThree(Eigen::MatrixXi& am,
                                              Eigen::VectorXd& count_gr);
 
 Eigen::MatrixXd CalculateGraphletKernelPy(
-    vector<Eigen::MatrixXi>& graph_adj_all,
     vector<vector<vector<int>>>& graph_adjlist_all,
     int k);
 

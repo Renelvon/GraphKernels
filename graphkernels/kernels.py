@@ -19,14 +19,10 @@ def _do_calculate(G, gk_par, kernel_id=None):
         raise ValueError('Kernel index must be positive')
 
     # Extract graph info.
-    E, V_label, V_count, E_count, D_max = GetGKInput(G)
+    E, V_label, _, _, _ = GetGKInput(G)
 
     # Compute designated kernel
-    return gkCpy.CalculateKernelPy(
-        E, V_label, V_count, E_count, D_max,
-        gk_par,
-        kernel_id
-    )
+    return gkCpy.CalculateKernelPy(E, V_label, gk_par, kernel_id)
 
 
 # === Linear Kernels on Histograms ===
@@ -130,8 +126,8 @@ def CalculateGraphletKernel(G, par=4):
     if par not in (3, 4):
         raise ValueError("Graphlet kernel supports only: k = 3 or 4")
 
-    adj_mat, adj_list = GetAdjMatList(G) # Extract graph info.
-    return gkCpy.CalculateGraphletKernelPy(adj_mat, adj_list, par)
+    _, adj_list = GetAdjMatList(G) # Extract graph info.
+    return gkCpy.CalculateGraphletKernelPy(adj_list, par)
 
 
 def CalculateConnectedGraphletKernel(G, par=4):
@@ -153,18 +149,15 @@ def CalculateConnectedGraphletKernel(G, par=4):
     return gkCpy.CalculateConnectedGraphletKernelPy(adj_mat, adj_list, par)
 
 
-def _floyd_transform(g):
-    am = g.shortest_paths_dijkstra()
-    am = np.asarray(am).reshape(len(am), len(am))
-    am_pos_l = (am > 0).to_list()
-
-    g_floyd = Graph.Adjacency(am_pos_l)
-
-    g_floyd.es['label'] = am[am.nonzero()]
-    g_floyd.vs['id'] = np.arange(len(g.vs['label']))
-    g_floyd.vs['label'] = g.vs['label']
-
-    return g_floyd
+def _floyd_transform(gg):
+    # TODO: Beautify.
+    g_floyd_am = gg.shortest_paths_dijkstra()
+    g_floyd_am = np.asarray(g_floyd_am).reshape(len(g_floyd_am), len(g_floyd_am))
+    g = Graph.Adjacency((g_floyd_am > 0).tolist())
+    g.es['label'] = g_floyd_am[g_floyd_am.nonzero()]
+    g.vs['id']= np.arange(len(gg.vs['label']))
+    g.vs['label'] = gg.vs['label']
+    return g
 
 
 def CalculateShortestPathKernel(G):
