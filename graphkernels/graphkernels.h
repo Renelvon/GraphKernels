@@ -36,20 +36,6 @@ using Eigen::MatrixXi;
 using Eigen::SelfAdjointEigenSolver;
 using Eigen::SparseMatrix;
 
-double selectLinearGaussian(vector<int>& h1, vector<int>& h2, double sigma);
-
-int productMapping(vector<int>& v1_label,
-                   vector<int>& v2_label,
-                   MatrixXi& H);
-
-MatrixXd productAdjacency(MatrixXi& e1,
-                          MatrixXi& e2,
-                          vector<int>& v1_label,
-                          vector<int>& v2_label,
-                          MatrixXi& H);
-
-void bucketsort(vector<int>& x, vector<int>& index, int label_max);
-
 // Simple Kernels
 // ==============
 
@@ -119,28 +105,6 @@ MatrixXd CalculateKernelPy(vector<MatrixXi>& E,
 
 // Graphlet kernels
 // ================
-
-// Auxiliary functions
-// -------------------
-int find_min(int a, int b, int c);
-
-void card_ThreeInter(vector<int>& L1,
-                     vector<int>& L2,
-                     vector<int>& L3,
-                     vector<int>& card);
-
-void getIndices(vector<int>& o_set1,
-                vector<int>& o_set2,
-                vector<int>& inter,
-                vector<int>& diff1,
-                vector<int>& diff2);
-
-
-void getCardinality(vector<int>& o_set1,
-                    vector<int>& o_set2,
-                    vector<double>& card);
-
-void getMinValue(MatrixXi& iam, vector<int>& idx, vector<int>& sums);
 
 // Graphlet kernel for k = 3, 4
 // ----------------------------
