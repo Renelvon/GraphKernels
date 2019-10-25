@@ -52,7 +52,7 @@ void card_ThreeInter(vector<int>& L1,
   fill(card.begin(), card.end(), 0);
   int i = 0, j = 0, k = 0;
 
-  while (i < (int)L1.size() && j < (int)L2.size() && k < (int)L3.size()) {
+  while (i < L1.size() && j < L2.size() && k < L3.size()) {
     int m = find_min(L1[i], L2[j], L3[k]);
     card[m - 1] += 1;
     switch (m) {
@@ -85,21 +85,24 @@ void card_ThreeInter(vector<int>& L1,
     }
   }
 
-  if (i < (int)L1.size() || j < (int)L2.size() || k < (int)L3.size()) {
-    if (i >= (int)L1.size() && j >= (int)L2.size()) {
-      card[2] += (int)L3.size() - k;
-      k = (int)L3.size();
+  if (i < L1.size() || j < L2.size() || k < L3.size()) {
+    if (i >= L1.size() && j >= L2.size()) {
+      card[2] += L3.size();
+      card[2] -= k;
+      k = L3.size();
     } else {
-      if (i >= (int)L1.size() && k >= (int)L3.size()) {
-        card[1] += (int)L2.size() - j;
-        j = (int)L2.size();
+      if (i >= L1.size() && k >= L3.size()) {
+        card[1] += L2.size();
+        card[1] -= j;
+        j = L2.size();
       } else {
-        if (j >= (int)L2.size() && k >= (int)L3.size()) {
-          card[0] += (int)L1.size() - i;
-          i = (int)L1.size();
+        if (j >= L2.size() && k >= L3.size()) {
+          card[0] += L1.size();
+          card[0] -= i;
+          i = L1.size();
         } else {
-          if (i >= (int)L1.size()) {
-            while (j < (int)L2.size() && k < (int)L3.size()) {
+          if (i >= L1.size()) {
+            while (j < L2.size() && k < L3.size()) {
               if (L2[j] < L3[k]) {
                 card[1]++;
                 j++;
@@ -115,8 +118,8 @@ void card_ThreeInter(vector<int>& L1,
               }
             }
           } else {
-            if (j >= (int)L2.size()) {
-              while (i < (int)L1.size() && k < (int)L3.size()) {
+            if (j >= L2.size()) {
+              while (i < L1.size() && k < L3.size()) {
                 if (L1[i] < L3[k]) {
                   card[0]++;
                   i++;
@@ -132,8 +135,8 @@ void card_ThreeInter(vector<int>& L1,
                 }
               }
             } else {
-              if (k >= (int)L3.size()) {
-                while (i < (int)L1.size() && j < (int)L2.size()) {
+              if (k >= L3.size()) {
+                while (i < L1.size() && j < L2.size()) {
                   if (L1[i] < L2[j]) {
                     card[0]++;
                     i++;
@@ -155,13 +158,16 @@ void card_ThreeInter(vector<int>& L1,
       }
     }
   }
-  if (i < (int)L1.size() || j < (int)L2.size() || k < (int)L3.size()) {
-    if (i >= (int)L1.size() && j >= (int)L2.size()) {
-      card[2] += (int)L3.size() - k;
-    } else if (i >= (int)L1.size() && k >= (int)L3.size()) {
-      card[1] += (int)L2.size() - j;
-    } else if (j >= (int)L2.size() && k >= (int)L3.size()) {
-      card[0] += (int)L1.size() - i;
+  if (i < L1.size() || j < L2.size() || k < L3.size()) {
+    if (i >= L1.size() && j >= L2.size()) {
+      card[2] += L3.size();
+      card[2] -= k;
+    } else if (i >= L1.size() && k >= L3.size()) {
+      card[1] += L2.size();
+      card[1] -= j;
+    } else if (j >= L2.size() && k >= L3.size()) {
+      card[0] += L1.size();
+      card[0] -= i;
     }
   }
 }
@@ -176,7 +182,7 @@ void getIndices(vector<int>& o_set1,
   vector<int> diff2_(max(o_set1.size(), o_set2.size()), -1);
 
   int i = 0, j = 0;
-  while (i < (int)o_set1.size() && j < (int)o_set2.size()) {
+  while (i < o_set1.size() && j < o_set2.size()) {
     if (o_set1[i] < o_set2[j]) {
       diff1_[i] = o_set1[i];
       i++;
@@ -190,12 +196,12 @@ void getIndices(vector<int>& o_set1,
     }
   }
 
-  if (i < (int)o_set1.size()) {
-    for (int k = i; k < (int)o_set1.size(); ++k) {
+  if (i < o_set1.size()) {
+    for (auto k = i; k < o_set1.size(); ++k) {
       diff1_[k] = o_set1[k];
     }
-  } else if (j < (int)o_set2.size()) {
-    for (int k = j; k < (int)o_set2.size(); ++k) {
+  } else if (j < o_set2.size()) {
+    for (auto k = j; k < o_set2.size(); ++k) {
       diff2_[k] = o_set2[k];
     }
   }
@@ -218,7 +224,7 @@ void getIndices(vector<int>& o_set1,
 }
 
 VectorXd countGraphletsFour(vector<vector<int>>& al, VectorXd& count_gr) {
-  double n = (double)al.size();
+  auto n = double{al.size()};
   vector<double> w = {1.0 / 12.0, 1.0 / 10.0, 1.0 / 8.0, 1.0 / 6.0,
                       1.0 / 8.0,  1.0 / 6.0,  1.0 / 6.0, 1.0 / 4.0,
                       1.0 / 4.0,  1.0 / 2.0,  0};
@@ -229,7 +235,7 @@ VectorXd countGraphletsFour(vector<vector<int>>& al, VectorXd& count_gr) {
 
   double m = 0.0;
   for (auto&& vec : al) {
-    m += (double)vec.size();
+    m += vec.size();
   }
   m /= 2.0;
 
@@ -242,16 +248,16 @@ VectorXd countGraphletsFour(vector<vector<int>>& al, VectorXd& count_gr) {
       getIndices(al[i], al[j], inter, diff1, diff2);
       for (auto&& k : inter) {
         card_ThreeInter(al[i], al[j], al[k], card);
-        inter_count[0] += 0.5 * (double)card[6];
-        inter_count[1] += 0.5 * (double)(card[3] - 1.0);
-        inter_count[1] += 0.5 * (double)(card[4] - 1.0);
-        inter_count[1] += 0.5 * (double)(card[5] - 1.0);
-        inter_count[2] += 0.5 * (double)card[0];
-        inter_count[2] += 0.5 * (double)card[1];
-        inter_count[2] += (double)card[2];
-        inter_count[6] += n - (double)accumulate(card.begin(), card.end(), 0);
-        K += 0.5 * (double)card[6] + 0.5 * (double)(card[4] - 1.0) +
-             0.5 * (double)(card[5] - 1.0) + card[2];
+        inter_count[0] += 0.5 * card[6];
+        inter_count[1] += 0.5 * (card[3] - 1.0);
+        inter_count[1] += 0.5 * (card[4] - 1.0);
+        inter_count[1] += 0.5 * (card[5] - 1.0);
+        inter_count[2] += 0.5 * card[0];
+        inter_count[2] += 0.5 * card[1];
+        inter_count[2] += card[2];
+        inter_count[6] += n - accumulate(card.begin(), card.end(), 0);
+        K += 0.5 * card[6] + 0.5 * (card[4] - 1.0) +
+             0.5 * (card[5] - 1.0) + card[2];
       }
       v.clear();
       v.resize(diff1.size());
@@ -262,16 +268,16 @@ VectorXd countGraphletsFour(vector<vector<int>>& al, VectorXd& count_gr) {
       v.resize(it - v.begin());
       for (auto&& k : v) {
         card_ThreeInter(al[i], al[j], al[k], card);
-        inter_count[1] += 0.5 * (double)card[6];
-        inter_count[2] += 0.5 * (double)card[3];
-        inter_count[2] += 0.5 * (double)card[4];
-        inter_count[4] += 0.5 * (double)(card[5] - 1.0);
-        inter_count[3] += 0.5 * (double)(card[0] - 2.0);
-        inter_count[5] += 0.5 * (double)card[1];
-        inter_count[5] += (double)card[2];
-        inter_count[7] += n - (double)accumulate(card.begin(), card.end(), 0);
-        K += 0.5 * (double)card[6] + 0.5 * (double)card[4] +
-             0.5 * (double)(card[5] - 1.0) + card[2];
+        inter_count[1] += 0.5 * card[6];
+        inter_count[2] += 0.5 * card[3];
+        inter_count[2] += 0.5 * card[4];
+        inter_count[4] += 0.5 * (card[5] - 1.0);
+        inter_count[3] += 0.5 * (card[0] - 2.0);
+        inter_count[5] += 0.5 * card[1];
+        inter_count[5] += card[2];
+        inter_count[7] += n - accumulate(card.begin(), card.end(), 0);
+        K += 0.5 * card[6] + 0.5 * card[4] +
+             0.5 * (card[5] - 1.0) + card[2];
       }
       v.clear();
       v.resize(diff2.size());
@@ -281,27 +287,24 @@ VectorXd countGraphletsFour(vector<vector<int>>& al, VectorXd& count_gr) {
       v.resize(it - v.begin());
       for (auto&& k : v) {
         card_ThreeInter(al[i], al[j], al[k], card);
-        inter_count[1] += 0.5 * (double)card[6];
-        inter_count[2] += 0.5 * (double)card[3];
-        inter_count[4] += 0.5 * (double)(card[4] - 1.0);
-        inter_count[2] += 0.5 * (double)card[5];
-        inter_count[5] += 0.5 * (double)card[0];
-        inter_count[3] += 0.5 * (double)(card[1] - 2.0);
-        inter_count[5] += (double)card[2];
-        inter_count[7] += n - (double)accumulate(card.begin(), card.end(), 0);
-        K += 0.5 * (double)card[6] + 0.5 * (double)(card[4] - 1.0) +
-             0.5 * (double)card[5] + card[2];
+        inter_count[1] += 0.5 * card[6];
+        inter_count[2] += 0.5 * card[3];
+        inter_count[4] += 0.5 * (card[4] - 1.0);
+        inter_count[2] += 0.5 * card[5];
+        inter_count[5] += 0.5 * card[0];
+        inter_count[3] += 0.5 * (card[1] - 2.0);
+        inter_count[5] += card[2];
+        inter_count[7] += n - accumulate(card.begin(), card.end(), 0);
+        K += 0.5 * card[6] + 0.5 * (card[4] - 1.0) +
+             0.5 * card[5] + card[2];
       }
-      inter_count[8] += m + 1.0 - (double)v1.size() - (double)al[i].size() - K;
+      inter_count[8] += m + 1.0 - v1.size() - al[i].size() - K;
       inter_count[9] +=
-          (n - (double)inter.size() - (double)diff1.size() -
-           (double)diff2.size()) *
-              (n - (double)inter.size() - (double)diff1.size() -
-               (double)diff2.size() - 1.0) /
-              2 -
-          (m + 1.0 - (double)v1.size() - (double)al[i].size() - K);
+          (n - inter.size() - diff1.size() - diff2.size()) *
+          (n - 1.0 - inter.size() - diff1.size() - diff2.size()) / 2 -
+          (m + 1.0 - v1.size() - al[i].size() - K);
 
-      for (int k = 0; k < (int)count_gr.size(); ++k) {
+      for (auto k = 0; k < count_gr.size(); ++k) {
         count_gr(k) += inter_count[k] * w[k];
       }
     }
@@ -319,7 +322,7 @@ void getCardinality(vector<int>& o_set1,
   card.resize(3);
   fill(card.begin(), card.end(), 0.0);
   int i = 0, j = 0;
-  while (i < (int)o_set1.size() && j < (int)o_set2.size()) {
+  while (i < o_set1.size() && j < o_set2.size()) {
     if (o_set1[i] < o_set2[j]) {
       card[0] += 1.0;
       i++;
@@ -332,12 +335,15 @@ void getCardinality(vector<int>& o_set1,
       card[2] += 1.0;
     }
   }
-  card[0] += (double)((int)o_set1.size() - i);
-  card[1] += (double)((int)o_set2.size() - j);
+  card[0] += o_set1.size();
+  card[0] -= i;
+
+  card[1] += o_set2.size();
+  card[1] -= j;
 }
 
 VectorXd countGraphletsThree(vector<vector<int>>& al, VectorXd& count_gr) {
-  double n = (double)al.size();
+  auto n = double{al.size()};
   vector<double> w = {1.0 / 6.0, 1.0 / 4.0, 1.0 / 2.0};
   vector<double> card(3);
 
