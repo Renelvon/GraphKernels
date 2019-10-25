@@ -63,7 +63,9 @@ def main():
                 include_dirs=[
                     get_eigen_include_dir(),
                     np.get_include(),
-                ]
+                ],
+                language='c++',
+                optional=False
             )
         ],
         # NOTE: The following option may produce a harmless warning when
