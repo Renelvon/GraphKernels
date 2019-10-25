@@ -149,18 +149,15 @@ def CalculateConnectedGraphletKernel(G, par=4):
     return gkCpy.CalculateConnectedGraphletKernelPy(adj_mat, adj_list, par)
 
 
-def _floyd_transform(g):
-    am = g.shortest_paths_dijkstra()
-    am = np.asarray(am).reshape(len(am), len(am))
-    am_pos_l = (am > 0).to_list()
-
-    g_floyd = Graph.Adjacency(am_pos_l)
-
-    g_floyd.es['label'] = am[am.nonzero()]
-    g_floyd.vs['id'] = np.arange(len(g.vs['label']))
-    g_floyd.vs['label'] = g.vs['label']
-
-    return g_floyd
+def _floyd_transform(gg):
+    # TODO: Beautify.
+    g_floyd_am = gg.shortest_paths_dijkstra()
+    g_floyd_am = np.asarray(g_floyd_am).reshape(len(g_floyd_am), len(g_floyd_am))
+    g = Graph.Adjacency((g_floyd_am > 0).tolist())
+    g.es['label'] = g_floyd_am[g_floyd_am.nonzero()]
+    g.vs['id']= np.arange(len(gg.vs['label']))
+    g.vs['label'] = gg.vs['label']
+    return g
 
 
 def CalculateShortestPathKernel(G):
