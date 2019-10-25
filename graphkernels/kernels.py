@@ -155,7 +155,7 @@ def _floyd_transform(gg):
     g_floyd_am = np.asarray(g_floyd_am).reshape(len(g_floyd_am), len(g_floyd_am))
     g = Graph.Adjacency((g_floyd_am > 0).tolist())
     g.es['label'] = g_floyd_am[g_floyd_am.nonzero()]
-    g.vs['id']= np.arange(len(gg.vs['label']))
+    g.vs['id'] = np.arange(len(gg.vs['label']))
     g.vs['label'] = gg.vs['label']
     return g
 
