@@ -38,9 +38,7 @@ using Eigen::SparseMatrix;
 
 double selectLinearGaussian(vector<int>& h1, vector<int>& h2, double sigma);
 
-int productMapping(MatrixXi& e1,
-                   MatrixXi& e2,
-                   vector<int>& v1_label,
+int productMapping(vector<int>& v1_label,
                    vector<int>& v2_label,
                    MatrixXi& H);
 

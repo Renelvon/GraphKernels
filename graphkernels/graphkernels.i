@@ -43,9 +43,7 @@ namespace std {
 };
 
 double selectLinearGaussian(vector<int>& h1, vector<int>& h2, double sigma);
-int productMapping(Eigen::MatrixXi& e1,
-                   Eigen::MatrixXi& e2,
-                   vector<int>& v1_label,
+int productMapping(vector<int>& v1_label,
                    vector<int>& v2_label,
                    Eigen::MatrixXi& H);
 
