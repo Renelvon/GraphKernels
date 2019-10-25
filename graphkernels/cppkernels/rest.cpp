@@ -12,13 +12,14 @@ double selectLinearGaussian(vector<int>& h1, vector<int>& h2, double sigma) {
   double K = 0;
   if (sigma < 0) {
     // linear kernel
-    for (int i = 0; i < (int)h1.size(); i++) {
-      K += (double)h1[i] * (double)h2[i];
+    for (auto i = 0; i < h1.size(); ++i) {
+      K += static_cast<double>(h1[i]) * h2[i];
     }
   } else {
     // Gaussian kernel
-    for (int i = 0; i < (int)h1.size(); i++) {
-      K += ((double)h1[i] - (double)h2[i]) * ((double)h1[i] - (double)h2[i]);
+    for (auto i = 0; i < h1.size(); ++i) {
+        const auto diff = static_cast<double>(h1[i]) - h2[i];
+        K += diff * diff;
     }
     K = exp(-1.0 * K / (2.0 * sigma * sigma));
   }
@@ -30,8 +31,8 @@ int productMapping(vector<int>& v1_label,
                    vector<int>& v2_label,
                    MatrixXi& H) {
   int n_vx = 0;
-  for (int i = 0; i < (int)v1_label.size(); i++) {
-    for (int j = 0; j < (int)v2_label.size(); j++) {
+  for (auto i = 0; i < v1_label.size(); ++i) {
+    for (auto j = 0; j < v2_label.size(); ++j) {
       if (v1_label[i] == v2_label[j]) {
         H(i, j) = n_vx;
         n_vx++;
@@ -135,10 +136,10 @@ double vertexHistogramKernel(vector<int>& v1_label,
   vector<int> h1(v_label_max + 1, 0);
   vector<int> h2(v_label_max + 1, 0);
 
-  for (int i = 0; i < (int)v1_label.size(); i++) {
+  for (auto i = 0; i < v1_label.size(); ++i) {
     (h1[v1_label[i]])++;
   }
-  for (int i = 0; i < (int)v2_label.size(); i++) {
+  for (auto i = 0; i < v2_label.size(); ++i) {
     (h2[v2_label[i]])++;
   }
 
@@ -313,7 +314,7 @@ double kstepRandomWalkKernel(MatrixXi& e1,
   Ax = dAx.sparseView();
 
   // compute products until k
-  int k_max = (int)lambda_list.size() - 1;
+  auto k_max = int{lambda_list.size()} - 1;
   SparseMatrix<double> Ax_pow = I;
   SparseMatrix<double> Sum = lambda_list[0] * I;
   for (int k = 1; k <= k_max; k++) {
@@ -343,7 +344,7 @@ MatrixXd WLKernelMatrix(vector<MatrixXi>& E,
 
   K_mat.setZero();
 
-  int n = (int)E.size();
+  auto n = int{E.size()};
   int v_all = accumulate(num_v.begin(), num_v.end(), 0);
   int degree_max_all = *max_element(degree_max.begin(), degree_max.end());
   vector<int> label_max_vec(n);

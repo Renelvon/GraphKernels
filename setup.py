@@ -44,7 +44,11 @@ def main():
         '-std=c++14',
         '-Wall',
         '-Wextra',
-        '-Wpedantic'
+        '-Wpedantic',
+        '-Wno-narrowing',
+        '-Wno-sign-compare',
+        '-Wno-unused-parameter',
+        '-Wno-unused-variable'
     ]
 
     setuptools.setup(
