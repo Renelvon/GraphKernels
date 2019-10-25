@@ -113,7 +113,6 @@ VectorXd countGraphletsThree(vector<vector<int>>& al, VectorXd& count_gr);
 VectorXd countGraphletsFour(vector<vector<int>>& al, VectorXd& count_gr);
 
 MatrixXd CalculateGraphletKernelPy(
-    vector<MatrixXi>& graph_adj_all,
     vector<vector<vector<int>>>& graph_adjlist_all,
     int k);
 

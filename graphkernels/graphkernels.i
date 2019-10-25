@@ -117,7 +117,6 @@ Eigen::VectorXd countConnectedGraphletsThree(Eigen::MatrixXi& am,
                                              Eigen::VectorXd& count_gr);
 
 Eigen::MatrixXd CalculateGraphletKernelPy(
-    vector<Eigen::MatrixXi>& graph_adj_all,
     vector<vector<vector<int>>>& graph_adjlist_all,
     int k);
 

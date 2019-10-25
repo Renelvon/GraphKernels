@@ -130,8 +130,8 @@ def CalculateGraphletKernel(G, par=4):
     if par not in (3, 4):
         raise ValueError("Graphlet kernel supports only: k = 3 or 4")
 
-    adj_mat, adj_list = GetAdjMatList(G) # Extract graph info.
-    return gkCpy.CalculateGraphletKernelPy(adj_mat, adj_list, par)
+    _, adj_list = GetAdjMatList(G) # Extract graph info.
+    return gkCpy.CalculateGraphletKernelPy(adj_list, par)
 
 
 def CalculateConnectedGraphletKernel(G, par=4):

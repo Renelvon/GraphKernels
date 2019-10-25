@@ -358,7 +358,6 @@ VectorXd countGraphletsThree(vector<vector<int>>& al, VectorXd& count_gr) {
 
 // Python function
 MatrixXd CalculateGraphletKernelPy(
-    vector<MatrixXi>& graph_adj_all,
     vector<vector<vector<int>>>& graph_adjlist_all,
     int k) {
   // decrement one to start indices from zero
