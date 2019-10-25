@@ -105,29 +105,12 @@ MatrixXd CalculateKernelPy(vector<MatrixXi>& E,
 
 // Graphlet kernel for k = 3, 4
 // ----------------------------
-VectorXd countGraphletsThree(vector<vector<int>>& al, VectorXd& count_gr);
-
-VectorXd countGraphletsFour(vector<vector<int>>& al, VectorXd& count_gr);
-
 MatrixXd CalculateGraphletKernelPy(
     vector<vector<vector<int>>>& graph_adjlist_all,
     int k);
 
 // Connected Graphlet kernel for k = 3, 4, 5
 // -----------------------------------------
-
-VectorXd countConnectedGraphletsThree(MatrixXi& am,
-                                      vector<vector<int>>& al,
-                                      VectorXd& count_gr);
-
-VectorXd countConnectedGraphletsFour(MatrixXi& am,
-                                     vector<vector<int>>& al,
-                                     VectorXd& count_gr);
-
-VectorXd countConnectedGraphletsFive(MatrixXi& am,
-                                     vector<vector<int>>& al,
-                                     VectorXd& count_gr);
-
 MatrixXd CalculateConnectedGraphletKernelPy(
     vector<MatrixXi>& graph_adj_all,
     vector<vector<vector<int>>>& graph_adjlist_all,

@@ -95,24 +95,6 @@ Eigen::MatrixXd CalculateKernelPy(vector<Eigen::MatrixXi>& E,
                                   vector<double>& par,
                                   int kernel_type);
 
-Eigen::VectorXd countGraphletsFour(vector<vector<int>>& al,
-                                   Eigen::VectorXd& count_gr);
-
-Eigen::VectorXd countGraphletsThree(vector<vector<int>>& al,
-                                    Eigen::VectorXd& count_gr);
-
-Eigen::VectorXd countConnectedGraphletsFive(Eigen::MatrixXi& am,
-                                            vector<vector<int>>& al,
-                                            Eigen::VectorXd& count_gr);
-
-Eigen::VectorXd countConnectedGraphletsFour(Eigen::MatrixXi& am,
-                                            vector<vector<int>>& al,
-                                            Eigen::VectorXd& count_gr);
-
-Eigen::VectorXd countConnectedGraphletsThree(Eigen::MatrixXi& am,
-                                             vector<vector<int>>& al,
-                                             Eigen::VectorXd& count_gr);
-
 Eigen::MatrixXd CalculateGraphletKernelPy(
     vector<vector<vector<int>>>& graph_adjlist_all,
     int k);
