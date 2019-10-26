@@ -2,7 +2,17 @@
  * All rigths reserved.
  */
 
+#include <Eigen/Eigenvalues>
+#include <Eigen/LU>
+#include <Eigen/Sparse>
+
 #include "graphkernels.h"
+
+using Eigen::FullPivLU;
+using Eigen::SelfAdjointEigenSolver;
+using Eigen::SparseMatrix;
+
+using T = Eigen::Triplet<double>;
 
 // =================================================================== //
 // ==================== Functions used in kernels ==================== //

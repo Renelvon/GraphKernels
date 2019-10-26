@@ -12,9 +12,6 @@
 #include <vector>
 
 #include <Eigen/Core>
-#include <Eigen/Eigenvalues>
-#include <Eigen/LU>
-#include <Eigen/Sparse>
 
 using std::accumulate;
 using std::greater;
@@ -24,12 +21,9 @@ using std::min;
 using std::set;
 using std::vector;
 
-using Eigen::FullPivLU;
 using Eigen::VectorXd;
 using Eigen::MatrixXd;
 using Eigen::MatrixXi;
-using Eigen::SelfAdjointEigenSolver;
-using Eigen::SparseMatrix;
 
 // Simple Kernels
 // ==============

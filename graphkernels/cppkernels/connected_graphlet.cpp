@@ -2,7 +2,12 @@
  * All rigths reserved.
  */
 
+#include <Eigen/Sparse>
+
 #include "graphkernels.h"
+
+using Eigen::SparseMatrix;
+
 
 // ===== connected graphlet kernel for k = 5 ===== //
 void getMinValue(MatrixXi& iam, vector<int>& idx, vector<int>& sums) {
