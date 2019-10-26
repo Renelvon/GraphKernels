@@ -4,6 +4,14 @@
 
 #include "graphkernels.h"
 
+#include <functional>
+#include <numeric>
+#include <set>
+
+using std::accumulate;
+using std::greater;
+using std::set;
+
 // bucket sort used in Weisfeiler-Leiman graph kernel
 void bucketsort(vector<int>& x, vector<int>& index, int label_max) {
   vector<vector<int>> buckets;

@@ -5,20 +5,10 @@
 #ifndef GRAPHKERNELS_GRAPHKERNELS_H_
 #define GRAPHKERNELS_GRAPHKERNELS_H_
 
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <set>
 #include <vector>
 
 #include <Eigen/Core>
 
-using std::accumulate;
-using std::greater;
-using std::iota;
-using std::max;
-using std::min;
-using std::set;
 using std::vector;
 
 using Eigen::VectorXd;

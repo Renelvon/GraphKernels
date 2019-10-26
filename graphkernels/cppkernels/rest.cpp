@@ -2,11 +2,15 @@
  * All rigths reserved.
  */
 
+#include <numeric>
+
 #include <Eigen/Eigenvalues>
 #include <Eigen/LU>
 #include <Eigen/Sparse>
 
 #include "graphkernels.h"
+
+using std::iota;
 
 using Eigen::FullPivLU;
 using Eigen::SelfAdjointEigenSolver;

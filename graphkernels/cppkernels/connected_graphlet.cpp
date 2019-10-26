@@ -2,9 +2,13 @@
  * All rigths reserved.
  */
 
+#include <numeric>
+
 #include <Eigen/Sparse>
 
 #include "graphkernels.h"
+
+using std::iota;
 
 using Eigen::SparseMatrix;
 
