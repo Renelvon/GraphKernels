@@ -17,16 +17,13 @@ void bucketsort(vector<int>& x, vector<int>& index, int label_max) {
   vector<vector<int>> buckets;
   buckets.resize(label_max + 1);
 
-  for (vector<int>::iterator itr = index.begin(), end = index.end(); itr != end;
-       ++itr) {
+  for (auto itr = index.begin(), end = index.end(); itr != end; ++itr) {
     buckets[x[*itr]].push_back(*itr);
   }
 
   int counter = 0;
-  for (vector<vector<int>>::iterator itr = buckets.begin(), end = buckets.end();
-       itr != end; ++itr) {
-    for (vector<int>::iterator itr2 = (*itr).begin(), end2 = (*itr).end();
-         itr2 != end2; ++itr2) {
+  for (auto itr = buckets.begin(), end = buckets.end(); itr != end; ++itr) {
+    for (auto itr2 = (*itr).begin(), end2 = (*itr).end(); itr2 != end2; ++itr2) {
       index[counter] = *itr2;
       counter++;
     }
@@ -90,11 +87,8 @@ MatrixXd WLKernelMatrix(vector<MatrixXi>& E,
     count[graph_index[index_org[index[i]]]]++;
     if (i == v_all - 1 ||
         label_list(index[i], 0) != label_list(index[i + 1], 0)) {
-      for (set<int>::iterator itr = count_index.begin(),
-                              end = count_index.end();
-           itr != end; ++itr) {
-        for (set<int>::iterator itr2 = itr, end2 = count_index.end();
-             itr2 != end2; ++itr2) {
+      for (auto itr = count_index.begin(), end = count_index.end(); itr != end; ++itr) {
+        for (auto itr2 = itr, end2 = count_index.end(); itr2 != end2; ++itr2) {
           k_value = count[*itr] * count[*itr2];
           K_mat(*itr, *itr2) += k_value;
           K_mat(*itr2, *itr) += k_value;
@@ -161,11 +155,8 @@ MatrixXd WLKernelMatrix(vector<MatrixXi>& E,
                   .array()
                   .abs()
                   .sum() != 0) {
-        for (set<int>::iterator itr = count_index.begin(),
-                                end = count_index.end();
-             itr != end; ++itr) {
-          for (set<int>::iterator itr2 = itr, end2 = count_index.end();
-               itr2 != end2; ++itr2) {
+        for (auto itr = count_index.begin(), end = count_index.end(); itr != end; ++itr) {
+          for (auto itr2 = itr, end2 = count_index.end(); itr2 != end2; ++itr2) {
             k_value = count[*itr] * count[*itr2];
             K_mat(*itr, *itr2) += k_value;
             K_mat(*itr2, *itr) += k_value;

@@ -238,7 +238,6 @@ VectorXd countGraphletsFour(vector<vector<int>>& al, VectorXd& count_gr) {
   vector<int> inter, diff1, diff2, card;
   vector<double> inter_count(11);
   vector<int> v;
-  vector<int>::iterator it;
 
   double m = 0.0;
   for (auto&& vec : al) {
@@ -270,7 +269,7 @@ VectorXd countGraphletsFour(vector<vector<int>>& al, VectorXd& count_gr) {
       v.resize(diff1.size());
       sort(diff1.begin(), diff1.end());
       sort(al[i].begin(), al[i].end());
-      it = set_difference(diff1.begin(), diff1.end(), al[i].begin(),
+      auto it = set_difference(diff1.begin(), diff1.end(), al[i].begin(),
                           al[i].end(), v.begin());
       v.resize(it - v.begin());
       for (auto&& k : v) {
