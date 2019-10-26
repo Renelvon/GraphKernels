@@ -16,11 +16,6 @@
 #include <Eigen/LU>
 #include <Eigen/Sparse>
 
-#define Int int32_t
-
-typedef Eigen::Triplet<double> T;
-
-
 using std::accumulate;
 using std::greater;
 using std::iota;
