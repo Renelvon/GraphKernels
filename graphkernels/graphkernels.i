@@ -8,7 +8,6 @@
 
 %{
 /* line for specifying that the C file should be built as a python extension */
-#include <memory>
 #include <vector>
 #define SWIG_FILE_WITH_INIT
 #include <Python.h>
@@ -19,12 +18,8 @@
 // Include the built-in support for std::vector
 %include <typemaps.i>
 %include <std_vector.i>
-%include <std_string.i>
-%include <std_shared_ptr.i>
 %include <numpy.i>
 %include <eigen.i>
-%include <stl.i>
-
 
 
 %init %{
