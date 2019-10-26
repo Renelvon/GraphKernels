@@ -63,6 +63,7 @@ def main():
                     path.join(CPP_DIR, 'connected_graphlet.cpp'),
                     path.join(CPP_DIR, 'graphlet.cpp'),
                     path.join(CPP_DIR, 'rest.cpp'),
+                    path.join(CPP_DIR, 'wl.cpp'),
                 ],
                 swig_opts=['-c++', '-Wall', '-builtin', '-O', '-py3'],
                 extra_compile_args=cppflags,
