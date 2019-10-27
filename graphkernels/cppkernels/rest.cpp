@@ -168,7 +168,8 @@ double vertexEdgeHistogramKernel(MatrixXi& e1,
   vector<int> h1(v_label_max * v_label_max * e_label_max, 0);
   vector<int> h2(v_label_max * v_label_max * e_label_max, 0);
 
-  int v1, v2;
+  int v1;
+  int v2;
   for (auto i = 0L; i < e1.rows(); i++) {
     v1 = e1(i, 0);
     v2 = e1(i, 1);

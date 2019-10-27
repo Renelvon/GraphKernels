@@ -99,7 +99,8 @@ MatrixXd WLKernelMatrix(vector<MatrixXi>& E,
     }
   }
 
-  int v_raised_1, v_raised_2;
+  int v_raised_1;
+  int v_raised_2;
   for (int h = 0; h < h_max; h++) {
     nei_list.setZero();
 
