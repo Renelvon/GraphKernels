@@ -17,16 +17,13 @@ void bucketsort(vector<int>& x, vector<int>& index, int label_max) {
   vector<vector<int>> buckets;
   buckets.resize(label_max + 1);
 
-  for (vector<int>::iterator itr = index.begin(), end = index.end(); itr != end;
-       ++itr) {
+  for (auto itr = index.begin(), end = index.end(); itr != end; ++itr) {
     buckets[x[*itr]].push_back(*itr);
   }
 
   int counter = 0;
-  for (vector<vector<int>>::iterator itr = buckets.begin(), end = buckets.end();
-       itr != end; ++itr) {
-    for (vector<int>::iterator itr2 = (*itr).begin(), end2 = (*itr).end();
-         itr2 != end2; ++itr2) {
+  for (auto itr = buckets.begin(), end = buckets.end(); itr != end; ++itr) {
+    for (auto itr2 = (*itr).begin(), end2 = (*itr).end(); itr2 != end2; ++itr2) {
       index[counter] = *itr2;
       counter++;
     }
@@ -44,7 +41,7 @@ MatrixXd WLKernelMatrix(vector<MatrixXi>& E,
 
   K_mat.setZero();
 
-  auto n = int{E.size()};
+  auto n = static_cast<int>(E.size());
   int v_all = accumulate(num_v.begin(), num_v.end(), 0);
   int degree_max_all = *max_element(degree_max.begin(), degree_max.end());
   vector<int> label_max_vec(n);
@@ -90,11 +87,8 @@ MatrixXd WLKernelMatrix(vector<MatrixXi>& E,
     count[graph_index[index_org[index[i]]]]++;
     if (i == v_all - 1 ||
         label_list(index[i], 0) != label_list(index[i + 1], 0)) {
-      for (set<int>::iterator itr = count_index.begin(),
-                              end = count_index.end();
-           itr != end; ++itr) {
-        for (set<int>::iterator itr2 = itr, end2 = count_index.end();
-             itr2 != end2; ++itr2) {
+      for (auto itr = count_index.begin(), end = count_index.end(); itr != end; ++itr) {
+        for (auto itr2 = itr, end2 = count_index.end(); itr2 != end2; ++itr2) {
           k_value = count[*itr] * count[*itr2];
           K_mat(*itr, *itr2) += k_value;
           K_mat(*itr2, *itr) += k_value;
@@ -105,7 +99,8 @@ MatrixXd WLKernelMatrix(vector<MatrixXi>& E,
     }
   }
 
-  int v_raised_1, v_raised_2;
+  int v_raised_1;
+  int v_raised_2;
   for (int h = 0; h < h_max; h++) {
     nei_list.setZero();
 
@@ -128,12 +123,12 @@ MatrixXd WLKernelMatrix(vector<MatrixXi>& E,
 
     // sort each row w.r.t. neighbors
     vector<int> y(nei_list.cols() - 1);
-    for (int i = 0; i < v_all; i++) {
-      for (int j = 1; j < nei_list.cols(); ++j) {
+    for (auto i = 0; i < v_all; i++) {
+      for (auto j = 1L; j < nei_list.cols(); ++j) {
         y[j - 1] = nei_list(i, j);
       }
-      sort(y.begin(), y.end(), greater<int>());
-      for (int j = 1; j < nei_list.cols(); ++j) {
+      sort(y.begin(), y.end(), greater<>());
+      for (auto j = 1L; j < nei_list.cols(); ++j) {
         nei_list(i, j) = y[j - 1];
       }
     }
@@ -143,7 +138,7 @@ MatrixXd WLKernelMatrix(vector<MatrixXi>& E,
       index[i] = i;
       index_org[i] = i;
     }
-    for (int k = nei_list.cols() - 1; k >= 0; k--) {
+    for (auto k = nei_list.cols() - 1; k >= 0; k--) {
       for (int i = 0; i < v_all; i++) {
         x[i] = nei_list(i, k);
       }
@@ -161,11 +156,8 @@ MatrixXd WLKernelMatrix(vector<MatrixXi>& E,
                   .array()
                   .abs()
                   .sum() != 0) {
-        for (set<int>::iterator itr = count_index.begin(),
-                                end = count_index.end();
-             itr != end; ++itr) {
-          for (set<int>::iterator itr2 = itr, end2 = count_index.end();
-               itr2 != end2; ++itr2) {
+        for (auto itr = count_index.begin(), end = count_index.end(); itr != end; ++itr) {
+          for (auto itr2 = itr, end2 = count_index.end(); itr2 != end2; ++itr2) {
             k_value = count[*itr] * count[*itr2];
             K_mat(*itr, *itr2) += k_value;
             K_mat(*itr2, *itr) += k_value;

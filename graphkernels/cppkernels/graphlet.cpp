@@ -19,10 +19,12 @@ using std::min;
 int find_min(int a, int b, int c) {
   int m;
   int mini = a;
-  if (b < mini)
-    mini = b;
-  if (c < mini)
-    mini = c;
+  if (b < mini) {
+      mini = b;
+  }
+  if (c < mini) {
+      mini = c;
+  }
   if (mini == a) {
     if (mini == b) {
       if (mini == c) {
@@ -57,7 +59,9 @@ void card_ThreeInter(vector<int>& L1,
                      vector<int>& card) {
   card.resize(7);
   fill(card.begin(), card.end(), 0);
-  int i = 0, j = 0, k = 0;
+  auto i = 0;
+  auto j = 0;
+  auto k = 0;
 
   while (i < L1.size() && j < L2.size() && k < L3.size()) {
     int m = find_min(L1[i], L2[j], L3[k]);
@@ -188,7 +192,8 @@ void getIndices(vector<int>& o_set1,
   vector<int> diff1_(max(o_set1.size(), o_set2.size()), -1);
   vector<int> diff2_(max(o_set1.size(), o_set2.size()), -1);
 
-  int i = 0, j = 0;
+  auto i = 0;
+  auto j = 0;
   while (i < o_set1.size() && j < o_set2.size()) {
     if (o_set1[i] < o_set2[j]) {
       diff1_[i] = o_set1[i];
@@ -215,30 +220,35 @@ void getIndices(vector<int>& o_set1,
 
   inter.clear();
   for (auto&& x : inter_) {
-    if (x >= 0)
-      inter.push_back(x);
+      if (x >= 0) {
+          inter.push_back(x);
+      }
   }
   diff1.clear();
   for (auto&& x : diff1_) {
-    if (x >= 0)
-      diff1.push_back(x);
+      if (x >= 0) {
+          diff1.push_back(x);
+      }
   }
   diff2.clear();
   for (auto&& x : diff2_) {
-    if (x >= 0)
-      diff2.push_back(x);
+      if (x >= 0) {
+          diff2.push_back(x);
+      }
   }
 }
 
 VectorXd countGraphletsFour(vector<vector<int>>& al, VectorXd& count_gr) {
-  auto n = double{al.size()};
+  auto n = static_cast<double>(al.size());
   vector<double> w = {1.0 / 12.0, 1.0 / 10.0, 1.0 / 8.0, 1.0 / 6.0,
                       1.0 / 8.0,  1.0 / 6.0,  1.0 / 6.0, 1.0 / 4.0,
                       1.0 / 4.0,  1.0 / 2.0,  0};
-  vector<int> inter, diff1, diff2, card;
+  vector<int> inter;
+  vector<int> diff1;
+  vector<int> diff2;
+  vector<int> card;
   vector<double> inter_count(11);
   vector<int> v;
-  vector<int>::iterator it;
 
   double m = 0.0;
   for (auto&& vec : al) {
@@ -270,7 +280,7 @@ VectorXd countGraphletsFour(vector<vector<int>>& al, VectorXd& count_gr) {
       v.resize(diff1.size());
       sort(diff1.begin(), diff1.end());
       sort(al[i].begin(), al[i].end());
-      it = set_difference(diff1.begin(), diff1.end(), al[i].begin(),
+      auto it = set_difference(diff1.begin(), diff1.end(), al[i].begin(),
                           al[i].end(), v.begin());
       v.resize(it - v.begin());
       for (auto&& k : v) {
@@ -311,7 +321,7 @@ VectorXd countGraphletsFour(vector<vector<int>>& al, VectorXd& count_gr) {
           (n - 1.0 - inter.size() - diff1.size() - diff2.size()) / 2 -
           (m + 1.0 - v1.size() - al[i].size() - K);
 
-      for (auto k = 0; k < count_gr.size(); ++k) {
+      for (auto k = 0L; k < count_gr.size(); ++k) {
         count_gr(k) += inter_count[k] * w[k];
       }
     }
@@ -328,7 +338,8 @@ void getCardinality(vector<int>& o_set1,
                     vector<double>& card) {
   card.resize(3);
   fill(card.begin(), card.end(), 0.0);
-  int i = 0, j = 0;
+  auto i = 0;
+  auto j = 0;
   while (i < o_set1.size() && j < o_set2.size()) {
     if (o_set1[i] < o_set2[j]) {
       card[0] += 1.0;
@@ -350,7 +361,7 @@ void getCardinality(vector<int>& o_set1,
 }
 
 VectorXd countGraphletsThree(vector<vector<int>>& al, VectorXd& count_gr) {
-  auto n = double{al.size()};
+  auto n = static_cast<double>(al.size());
   vector<double> w = {1.0 / 6.0, 1.0 / 4.0, 1.0 / 2.0};
   vector<double> card(3);
 
