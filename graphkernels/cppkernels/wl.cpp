@@ -127,7 +127,7 @@ MatrixXd WLKernelMatrix(vector<MatrixXi>& E,
       for (auto j = 1L; j < nei_list.cols(); ++j) {
         y[j - 1] = nei_list(i, j);
       }
-      sort(y.begin(), y.end(), greater<int>());
+      sort(y.begin(), y.end(), greater<>());
       for (auto j = 1L; j < nei_list.cols(); ++j) {
         nei_list(i, j) = y[j - 1];
       }
