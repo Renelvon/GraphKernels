@@ -29,7 +29,7 @@ install:
 
 script:
     - pylint3 setup.py graphkernels
-    - cpplint --recursive graphkernels/graphkernels.h graphkernels/cppkernels
+    - cpplint --recursive graphkernels/cppkernels
     - cd ./Tutorial
     - python3 demo_mutag.py
     # The following requires sklearn package

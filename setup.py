@@ -70,7 +70,7 @@ def main():
                 include_dirs=[
                     get_eigen_include_dir(),
                     np.get_include(),
-                    GK_DIR # For "graphkernels.h"
+                    CPP_DIR # For kernel headers.
                 ],
                 language='c++',
                 optional=False

@@ -12,7 +12,10 @@
 #define SWIG_FILE_WITH_INIT
 #include <Python.h>
 #define ITPP_EXPORT
-#include "graphkernels.h"
+#include "connected_graphlet.h"
+#include "graphlet.h"
+#include "rest.h"
+#include "wl.h"
 %}
 
 // Include the built-in support for std::vector
