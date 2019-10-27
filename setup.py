@@ -45,7 +45,6 @@ def main():
         '-Wall',
         '-Wextra',
         '-Wpedantic',
-        '-Wno-narrowing',
         '-Wno-sign-compare',
         '-Wno-unused-parameter',
         '-Wno-unused-variable'

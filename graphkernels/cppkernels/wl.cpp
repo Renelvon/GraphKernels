@@ -44,7 +44,7 @@ MatrixXd WLKernelMatrix(vector<MatrixXi>& E,
 
   K_mat.setZero();
 
-  auto n = int{E.size()};
+  auto n = static_cast<int>(E.size());
   int v_all = accumulate(num_v.begin(), num_v.end(), 0);
   int degree_max_all = *max_element(degree_max.begin(), degree_max.end());
   vector<int> label_max_vec(n);

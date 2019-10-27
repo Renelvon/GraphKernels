@@ -231,7 +231,7 @@ void getIndices(vector<int>& o_set1,
 }
 
 VectorXd countGraphletsFour(vector<vector<int>>& al, VectorXd& count_gr) {
-  auto n = double{al.size()};
+  auto n = static_cast<double>(al.size());
   vector<double> w = {1.0 / 12.0, 1.0 / 10.0, 1.0 / 8.0, 1.0 / 6.0,
                       1.0 / 8.0,  1.0 / 6.0,  1.0 / 6.0, 1.0 / 4.0,
                       1.0 / 4.0,  1.0 / 2.0,  0};
@@ -350,7 +350,7 @@ void getCardinality(vector<int>& o_set1,
 }
 
 VectorXd countGraphletsThree(vector<vector<int>>& al, VectorXd& count_gr) {
-  auto n = double{al.size()};
+  auto n = static_cast<double>(al.size());
   vector<double> w = {1.0 / 6.0, 1.0 / 4.0, 1.0 / 2.0};
   vector<double> card(3);
 

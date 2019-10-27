@@ -35,7 +35,7 @@ void getMinValue(MatrixXi& iam, vector<int>& idx, vector<int>& sums) {
 VectorXd countConnectedGraphletsFive(MatrixXi& am,
                                      vector<vector<int>>& al,
                                      VectorXd& count_gr) {
-  auto n = int{al.size()};
+  auto n = static_cast<int>(al.size());
 
   vector<double> w = {
       1.0 / 120.0, 1.0 / 72.0, 1.0 / 48.0, 1.0 / 36.0, 1.0 / 28.0, 1.0 / 20.0,
@@ -212,7 +212,7 @@ VectorXd countConnectedGraphletsFour(MatrixXi& am,
                                      VectorXd& count_gr) {
   vector<double> w = {1.0 / 24.0, 1.0 / 12.0, 1.0 / 4.0,
                       0.0,        1.0 / 8.0,  1.0 / 2.0};
-  auto n = int{am.rows()};
+  auto n = static_cast<int>(am.rows());
   vector<int> L1(n);
   iota(L1.begin(), L1.end(), 0);
 
@@ -263,7 +263,7 @@ VectorXd countConnectedGraphletsThree(MatrixXi& am,
                                       vector<vector<int>>& al,
                                       VectorXd& count_gr) {
   vector<double> w = {1.0 / 2.0, 1.0 / 6.0};
-  auto n = int{am.rows()};
+  auto n = static_cast<int>(am.rows());
   vector<int> L1(n);
   iota(L1.begin(), L1.end(), 0);
 

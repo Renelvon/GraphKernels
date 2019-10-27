@@ -307,7 +307,7 @@ double kstepRandomWalkKernel(MatrixXi& e1,
   Ax = dAx.sparseView();
 
   // compute products until k
-  auto k_max = int{lambda_list.size()} - 1;
+  auto k_max = static_cast<int>(lambda_list.size()) - 1;
   SparseMatrix<double> Ax_pow = I;
   SparseMatrix<double> Sum = lambda_list[0] * I;
   for (int k = 1; k <= k_max; k++) {
