@@ -19,10 +19,12 @@ using std::min;
 int find_min(int a, int b, int c) {
   int m;
   int mini = a;
-  if (b < mini)
-    mini = b;
-  if (c < mini)
-    mini = c;
+  if (b < mini) {
+      mini = b;
+  }
+  if (c < mini) {
+      mini = c;
+  }
   if (mini == a) {
     if (mini == b) {
       if (mini == c) {
@@ -215,18 +217,21 @@ void getIndices(vector<int>& o_set1,
 
   inter.clear();
   for (auto&& x : inter_) {
-    if (x >= 0)
-      inter.push_back(x);
+      if (x >= 0) {
+          inter.push_back(x);
+      }
   }
   diff1.clear();
   for (auto&& x : diff1_) {
-    if (x >= 0)
-      diff1.push_back(x);
+      if (x >= 0) {
+          diff1.push_back(x);
+      }
   }
   diff2.clear();
   for (auto&& x : diff2_) {
-    if (x >= 0)
-      diff2.push_back(x);
+      if (x >= 0) {
+          diff2.push_back(x);
+      }
   }
 }
 

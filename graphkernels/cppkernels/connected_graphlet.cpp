@@ -114,8 +114,9 @@ VectorXd countConnectedGraphletsFive(MatrixXi& am,
                       } else {
                         vector<int> ind;
                         for (auto ii = 0; ii < sums.size(); ++ii) {
-                          if (sums[ii] == 3)
-                            ind.push_back(ii);
+                            if (sums[ii] == 3) {
+                                ind.push_back(ii);
+                            }
                         }
                         // idx[0] = i; idx[1] = j; idx[2] = k; idx[3] = l;
                         // idx[4] = m;
@@ -143,12 +144,14 @@ VectorXd countConnectedGraphletsFive(MatrixXi& am,
                     } else {
                       vector<int> ind;
                       for (auto ii = 0; ii < sums.size(); ++ii) {
-                        if (sums[ii] == 3)
-                          ind.push_back(ii);
+                          if (sums[ii] == 3) {
+                              ind.push_back(ii);
+                          }
                       }
                       for (auto ii = 0; ii < sums.size(); ++ii) {
-                        if (sums[ii] == 1)
-                          ind.push_back(ii);
+                          if (sums[ii] == 1) {
+                              ind.push_back(ii);
+                          }
                       }
                       if (am.coeff(idx[ind[0]], idx[ind[1]]) == 1) {
                         count_gr[16] += w[16];

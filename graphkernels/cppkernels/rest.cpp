@@ -97,12 +97,14 @@ MatrixXd productAdjacency(MatrixXi& e1,
 double edgeHistogramKernel(MatrixXi& e1, MatrixXi& e2, double sigma) {
   int e_label_max = 0;
   for (auto i = 0L; i < e1.rows(); i++) {
-    if (e1(i, 2) > e_label_max)
-      e_label_max = e1(i, 2);
+      if (e1(i, 2) > e_label_max) {
+          e_label_max = e1(i, 2);
+      }
   }
   for (auto i = 0L; i < e2.rows(); i++) {
-    if (e2(i, 2) > e_label_max)
-      e_label_max = e2(i, 2);
+      if (e2(i, 2) > e_label_max) {
+          e_label_max = e2(i, 2);
+      }
   }
 
   vector<int> h1(e_label_max + 1, 0);
@@ -147,12 +149,14 @@ double vertexEdgeHistogramKernel(MatrixXi& e1,
                                  double sigma) {
   int e_label_max = 0;
   for (auto i = 0L; i < e1.rows(); i++) {
-    if (e1(i, 2) > e_label_max)
-      e_label_max = e1(i, 2);
+      if (e1(i, 2) > e_label_max) {
+          e_label_max = e1(i, 2);
+      }
   }
   for (auto i = 0L; i < e2.rows(); i++) {
-    if (e2(i, 2) > e_label_max)
-      e_label_max = e2(i, 2);
+      if (e2(i, 2) > e_label_max) {
+          e_label_max = e2(i, 2);
+      }
   }
   e_label_max++;
 
@@ -224,8 +228,9 @@ double geometricRandomWalkKernel(MatrixXi& e1,
 
   // inverse of I - lambda * Ax by fixed-poInt iterations
   VectorXd I_vec(n_vx);
-  for (int i = 0; i < n_vx; i++)
-    I_vec[i] = 1;
+  for (int i = 0; i < n_vx; i++) {
+      I_vec[i] = 1;
+  }
   VectorXd x = I_vec;
   VectorXd x_pre(n_vx);
   x_pre.setZero();
