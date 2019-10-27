@@ -2,15 +2,17 @@
  * All rigths reserved.
  */
 
+#include "graphlet.h"
+
 #include <algorithm>
 #include <numeric>
-
-#include "graphkernels.h"
 
 using std::accumulate;
 using std::iota;
 using std::max;
 using std::min;
+
+using Eigen::VectorXd;
 
 // ========================================================= //
 // ==================== Graphlet kernel ==================== //

@@ -2,8 +2,9 @@
  * All rigths reserved.
  */
 
-#include "graphkernels.h"
+#include "wl.h"
 
+#include <algorithm>
 #include <functional>
 #include <numeric>
 #include <set>
@@ -11,6 +12,7 @@
 using std::accumulate;
 using std::greater;
 using std::set;
+using std::sort;
 
 // bucket sort used in Weisfeiler-Leiman graph kernel
 void bucketsort(vector<int>& x, vector<int>& index, int label_max) {

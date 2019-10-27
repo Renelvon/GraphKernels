@@ -2,15 +2,20 @@
  * All rigths reserved.
  */
 
-#include <numeric>
+#include "connected_graphlet.h"
 
 #include <Eigen/Sparse>
 
-#include "graphkernels.h"
+#include <algorithm>
+#include <numeric>
 
 using std::iota;
+using std::sort;
 
+using Eigen::MatrixXd;
+using Eigen::MatrixXi;
 using Eigen::SparseMatrix;
+using Eigen::VectorXd;
 
 
 // ===== connected graphlet kernel for k = 5 ===== //
