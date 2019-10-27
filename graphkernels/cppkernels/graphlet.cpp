@@ -95,6 +95,8 @@ void card_ThreeInter(vector<int>& L1,
         j++;
         k++;
         break;
+      default:
+        ; // FIXME: THIS SHOULD NEVER HAPPEN.
     }
   }
 
@@ -400,6 +402,8 @@ MatrixXd CalculateGraphletKernelPy(
     case 4:
       freq_size = 11;
       break;
+    default:
+      ; // FIXME: THIS SHOULD NEVER HAPPEN.
   }
 
   // freq = MatrixXd::Zero(graph_adjlist_all.size(), freq_size);
