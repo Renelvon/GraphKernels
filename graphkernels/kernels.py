@@ -8,7 +8,7 @@ from igraph import Graph
 # FIXME: Avoid double-import by exporting names in __init__
 from graphkernels import graphkernels as gkCpy
 
-from .utilities import GetGKInput, GetAdjMatList
+from .utilities import GetAdjMatList, GetGKInput
 
 
 def _do_calculate(G, gk_par, kernel_id=None):
@@ -26,6 +26,7 @@ def _do_calculate(G, gk_par, kernel_id=None):
 
 
 # === Linear Kernels on Histograms ===
+
 
 def CalculateEdgeHistKernel(G, par=-1.0):
     """Edge Histogram Kernel"""
@@ -53,6 +54,7 @@ def CalculateVertexVertexEdgeHistKernel(G, par=1):
 
 # === RBF Kernels on Histograms ===
 
+
 def CalculateEdgeHistGaussKernel(G, par=1):
     """Edge Histogram RBF Kernel"""
     gk_par = gkCpy.DoubleVector([par])
@@ -72,6 +74,7 @@ def CalculateVertexEdgeHistGaussKernel(G, par=1):
 
 
 # === Random Walk Kernels ===
+
 
 def CalculateGeometricRandomWalkKernel(G, par=1):
     """Geometric Random Walk Kernel"""
@@ -96,6 +99,7 @@ def CalculateKStepRandomWalkKernel(G, par=1):
 
 # === Advanced Kernels ===
 
+
 def CalculateWLKernel(G, par=5):
     """Weisfeiler-Lehman Kernel
 
@@ -109,7 +113,7 @@ def CalculateWLKernel(G, par=5):
     if par < 0:
         raise ValueError('Number of WL iterations must be non-negative')
 
-    E, V_label, V_count, E_count, D_max = GetGKInput(G) # Extract graph info.
+    E, V_label, V_count, E_count, D_max = GetGKInput(G)  # Extract graph info.
     return gkCpy.WLKernelMatrix(E, V_label, V_count, E_count, D_max, par)
 
 
@@ -126,7 +130,7 @@ def CalculateGraphletKernel(G, par=4):
     if par not in (3, 4):
         raise ValueError("Graphlet kernel supports only: k = 3 or 4")
 
-    _, adj_list = GetAdjMatList(G) # Extract graph info.
+    _, adj_list = GetAdjMatList(G)  # Extract graph info.
     return gkCpy.CalculateGraphletKernelPy(adj_list, par)
 
 
@@ -145,14 +149,16 @@ def CalculateConnectedGraphletKernel(G, par=4):
             "Connected Graphlet kernel supports only: k = 3, 4 or 5"
         )
 
-    adj_mat, adj_list = GetAdjMatList(G) # Extract graph info.
+    adj_mat, adj_list = GetAdjMatList(G)  # Extract graph info.
     return gkCpy.CalculateConnectedGraphletKernelPy(adj_mat, adj_list, par)
 
 
 def _floyd_transform(gg):
     # TODO: Beautify.
     g_floyd_am = gg.shortest_paths_dijkstra()
-    g_floyd_am = np.asarray(g_floyd_am).reshape(len(g_floyd_am), len(g_floyd_am))
+    g_floyd_am = np.asarray(g_floyd_am).reshape(
+        len(g_floyd_am), len(g_floyd_am)
+    )
     g = Graph.Adjacency((g_floyd_am > 0).tolist())
     g.es['label'] = g_floyd_am[g_floyd_am.nonzero()]
     g.vs['id'] = np.arange(len(gg.vs['label']))
