@@ -41,7 +41,10 @@ def compute_all_kernels(graphs):
 #       gk.CalculateExponentialRandomWalkKernel(graphs),
         gk.CalculateKStepRandomWalkKernel(graphs),
         gk.CalculateWLKernel(graphs),
+        gk.CalculateConnectedGraphletKernel(graphs, 3),
         gk.CalculateConnectedGraphletKernel(graphs, 4),
+        gk.CalculateConnectedGraphletKernel(graphs, 5),
+        gk.CalculateGraphletKernel(graphs, 3),
         gk.CalculateGraphletKernel(graphs, 4),
         gk.CalculateShortestPathKernel(graphs)
     )
