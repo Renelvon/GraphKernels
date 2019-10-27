@@ -21,6 +21,8 @@ addons:
 
 before_install:
     - pip3 install --upgrade cpplint # test
+    - pip3 install --upgrade check-manifest # test
+    - check-manifest # test
     - cpplint --recursive graphkernels/cppkernels
     - pylint3 setup.py graphkernels
 
