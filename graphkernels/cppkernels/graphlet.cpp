@@ -310,7 +310,7 @@ VectorXd countGraphletsFour(vector<vector<int>>& al, VectorXd& count_gr) {
           (n - 1.0 - inter.size() - diff1.size() - diff2.size()) / 2 -
           (m + 1.0 - v1.size() - al[i].size() - K);
 
-      for (auto k = 0; k < count_gr.size(); ++k) {
+      for (auto k = 0L; k < count_gr.size(); ++k) {
         count_gr(k) += inter_count[k] * w[k];
       }
     }

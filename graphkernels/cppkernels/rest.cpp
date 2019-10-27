@@ -62,15 +62,15 @@ MatrixXd productAdjacency(MatrixXi& e1,
                           vector<int>& v1_label,
                           vector<int>& v2_label,
                           MatrixXi& H) {
-  int n_vx = v1_label.size() * v2_label.size();
+  auto n_vx = v1_label.size() * v2_label.size();
 
   SparseMatrix<double> Ax(n_vx, n_vx);
   MatrixXd dAx;
 
   vector<T> v;
 
-  for (int i = 0; i < e1.rows(); i++) {
-    for (int j = 0; j < e2.rows(); j++) {
+  for (auto i = 0L; i < e1.rows(); i++) {
+    for (auto j = 0L; j < e2.rows(); j++) {
       if (v1_label[e1(i, 0)] == v2_label[e2(j, 0)] &&
           v1_label[e1(i, 1)] == v2_label[e2(j, 1)] && e1(i, 2) == e2(j, 2)) {
         v.push_back(T(H(e1(i, 0), e2(j, 0)), H(e1(i, 1), e2(j, 1)), 1.0));
@@ -96,11 +96,11 @@ MatrixXd productAdjacency(MatrixXi& e1,
 // edge histogram karnel
 double edgeHistogramKernel(MatrixXi& e1, MatrixXi& e2, double sigma) {
   int e_label_max = 0;
-  for (int i = 0; i < e1.rows(); i++) {
+  for (auto i = 0L; i < e1.rows(); i++) {
     if (e1(i, 2) > e_label_max)
       e_label_max = e1(i, 2);
   }
-  for (int i = 0; i < e2.rows(); i++) {
+  for (auto i = 0L; i < e2.rows(); i++) {
     if (e2(i, 2) > e_label_max)
       e_label_max = e2(i, 2);
   }
@@ -108,10 +108,10 @@ double edgeHistogramKernel(MatrixXi& e1, MatrixXi& e2, double sigma) {
   vector<int> h1(e_label_max + 1, 0);
   vector<int> h2(e_label_max + 1, 0);
 
-  for (int i = 0; i < e1.rows(); i++) {
+  for (auto i = 0L; i < e1.rows(); i++) {
     (h1[e1(i, 2)])++;
   }
-  for (int i = 0; i < e2.rows(); i++) {
+  for (auto i = 0L; i < e2.rows(); i++) {
     (h2[e2(i, 2)])++;
   }
 
@@ -146,11 +146,11 @@ double vertexEdgeHistogramKernel(MatrixXi& e1,
                                  vector<int>& v2_label,
                                  double sigma) {
   int e_label_max = 0;
-  for (int i = 0; i < e1.rows(); i++) {
+  for (auto i = 0L; i < e1.rows(); i++) {
     if (e1(i, 2) > e_label_max)
       e_label_max = e1(i, 2);
   }
-  for (int i = 0; i < e2.rows(); i++) {
+  for (auto i = 0L; i < e2.rows(); i++) {
     if (e2(i, 2) > e_label_max)
       e_label_max = e2(i, 2);
   }
@@ -165,7 +165,7 @@ double vertexEdgeHistogramKernel(MatrixXi& e1,
   vector<int> h2(v_label_max * v_label_max * e_label_max, 0);
 
   int v1, v2;
-  for (int i = 0; i < e1.rows(); i++) {
+  for (auto i = 0L; i < e1.rows(); i++) {
     v1 = e1(i, 0);
     v2 = e1(i, 1);
     if (v2 > v1) {
@@ -176,7 +176,7 @@ double vertexEdgeHistogramKernel(MatrixXi& e1,
     (h1[v1_label[v1] + v1_label[v2] * v_label_max +
         e1(i, 2) * v_label_max * v_label_max])++;
   }
-  for (int i = 0; i < e2.rows(); i++) {
+  for (auto i = 0L; i < e2.rows(); i++) {
     v1 = e2(i, 0);
     v2 = e2(i, 1);
     if (v2 > v1) {
@@ -276,8 +276,8 @@ double exponentialRandomWalkKernel(MatrixXi& e1,
 
   // compute the total sum
   double K = 0;
-  for (int i = 0; i < Res.rows(); i++) {
-    for (int j = 0; j < Res.cols(); j++) {
+  for (auto i = 0L; i < Res.rows(); i++) {
+    for (auto j = 0L; j < Res.cols(); j++) {
       K += Res(i, j);
     }
   }
@@ -317,7 +317,7 @@ double kstepRandomWalkKernel(MatrixXi& e1,
 
   // compute the total sum
   double K = 0;
-  for (int i = 0; i < Sum.outerSize(); ++i) {
+  for (auto i = 0L; i < Sum.outerSize(); ++i) {
     for (SparseMatrix<double>::InnerIterator it(Sum, i); it; ++it) {
       K += it.value();
     }

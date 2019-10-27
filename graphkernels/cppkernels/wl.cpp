@@ -122,12 +122,12 @@ MatrixXd WLKernelMatrix(vector<MatrixXi>& E,
 
     // sort each row w.r.t. neighbors
     vector<int> y(nei_list.cols() - 1);
-    for (int i = 0; i < v_all; i++) {
-      for (int j = 1; j < nei_list.cols(); ++j) {
+    for (auto i = 0; i < v_all; i++) {
+      for (auto j = 1L; j < nei_list.cols(); ++j) {
         y[j - 1] = nei_list(i, j);
       }
       sort(y.begin(), y.end(), greater<int>());
-      for (int j = 1; j < nei_list.cols(); ++j) {
+      for (auto j = 1L; j < nei_list.cols(); ++j) {
         nei_list(i, j) = y[j - 1];
       }
     }
@@ -137,7 +137,7 @@ MatrixXd WLKernelMatrix(vector<MatrixXi>& E,
       index[i] = i;
       index_org[i] = i;
     }
-    for (int k = nei_list.cols() - 1; k >= 0; k--) {
+    for (auto k = nei_list.cols() - 1; k >= 0; k--) {
       for (int i = 0; i < v_all; i++) {
         x[i] = nei_list(i, k);
       }
