@@ -131,11 +131,11 @@ double vertexHistogramKernel(vector<int>& v1_label,
   vector<int> h1(v_label_max + 1, 0);
   vector<int> h2(v_label_max + 1, 0);
 
-  for (auto i = 0; i < v1_label.size(); ++i) {
-    (h1[v1_label[i]])++;
+  for (int i : v1_label) {
+    ++h1[i];
   }
-  for (auto i = 0; i < v2_label.size(); ++i) {
-    (h2[v2_label[i]])++;
+  for (int i : v2_label) {
+    ++h2[i];
   }
 
   return selectLinearGaussian(h1, h2, sigma);
