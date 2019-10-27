@@ -2,8 +2,9 @@
  * All rigths reserved.
  */
 
-#include "graphkernels.h"
+#include "wl.h"
 
+#include <algorithm>
 #include <functional>
 #include <numeric>
 #include <set>
@@ -11,6 +12,7 @@
 using std::accumulate;
 using std::greater;
 using std::set;
+using std::sort;
 
 // bucket sort used in Weisfeiler-Leiman graph kernel
 void bucketsort(vector<int>& x, vector<int>& index, int label_max) {
@@ -23,7 +25,8 @@ void bucketsort(vector<int>& x, vector<int>& index, int label_max) {
 
   int counter = 0;
   for (auto itr = buckets.begin(), end = buckets.end(); itr != end; ++itr) {
-    for (auto itr2 = (*itr).begin(), end2 = (*itr).end(); itr2 != end2; ++itr2) {
+    for (auto itr2 = (*itr).begin(), end2 = (*itr).end(); itr2 != end2;
+        ++itr2) {
       index[counter] = *itr2;
       counter++;
     }
@@ -87,14 +90,16 @@ MatrixXd WLKernelMatrix(vector<MatrixXi>& E,
     count[graph_index[index_org[index[i]]]]++;
     if (i == v_all - 1 ||
         label_list(index[i], 0) != label_list(index[i + 1], 0)) {
-      for (auto itr = count_index.begin(), end = count_index.end(); itr != end; ++itr) {
-        for (auto itr2 = itr, end2 = count_index.end(); itr2 != end2; ++itr2) {
-          k_value = count[*itr] * count[*itr2];
-          K_mat(*itr, *itr2) += k_value;
-          K_mat(*itr2, *itr) += k_value;
+        for (auto itr = count_index.begin(), end = count_index.end();
+                itr != end; ++itr) {
+            for (auto itr2 = itr, end2 = count_index.end(); itr2 != end2;
+                    ++itr2) {
+                k_value = count[*itr] * count[*itr2];
+                K_mat(*itr, *itr2) += k_value;
+                K_mat(*itr2, *itr) += k_value;
+            }
+            count[*itr] = 0;
         }
-        count[*itr] = 0;
-      }
       count_index.clear();
     }
   }
@@ -156,14 +161,16 @@ MatrixXd WLKernelMatrix(vector<MatrixXi>& E,
                   .array()
                   .abs()
                   .sum() != 0) {
-        for (auto itr = count_index.begin(), end = count_index.end(); itr != end; ++itr) {
-          for (auto itr2 = itr, end2 = count_index.end(); itr2 != end2; ++itr2) {
-            k_value = count[*itr] * count[*itr2];
-            K_mat(*itr, *itr2) += k_value;
-            K_mat(*itr2, *itr) += k_value;
+          for (auto itr = count_index.begin(), end = count_index.end();
+                  itr != end; ++itr) {
+              for (auto itr2 = itr, end2 = count_index.end(); itr2 != end2;
+                      ++itr2) {
+                  k_value = count[*itr] * count[*itr2];
+                  K_mat(*itr, *itr2) += k_value;
+                  K_mat(*itr2, *itr) += k_value;
+              }
+              count[*itr] = 0;
           }
-          count[*itr] = 0;
-        }
         count_index.clear();
         label_max++;
       }

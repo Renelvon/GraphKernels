@@ -2,12 +2,12 @@
  * All rigths reserved.
  */
 
-#ifndef GRAPHKERNELS_GRAPHKERNELS_H_
-#define GRAPHKERNELS_GRAPHKERNELS_H_
-
-#include <vector>
+#ifndef GRAPHKERNELS_CPPKERNELS_REST_H_
+#define GRAPHKERNELS_CPPKERNELS_REST_H_
 
 #include <Eigen/Core>
+
+#include <vector>
 
 using std::vector;
 
@@ -63,36 +63,4 @@ double computeKernelValue(MatrixXi& e1,
                           vector<int>& v2_label,
                           vector<double>& par,
                           int kernel_type);
-
-// WL kernel
-// =========
-
-MatrixXd WLKernelMatrix(vector<MatrixXi>& E,
-                        vector<vector<int>>& V_label,
-                        vector<int>& num_v,
-                        vector<int>& num_e,
-                        vector<int>& degree_max,
-                        int h_max);
-
-MatrixXd CalculateKernelPy(vector<MatrixXi>& E,
-                           vector<vector<int>>& V_label,
-                           vector<double>& par,
-                           int kernel_type);
-
-// Graphlet kernels
-// ================
-
-// Graphlet kernel for k = 3, 4
-// ----------------------------
-MatrixXd CalculateGraphletKernelPy(
-    vector<vector<vector<int>>>& graph_adjlist_all,
-    int k);
-
-// Connected Graphlet kernel for k = 3, 4, 5
-// -----------------------------------------
-MatrixXd CalculateConnectedGraphletKernelPy(
-    vector<MatrixXi>& graph_adj_all,
-    vector<vector<vector<int>>>& graph_adjlist_all,
-    int k);
-
-#endif  // GRAPHKERNELS_GRAPHKERNELS_H_
+#endif  // GRAPHKERNELS_CPPKERNELS_REST_H_

@@ -21,6 +21,10 @@ addons:
 
 before_install:
     - pip3 install --upgrade cpplint # test
+    - pip3 install --upgrade check-manifest # test
+    - check-manifest # test
+    - cpplint --recursive graphkernels/cppkernels
+    - pylint3 setup.py graphkernels
 
 install:
     - python3 setup.py build_ext
@@ -28,8 +32,6 @@ install:
     - python3 setup.py sdist
 
 script:
-    - pylint3 setup.py graphkernels
-    - cpplint --recursive graphkernels/graphkernels.h graphkernels/cppkernels
     - cd ./Tutorial
     - python3 demo_mutag.py
     # The following requires sklearn package

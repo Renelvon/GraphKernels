@@ -1,3 +1,4 @@
+check-manifest
 cpplint
 numpy>=1.11
 pkgconfig

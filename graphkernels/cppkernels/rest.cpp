@@ -2,13 +2,13 @@
  * All rigths reserved.
  */
 
-#include <numeric>
+#include "rest.h"
 
 #include <Eigen/Eigenvalues>
 #include <Eigen/LU>
 #include <Eigen/Sparse>
 
-#include "graphkernels.h"
+#include <numeric>
 
 using std::iota;
 
