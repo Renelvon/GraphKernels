@@ -2,7 +2,16 @@
  * All rigths reserved.
  */
 
+#include <numeric>
+
+#include <Eigen/Sparse>
+
 #include "graphkernels.h"
+
+using std::iota;
+
+using Eigen::SparseMatrix;
+
 
 // ===== connected graphlet kernel for k = 5 ===== //
 void getMinValue(MatrixXi& iam, vector<int>& idx, vector<int>& sums) {
@@ -13,7 +22,7 @@ void getMinValue(MatrixXi& iam, vector<int>& idx, vector<int>& sums) {
   sums.resize(idx.size());
   fill(sums.begin(), sums.end(), 0);
   for (auto i = 0; i < idx.size(); ++i) {
-    Int k = idx[i];
+    int k = idx[i];
     for (SparseMatrix<int>::InnerIterator it(am, k); it; ++it) {
       if (find(idx.begin(), idx.end(), it.row()) != idx.end()) {
         sums[i] += it.value();
