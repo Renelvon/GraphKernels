@@ -11,7 +11,9 @@ using std::accumulate;
 using std::iota;
 using std::max;
 using std::min;
+using std::vector;
 
+using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
 // ========================================================= //

@@ -11,6 +11,7 @@
 
 using std::iota;
 using std::sort;
+using std::vector;
 
 using Eigen::MatrixXd;
 using Eigen::MatrixXi;

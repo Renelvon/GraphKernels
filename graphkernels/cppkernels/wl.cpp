@@ -13,6 +13,10 @@ using std::accumulate;
 using std::greater;
 using std::set;
 using std::sort;
+using std::vector;
+
+using Eigen::MatrixXd;
+using Eigen::MatrixXi;
 
 // bucket sort used in Weisfeiler-Leiman graph kernel
 void bucketsort(vector<int>& x, vector<int>& index, int label_max) {
