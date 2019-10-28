@@ -22,9 +22,11 @@ before_install:
     - pip3 install --upgrade cpplint # test
     - pip3 install --upgrade check-manifest # test
     - pip3 install --upgrade pylint # test
+    - pip3 install --upgrade pyroma # test
     - check-manifest # test
     - cpplint --recursive graphkernels/cppkernels
     - pylint setup.py graphkernels
+    - pyroma -n 9 . # test
 
 install:
     - python3 setup.py build_ext
