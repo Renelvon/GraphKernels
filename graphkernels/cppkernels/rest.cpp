@@ -16,7 +16,7 @@ using Eigen::FullPivLU;
 using Eigen::SelfAdjointEigenSolver;
 using Eigen::SparseMatrix;
 
-using T = Eigen::Triplet<double>;
+using Tuple3_t = Eigen::Triplet<double>;
 
 // =================================================================== //
 // ==================== Functions used in kernels ==================== //
@@ -67,7 +67,7 @@ MatrixXd productAdjacency(MatrixXi& e1,
   SparseMatrix<double> Ax(n_vx, n_vx);
   MatrixXd dAx;
 
-  vector<T> v;
+  vector<Tuple3_t> v;
 
   for (auto i = 0L; i < e1.rows(); i++) {
     for (auto j = 0L; j < e2.rows(); j++) {
