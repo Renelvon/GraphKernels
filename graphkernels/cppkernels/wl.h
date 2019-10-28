@@ -9,21 +9,16 @@
 
 #include <vector>
 
-using std::vector;
+Eigen::MatrixXd WLKernelMatrix(std::vector<Eigen::MatrixXi>& E,
+                               std::vector<std::vector<int>>& V_label,
+                               std::vector<int>& num_v,
+                               std::vector<int>& num_e,
+                               std::vector<int>& degree_max,
+                               int h_max);
 
-using Eigen::MatrixXd;
-using Eigen::MatrixXi;
-
-MatrixXd WLKernelMatrix(vector<MatrixXi>& E,
-                        vector<vector<int>>& V_label,
-                        vector<int>& num_v,
-                        vector<int>& num_e,
-                        vector<int>& degree_max,
-                        int h_max);
-
-MatrixXd CalculateKernelPy(vector<MatrixXi>& E,
-                           vector<vector<int>>& V_label,
-                           vector<double>& par,
-                           int kernel_type);
+Eigen::MatrixXd CalculateKernelPy(std::vector<Eigen::MatrixXi>& E,
+                                  std::vector<std::vector<int>>& V_label,
+                                  std::vector<double>& par,
+                                  int kernel_type);
 
 #endif  // GRAPHKERNELS_CPPKERNELS_WL_H_

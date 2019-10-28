@@ -11,6 +11,7 @@
 
 using std::iota;
 using std::sort;
+using std::vector;
 
 using Eigen::MatrixXd;
 using Eigen::MatrixXi;
@@ -315,7 +316,7 @@ MatrixXd CalculateConnectedGraphletKernelPy(
       freq_size = 21;
       break;
     default:
-      ; // FIXME: THIS SHOULD NEVER HAPPEN.
+      {}  // FIXME: THIS SHOULD NEVER HAPPEN.
   }
 
   MatrixXd freq(graph_adjlist_all.size(), freq_size);
