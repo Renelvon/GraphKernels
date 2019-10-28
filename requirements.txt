@@ -3,4 +3,5 @@ cpplint
 numpy>=1.11
 pkgconfig
 pylint
+pyroma>=2.4
 python-igraph

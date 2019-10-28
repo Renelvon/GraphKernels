@@ -17,14 +17,16 @@ addons:
             - libeigen3-dev     # setup/build/install
             - python3-igraph    # install
             - python3-numpy     # setup/build/install
-            - pylint3           # test
 
 before_install:
     - pip3 install --upgrade cpplint # test
     - pip3 install --upgrade check-manifest # test
+    - pip3 install --upgrade pylint # test
+    - pip3 install --upgrade pyroma # test
     - check-manifest # test
     - cpplint --recursive graphkernels/cppkernels
-    - pylint3 setup.py graphkernels
+    - pylint setup.py graphkernels
+    - pyroma -n 9 . # test
 
 install:
     - python3 setup.py build_ext
