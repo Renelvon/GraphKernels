@@ -5,6 +5,6 @@ numpy>=1.13.3
 pkgconfig
 pylint
 pyroma>=2.4
-python-igraph
+python-igraph>=0.7.1
 scikit-learn
 setuptools>=38.6.0
