@@ -5,3 +5,4 @@ pkgconfig
 pylint
 pyroma>=2.4
 python-igraph
+setuptools>=38.6.0
