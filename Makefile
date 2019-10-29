@@ -14,7 +14,7 @@ build: build_ext
 	$(PYTHON) $(SETUP) build
 
 check:
-	black --check --target-version=py36 -l 80 -S --exclude=graphkernels.py setup.py $(NAME)
+	black setup.py $(NAME)
 	check-manifest
 	cpplint --recursive $(NAME)/cppkernels
 	pylint setup.py $(NAME)
