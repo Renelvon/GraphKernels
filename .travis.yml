@@ -19,11 +19,7 @@ addons:
             - python3-numpy     # setup/build/install
 
 before_install:
-    - pip3 install --upgrade black
-    - pip3 install --upgrade cpplint
-    - pip3 install --upgrade check-manifest
-    - pip3 install --upgrade pylint
-    - pip3 install --upgrade pyroma
+    - pip3 install -r requirements.txt
     - make check
 
 install:
