@@ -25,7 +25,6 @@
 %include <numpy.i>
 %include <eigen.i>
 
-
 %init %{
 import_array();
 %}
@@ -43,31 +42,3 @@ namespace std {
 %template(DoubleVector) std::vector<double>;
 %template(VecMatrixXi) std::vector<Eigen::MatrixXi>;
 };
-
-Eigen::MatrixXd WLKernelMatrix(std::vector<Eigen::MatrixXi>& E,
-                               std::vector<std::vector<int>>& V_label,
-                               std::vector<int>& num_v,
-                               std::vector<int>& num_e,
-                               std::vector<int>& degree_max,
-                               int h_max);
-
-double computeKernelValue(Eigen::MatrixXi& e1,
-                          Eigen::MatrixXi& e2,
-                          std::vector<int>& v1_label,
-                          std::vector<int>& v2_label,
-                          std::vector<double>& par,
-                          int kernel_type);
-
-Eigen::MatrixXd CalculateKernelPy(std::vector<Eigen::MatrixXi>& E,
-                                  std::vector<std::vector<int>>& V_label,
-                                  std::vector<double>& par,
-                                  int kernel_type);
-
-Eigen::MatrixXd CalculateGraphletKernelPy(
-    std::vector<std::vector<std::vector<int>>>& graph_adjlist_all,
-    int k);
-
-Eigen::MatrixXd CalculateConnectedGraphletKernelPy(
-    std::vector<Eigen::MatrixXi>& graph_adj_all,
-    std::vector<std::vector<std::vector<int>>>& graph_adjlist_all,
-    int k);
