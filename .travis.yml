@@ -19,7 +19,7 @@ addons:
             - python3-numpy     # setup/build/install
 
 before_install:
-    - pip3 install -r requirements.txt
+    - pip3 install --user -r requirements.txt
     - make check
 
 install:
