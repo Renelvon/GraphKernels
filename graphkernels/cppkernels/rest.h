@@ -63,4 +63,10 @@ double computeKernelValue(MatrixXi& e1,
                           vector<int>& v2_label,
                           vector<double>& par,
                           int kernel_type);
+
+Eigen::MatrixXd CalculateKernelPy(std::vector<Eigen::MatrixXi>& E,
+                                  std::vector<std::vector<int>>& V_label,
+                                  std::vector<double>& par,
+                                  int kernel_type);
+
 #endif  // GRAPHKERNELS_CPPKERNELS_REST_H_
