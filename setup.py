@@ -35,21 +35,28 @@ def get_eigen_include_dir():
     return cflags[2:]
 
 
-def main():
-    cppflags = [
-        '-flto',
-        '-g0',
-        '-march=native',
-        '-O3',
-        '-std=c++14',
-        '-Wall',
-        '-Wextra',
-        '-Wpedantic',
-        '-Wno-sign-compare',
-        '-Wno-unused-parameter',
-        '-Wno-unused-variable',
-    ]
+CPP_FLAGS = [
+    '-flto',
+    '-g0',
+    '-march=native',
+    '-O3',
+    '-std=c++14',
+    '-Wall',
+    '-Wextra',
+    '-Wpedantic',
+    '-Wno-sign-compare',
+    '-Wno-unused-parameter',
+    '-Wno-unused-variable',
+]
 
+SWIG_OPTS = ('-builtin', '-c++', '-O', '-py3', '-Wall')
+
+LIBRARY_DIRS = [get_eigen_include_dir(), np.get_include(), CPP_DIR]
+
+INCLUDE_DIR_FLAGS = tuple('-I{}'.format(l) for l in LIBRARY_DIRS)
+
+
+def main():
     setuptools.setup(
         ext_modules=[
             setuptools.Extension(
@@ -61,14 +68,10 @@ def main():
                     path.join(CPP_DIR, 'rest.cpp'),
                     path.join(CPP_DIR, 'wl.cpp'),
                 ],
-                swig_opts=['-c++', '-Wall', '-builtin', '-O', '-py3'],
-                extra_compile_args=cppflags,
-                extra_link_args=cppflags,
-                include_dirs=[
-                    get_eigen_include_dir(),
-                    np.get_include(),
-                    CPP_DIR,  # For kernel headers.
-                ],
+                swig_opts=(*SWIG_OPTS, *INCLUDE_DIR_FLAGS),
+                extra_compile_args=CPP_FLAGS,
+                extra_link_args=CPP_FLAGS,
+                include_dirs=LIBRARY_DIRS,
                 language='c++',
                 optional=False,
             )
