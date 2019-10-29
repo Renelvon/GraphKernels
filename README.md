@@ -1,6 +1,7 @@
 # graphkernels
 
 [![Build Status](https://travis-ci.org/Renelvon/GraphKernels.svg?branch=master)](https://travis-ci.org/Renelvon/GraphKernels)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 `graphkernels` is a Python package for computing various graph kernels. The
 [backend](https://github.com/mahito-sugiyama/graph-kernels) is coded in C++ and
