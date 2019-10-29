@@ -32,7 +32,7 @@ install: build
 	$(PYTHON) $(SETUP) install --user
 
 installcheck:
-	@ # cd ./Tutorial && $(PYTHON) demo_grid_search.py # requires sklearn package
+	@ cd ./Tutorial && $(PYTHON) demo_grid_search.py
 	@ cd ./Tutorial && $(PYTHON) demo_mutag.py
 
 uninstall:

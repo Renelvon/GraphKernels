@@ -6,4 +6,5 @@ pkgconfig
 pylint
 pyroma>=2.4
 python-igraph
+scikit-learn
 setuptools>=38.6.0
