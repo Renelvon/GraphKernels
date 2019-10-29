@@ -13,4 +13,3 @@ include setup.py
 
 include CPPLINT.cfg
 include .pylintrc
-include .travis.yml

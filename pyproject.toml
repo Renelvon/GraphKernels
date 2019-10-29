@@ -13,3 +13,10 @@ exclude = 'graphkernels.py'
 line-length = 80
 skip-string-normalization = true
 target-version = ['py36']
+
+[tool.check-manifest]
+ignore = [
+    '.travis.yml',
+    'graphkernels/graphkernels.py',
+    'graphkernels/graphkernels_wrap.cpp',
+]
