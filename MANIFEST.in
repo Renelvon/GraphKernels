@@ -2,9 +2,10 @@ recursive-include graphkernels *.cpp *.h *.i *.py
 recursive-include Tutorial *.graphml *.md *.py *.txt
 
 include AUTHORS.md
-include LICENSE.md
+include LICENSE
 include README.md
 
+include Makefile
 include pyproject.toml
 include requirements.txt
 include setup.cfg
@@ -12,4 +13,3 @@ include setup.py
 
 include CPPLINT.cfg
 include .pylintrc
-include .travis.yml

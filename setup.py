@@ -27,7 +27,7 @@ def get_eigen_include_dir():
             Missing `eigen3` library. Please install it using the
             package manager of your operating system.
             """,
-            file=sys.stderr
+            file=sys.stderr,
         )
         raise
 
@@ -47,7 +47,7 @@ def main():
         '-Wpedantic',
         '-Wno-sign-compare',
         '-Wno-unused-parameter',
-        '-Wno-unused-variable'
+        '-Wno-unused-variable',
     ]
 
     setuptools.setup(
@@ -55,10 +55,7 @@ def main():
             setuptools.Extension(
                 '_graphkernels',
                 sources=[
-                    # Interface file
-                    path.join(GK_DIR, 'graphkernels.i'),
-
-                    # Implementation files
+                    path.join(GK_DIR, 'graphkernels.i'),  # Interface
                     path.join(CPP_DIR, 'connected_graphlet.cpp'),
                     path.join(CPP_DIR, 'graphlet.cpp'),
                     path.join(CPP_DIR, 'rest.cpp'),
@@ -70,10 +67,10 @@ def main():
                 include_dirs=[
                     get_eigen_include_dir(),
                     np.get_include(),
-                    CPP_DIR # For kernel headers.
+                    CPP_DIR,  # For kernel headers.
                 ],
                 language='c++',
-                optional=False
+                optional=False,
             )
         ],
         version=graphkernels.__version__,

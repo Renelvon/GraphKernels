@@ -17,7 +17,10 @@ def GetGraphInfo(g):
         E[i, :] = g.es[i].tuple
     # there are multiple edge attributes
     if len(g.es.attributes()) > 1:
-        print("There are multiple edge attributes! The first attribute %s is used" % g.es.attributes()[0])
+        print(
+            "There are multiple edge attributes! The first attribute %s is used"
+            % g.es.attributes()[0]
+        )
 
     # an edge attribute is missing
     if len(g.es.attributes()) == 0:
@@ -27,8 +30,11 @@ def GetGraphInfo(g):
     e_attr_values = np.asarray(g.es[e_attr_name]).reshape(len(g.es), 1)
     E = np.hstack((E, e_attr_values))
 
-    #if len(g.vs.attributes()) > 1:
-    #   print("There are multiple vertex attributes! The first attribute %s (or the label) is used" % g.vs.attributes()[0])
+    # if len(g.vs.attributes()) > 1:
+    #   print(
+    #        "There are multiple vertex attributes! The first attribute %s (or the label) is used"
+    #        % g.vs.attributes()[0]
+    #    )
 
     if len(g.vs.attributes()) == 0:
         g.vs["label"] = 1
@@ -39,17 +45,20 @@ def GetGraphInfo(g):
     if 'label' in g.vs.attributes():
         v_attr_name = 'label'
     else:
+        # FIXME
+        # https://github.com/AntoinePrv/GraphKernels/commit/ed097a3680c9e0ee91913dc2d2d4e2efa4a32b32
         v_attr_name = g.vs.attributes()[0]
-        # FIXME https://github.com/AntoinePrv/GraphKernels/commit/ed097a3680c9e0ee91913dc2d2d4e2efa4a32b32
 
-    v_attr_values = np.asarray(g.vs[v_attr_name]).reshape(len(g.vs), 1).astype(int)
+    v_attr_values = (
+        np.asarray(g.vs[v_attr_name]).reshape(len(g.vs), 1).astype(int)
+    )
 
     return {
         'edge': E,
         'vlabel': v_attr_values,
         'vsize': len(g.vs),
         'esize': len(g.es),
-        'maxdegree': g.maxdegree()
+        'maxdegree': g.maxdegree(),
     }
 
 
@@ -83,11 +92,11 @@ def GetAdjMatList(G):
     adj_list = gkCpy.IntIntIntVector()
 
     for graph in G:
-        am_cur = graph.get_adjacency() # adjacency matrix of i-th graph
+        am_cur = graph.get_adjacency()  # adjacency matrix of i-th graph
         am_cur = np.array(am_cur.data)
         adj_mat.append(am_cur)
 
-        al_cur = np.asarray(graph.get_adjlist()) # adjacency list of i-th graph
+        al_cur = np.asarray(graph.get_adjlist())  # adjacency list of i-th graph
 
         for j in range(len(al_cur)):
             al_cur[j] = gkCpy.IntVector(al_cur[j])
@@ -115,7 +124,7 @@ def normalizekm(K):
     """
     nv = np.sqrt(np.diag(K))
     nm = nv[:, np.newaxis] * nv[:, np.newaxis].T
-    Knm = nm**-1
+    Knm = nm ** -1
 
     Knm[np.where(np.isnan(Knm))] = 0
 
