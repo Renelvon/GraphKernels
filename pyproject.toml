@@ -1,3 +1,8 @@
 [build-system]
 # Minimum requirements for the build system to execute.
-requires = ['numpy', 'pkgconfig', 'setuptools', 'wheel'] # PEP 508 specifications.
+requires = [
+    'numpy>=1.11',
+    'pkgconfig',
+    'setuptools>=38.6.0',
+    'wheel',
+] # PEP 508 specifications.
