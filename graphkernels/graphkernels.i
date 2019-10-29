@@ -30,6 +30,11 @@
 import_array();
 %}
 
+%include "connected_graphlet.h"
+%include "graphlet.h"
+%include "rest.h"
+%include "wl.h"
+
 namespace std {
 %template(IntVector) std::vector<int>;
 %template(IntIntVector) std::vector<std::vector<int>>;
