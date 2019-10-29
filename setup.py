@@ -76,9 +76,6 @@ def main():
                 optional=False
             )
         ],
-        # NOTE: The following option may produce a harmless warning when
-        # building package using setuptools < 40.*
-        long_description_content_type='text/markdown',
         version=graphkernels.__version__,
     )
     # Rest of options are specified in `setup.cfg`

@@ -1,6 +1,7 @@
 # graphkernels
 
 [![Build Status](https://travis-ci.org/Renelvon/GraphKernels.svg?branch=master)](https://travis-ci.org/Renelvon/GraphKernels)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 `graphkernels` is a Python package for computing various graph kernels. The
 [backend](https://github.com/mahito-sugiyama/graph-kernels) is coded in C++ and
@@ -72,15 +73,16 @@ source code from GitHub
 
 users can use the `setup.py` script to install the package
 
-    $ cd GraphKernels/ $ python3 setup.py build $ python3 setup.py install
-    --user
+    $ cd GraphKernels
+    $ python3 setup.py build_ext
+    $ python3 setup.py install --user
 
 You should also make sure that you're installing the latest release of our
 package, in case you've had a previous version installed. To make sure the
 extension and package are not taken from your cache, you can use the
 `--no-cache-dir` option and install the package as:
 
-    $ pip3 --no-cache-dir install graphkernels`
+    $ pip3 --no-cache-dir install graphkernels
 
 ## Usage
 
