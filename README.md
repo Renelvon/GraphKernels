@@ -14,7 +14,7 @@ The Python and R packages are described at:
   R and Python packages for graph comparison**. Bioinformatics, 2017.
 
 The paper can be found
-[here](https://academic.oup.com/bioinformatics/article/34/3/530/4209994/)
+[here](https://academic.oup.com/bioinformatics/article/34/3/530/4209994/).
 
 ## Installation
 
@@ -40,54 +40,80 @@ the C++ compiler):
 
 - On Ubuntu 18.04 LTS:
 
-    `$ sudo apt-get install libeigen3-dev python3-igraph python3-numpy
-    python3-pkgconfig swig`
+```sh
+$ sudo apt-get install libeigen3-dev python3-igraph python3-numpy python3-pkgconfig swig
+```
 
 Some of the packages might not be available in older distributions.
 
 - On MacOSX:
 
-    `$ brew install eigen pkg-config`
+```sh
+$ brew install eigen pkg-config
+```
 
-Some dependencies may be skipped without problem, because they are
-automatically downloaded and installed by `pip`.
+### Installing `graphkernels` from PyPI
 
 To install the package through [PyPI](https://pypi.org/), type:
 
-    $ pip3 install graphkernels
+```sh
+$ pip3 install graphkernels --user
+```
 
-It is recommended that version `10` or later of `pip` is used. To see which
-version is installed, type:
+It is recommended that version `10` or later of `pip` is used; newer versions
+of `pip` can handle missing dependencies better, by automatically downloading
+and installing them together with `graphkernels` (this won't work for the Eigen
+library). To see which version of `pip` is installed, type:
 
-    $ pip3 --version
+```sh
+$ pip3 --version
+```
 
 If you are using an older version, you can locally upgrade `pip` by typing:
 
-    $ python3 -m pip install --user --upgrade-pip
+```
+$ python3 -m pip install --user --upgrade-pip
+```
 
-and retrying the `graphkernels` installation.
+before attempting the `graphkernels` installation.
 
-Alternatively, the package can be build from source. After downloading the
-source code from GitHub
+In case you already have an older version of `graphkernels` installed, you can
+use the `--no-cache-dir` option so that your local package cache is ignored and
+the lastest package is downloaded:
 
-    $ git clone https://github.com/Renelvon/GraphKernels.git
+```sh
+$ pip3 --no-cache-dir install graphkernels --user
+```
 
-users can use the `setup.py` script to install the package
+### Build-Installing `graphkernels` from main repository
+Alternatively, the package can be built from source as follows:
 
-    $ cd GraphKernels
-    $ python3 setup.py build_ext
-    $ python3 setup.py install --user
+1. Download the latest source code from GitHub (please *only* use the `master`
+   branch when doing so, other branches are not guaranteed to contain a correct
+   build):
 
-You should also make sure that you're installing the latest release of our
-package, in case you've had a previous version installed. To make sure the
-extension and package are not taken from your cache, you can use the
-`--no-cache-dir` option and install the package as:
+```sh
+$ git clone https://github.com/Renelvon/GraphKernels.git
+```
 
-    $ pip3 --no-cache-dir install graphkernels
+2. Build the package; this will also compile the C++ backend and generate the
+   SWIG wrapper:
+
+```sh
+$ cd GraphKernels
+$ python3 setup.py build
+```
+
+3. Install the package for this user only (showed by `--user`; installing the
+   package system-wide might require `sudo -H`):
+
+```sh
+$ python3 setup.py install --user
+```
 
 ## Usage
 
-The `tutorial` folder should help with getting started using the package.
+The `Tutorial` folder should help with getting started using the package.
 There, you can also find an example script for computing graph kernels through
 our package on a benchmark dataset.
 
@@ -107,7 +133,8 @@ support for Python 2 soon.
 If you use the `graphkernels` package in your projects please cite our work as
 follows:
 
-``` @article{Sugiyama-2017-Bioinformatics,
+```
+@article{Sugiyama-2017-Bioinformatics,
 author = {Sugiyama, Mahito and Ghisu, M. Elisabetta and Llinares-López, Felipe and Borgwardt, Karsten},
 title = {graphkernels: R and Python packages for graph comparison},
 journal = {Bioinformatics},
@@ -117,7 +144,8 @@ pages = {530--532},
 year = {2017},
 doi = {10.1093/bioinformatics/btx602},
 URL = {http://dx.doi.org/10.1093/bioinformatics/btx602},
-} ```
+}
+```
 
 If our project has made your life easier, we will be happy to receive your
 feedback, through e-mail or an issue on GitHub.
