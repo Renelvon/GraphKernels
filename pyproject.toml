@@ -1,7 +1,7 @@
 [build-system]
 # Minimum requirements for the build system to execute.
 requires = [
-    'numpy>=1.11',
+    'numpy>=1.13.3',
     'pkgconfig',
     'setuptools>=38.6.0',
     'wheel',
