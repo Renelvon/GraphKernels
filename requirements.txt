@@ -1,6 +1,6 @@
 black
 check-manifest>=0.38
-cpplint
+cpplint>=1.4.1
 numpy>=1.13.3
 pkgconfig
 pylint
