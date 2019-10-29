@@ -24,19 +24,10 @@ before_install:
     - pip3 install --upgrade check-manifest
     - pip3 install --upgrade pylint
     - pip3 install --upgrade pyroma
-    - black --check --target-version=py36 -l 80 -S setup.py
-    - check-manifest # test
-    - cpplint --recursive graphkernels/cppkernels
-    - pylint setup.py graphkernels
-    - pyroma -n 9 . # test
+    - make check
 
 install:
-    - python3 setup.py build_ext
-    - python3 setup.py install
-    - python3 setup.py sdist
+    - make install
 
 script:
-    - cd ./Tutorial
-    - python3 demo_mutag.py
-    # The following requires sklearn package
-    #- python3 demo_grid_search.py
+    - make installcheck
