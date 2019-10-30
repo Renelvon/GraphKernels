@@ -4,6 +4,7 @@
 Setup script for graphkernels package. Uses SWIG.
 """
 
+from distutils import ccompiler
 import pathlib
 
 import numpy as np
@@ -48,18 +49,19 @@ LIBRARY_DIRS = [np.get_include(), *_INFO['include_dirs'], str(CPP_PATH)]
 
 LIBRARIES = _INFO['libraries']
 
-INCLUDE_DIR_FLAGS = tuple('-I{}'.format(l) for l in LIBRARY_DIRS)
-
 CPP_SOURCES = [str(s) for s in CPP_PATH.glob('*.cpp')]
 
 
 def main():
+    _include_dir_flags = ccompiler.gen_preprocess_options(
+        macros=[], include_dirs=LIBRARY_DIRS
+    )
     setuptools.setup(
         ext_modules=[
             setuptools.Extension(
                 '_graphkernels',
                 sources=[str(GK_PATH / 'graphkernels.i'), *CPP_SOURCES],
-                swig_opts=[*SWIG_OPTS, *INCLUDE_DIR_FLAGS],
+                swig_opts=[*SWIG_OPTS, *_include_dir_flags],
                 extra_compile_args=CPP_FLAGS,
                 extra_link_args=CPP_FLAGS,
                 include_dirs=LIBRARY_DIRS,
