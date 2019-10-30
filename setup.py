@@ -5,7 +5,6 @@ Setup script for graphkernels package. Uses SWIG.
 """
 
 from os import path
-import sys
 
 import numpy as np
 import pkgconfig
@@ -16,23 +15,6 @@ import graphkernels
 THIS_DIR = path.dirname(__file__)
 GK_DIR = path.join(THIS_DIR, 'graphkernels')
 CPP_DIR = path.join(GK_DIR, 'cppkernels')
-
-
-def get_eigen_include_dir():
-    try:
-        cflags = pkgconfig.cflags('eigen3')
-    except pkgconfig.PackageNotFoundError:
-        print(
-            """
-            Missing `eigen3` library. Please install it using the
-            package manager of your operating system.
-            """,
-            file=sys.stderr,
-        )
-        raise
-
-    # Throw away the `-I` part; it is not part of the include directory.
-    return cflags[2:]
 
 
 CPP_FLAGS = [
@@ -51,7 +33,18 @@ CPP_FLAGS = [
 
 SWIG_OPTS = ('-builtin', '-c++', '-O', '-py3', '-Wall')
 
-LIBRARY_DIRS = [get_eigen_include_dir(), np.get_include(), CPP_DIR]
+try:
+    _INFO = pkgconfig.parse('eigen3 python3')
+except pkgconfig.PackageNotFoundError as e:
+    e.message += """
+        Missing `eigen3` library. Please install it using the
+        package manager of your operating system.
+        """
+    raise
+
+LIBRARY_DIRS = [np.get_include(), *_INFO['include_dirs'], CPP_DIR]
+
+LIBRARIES = _INFO['libraries']
 
 INCLUDE_DIR_FLAGS = tuple('-I{}'.format(l) for l in LIBRARY_DIRS)
 
@@ -72,6 +65,7 @@ def main():
                 extra_compile_args=CPP_FLAGS,
                 extra_link_args=CPP_FLAGS,
                 include_dirs=LIBRARY_DIRS,
+                libraries=LIBRARIES,
                 language='c++',
                 optional=False,
             )
