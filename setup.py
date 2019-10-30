@@ -50,19 +50,15 @@ LIBRARIES = _INFO['libraries']
 
 INCLUDE_DIR_FLAGS = tuple('-I{}'.format(l) for l in LIBRARY_DIRS)
 
+CPP_SOURCES = [str(s) for s in CPP_PATH.glob('*.cpp')]
+
 
 def main():
     setuptools.setup(
         ext_modules=[
             setuptools.Extension(
                 '_graphkernels',
-                sources=[
-                    str(GK_PATH / 'graphkernels.i'),  # Interface
-                    str(CPP_PATH / 'connected_graphlet.cpp'),
-                    str(CPP_PATH / 'graphlet.cpp'),
-                    str(CPP_PATH / 'rest.cpp'),
-                    str(CPP_PATH / 'wl.cpp'),
-                ],
+                sources=[str(GK_PATH / 'graphkernels.i'), *CPP_SOURCES],
                 swig_opts=(*SWIG_OPTS, *INCLUDE_DIR_FLAGS),
                 extra_compile_args=CPP_FLAGS,
                 extra_link_args=CPP_FLAGS,
