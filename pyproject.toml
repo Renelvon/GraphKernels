@@ -8,7 +8,6 @@ requires = [
 ] # PEP 508 specifications.
 
 [tool.black]
-check = true
 exclude = 'graphkernels.py'
 line-length = 80
 skip-string-normalization = true

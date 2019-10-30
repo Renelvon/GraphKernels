@@ -59,13 +59,13 @@ def main():
     setuptools.setup(
         ext_modules=[
             setuptools.Extension(
-                '_graphkernels',
+                name='_graphkernels',
                 sources=[str(GK_PATH / 'graphkernels.i'), *CPP_SOURCES],
+                include_dirs=INCLUDE_DIRS,
+                libraries=LIBRARIES,
                 swig_opts=[*SWIG_OPTS, *_include_dir_flags],
                 extra_compile_args=CPP_FLAGS,
                 extra_link_args=CPP_FLAGS,
-                include_dirs=INCLUDE_DIRS,
-                libraries=LIBRARIES,
                 language='c++',
                 optional=False,
             )
