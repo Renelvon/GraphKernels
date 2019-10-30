@@ -45,7 +45,7 @@ except pkgconfig.PackageNotFoundError as e:
         """
     raise
 
-LIBRARY_DIRS = [np.get_include(), *_INFO['include_dirs'], str(CPP_PATH)]
+INCLUDE_DIRS = [np.get_include(), *_INFO['include_dirs'], str(CPP_PATH)]
 
 LIBRARIES = _INFO['libraries']
 
@@ -54,7 +54,7 @@ CPP_SOURCES = [str(s) for s in CPP_PATH.glob('*.cpp')]
 
 def main():
     _include_dir_flags = ccompiler.gen_preprocess_options(
-        macros=[], include_dirs=LIBRARY_DIRS
+        macros=[], include_dirs=INCLUDE_DIRS
     )
     setuptools.setup(
         ext_modules=[
@@ -64,7 +64,7 @@ def main():
                 swig_opts=[*SWIG_OPTS, *_include_dir_flags],
                 extra_compile_args=CPP_FLAGS,
                 extra_link_args=CPP_FLAGS,
-                include_dirs=LIBRARY_DIRS,
+                include_dirs=INCLUDE_DIRS,
                 libraries=LIBRARIES,
                 language='c++',
                 optional=False,
