@@ -16,9 +16,4 @@ Eigen::MatrixXd WLKernelMatrix(std::vector<Eigen::MatrixXi>& E,
                                std::vector<int>& degree_max,
                                int h_max);
 
-Eigen::MatrixXd CalculateKernelPy(std::vector<Eigen::MatrixXi>& E,
-                                  std::vector<std::vector<int>>& V_label,
-                                  std::vector<double>& par,
-                                  int kernel_type);
-
 #endif  // GRAPHKERNELS_CPPKERNELS_WL_H_
