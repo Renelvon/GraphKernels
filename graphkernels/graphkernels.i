@@ -16,6 +16,7 @@
 
 #include "connected_graphlet.h"
 #include "graphlet.h"
+#include "histogram.h"
 #include "rest.h"
 #include "wl.h"
 %}
@@ -42,5 +43,6 @@ namespace std {
 // Include header files with kernel prototypes
 %include "connected_graphlet.h"
 %include "graphlet.h"
+%include "histogram.h"
 %include "rest.h"
 %include "wl.h"
