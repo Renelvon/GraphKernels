@@ -2,7 +2,7 @@
 # Minimum requirements for the build system to execute.
 requires = [
     'numpy>=1.13.3',
-    'pkgconfig',
+    'pkgconfig>=1.5.0',
     'setuptools>=38.6.0',
     'wheel',
 ] # PEP 508 specifications.
