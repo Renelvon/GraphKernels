@@ -4,7 +4,8 @@
 Setup script for graphkernels package. Uses SWIG.
 """
 
-from os import path
+from distutils import ccompiler
+import pathlib
 
 import numpy as np
 import pkgconfig
@@ -12,9 +13,9 @@ import setuptools
 
 import graphkernels
 
-THIS_DIR = path.dirname(__file__)
-GK_DIR = path.join(THIS_DIR, 'graphkernels')
-CPP_DIR = path.join(GK_DIR, 'cppkernels')
+THIS_PATH = pathlib.Path('.')
+GK_PATH = THIS_PATH / 'graphkernels'
+CPP_PATH = GK_PATH / 'cppkernels'
 
 
 CPP_FLAGS = [
@@ -33,7 +34,7 @@ CPP_FLAGS = [
     '-Wno-unused-variable',
 ]
 
-SWIG_OPTS = ('-builtin', '-c++', '-O', '-py3', '-Wall')
+SWIG_OPTS = ['-builtin', '-c++', '-O', '-py3', '-Wall']
 
 try:
     _INFO = pkgconfig.parse('eigen3 python3')
@@ -44,30 +45,27 @@ except pkgconfig.PackageNotFoundError as e:
         """
     raise
 
-LIBRARY_DIRS = [np.get_include(), *_INFO['include_dirs'], CPP_DIR]
+INCLUDE_DIRS = [np.get_include(), *_INFO['include_dirs'], str(CPP_PATH)]
 
 LIBRARIES = _INFO['libraries']
 
-INCLUDE_DIR_FLAGS = tuple('-I{}'.format(l) for l in LIBRARY_DIRS)
+CPP_SOURCES = [str(s) for s in CPP_PATH.glob('*.cpp')]
 
 
 def main():
+    _include_dir_flags = ccompiler.gen_preprocess_options(
+        macros=[], include_dirs=INCLUDE_DIRS
+    )
     setuptools.setup(
         ext_modules=[
             setuptools.Extension(
-                '_graphkernels',
-                sources=[
-                    path.join(GK_DIR, 'graphkernels.i'),  # Interface
-                    path.join(CPP_DIR, 'connected_graphlet.cpp'),
-                    path.join(CPP_DIR, 'graphlet.cpp'),
-                    path.join(CPP_DIR, 'rest.cpp'),
-                    path.join(CPP_DIR, 'wl.cpp'),
-                ],
-                swig_opts=(*SWIG_OPTS, *INCLUDE_DIR_FLAGS),
+                name='_graphkernels',
+                sources=[str(GK_PATH / 'graphkernels.i'), *CPP_SOURCES],
+                include_dirs=INCLUDE_DIRS,
+                libraries=LIBRARIES,
+                swig_opts=[*SWIG_OPTS, *_include_dir_flags],
                 extra_compile_args=CPP_FLAGS,
                 extra_link_args=CPP_FLAGS,
-                include_dirs=LIBRARY_DIRS,
-                libraries=LIBRARIES,
                 language='c++',
                 optional=False,
             )
