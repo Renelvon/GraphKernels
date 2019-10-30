@@ -7,6 +7,9 @@ SETUP=setup.py
 
 all: build
 
+bdist_wheel: build_ext
+	$(PYTHON) $(SETUP) bdist_wheel
+
 build_ext:
 	$(PYTHON) $(SETUP) build_ext
 
@@ -18,7 +21,7 @@ check:
 	check-manifest
 	cpplint --recursive $(NAME)/cppkernels
 	pylint setup.py $(NAME)
-	pyroma -n 9 .
+	pyroma -n 10 .
 
 clean:
 	git clean -xfd
