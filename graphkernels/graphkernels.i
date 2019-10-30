@@ -29,16 +29,18 @@
 import_array();
 %}
 
+// Instantiate vector templates.
+namespace std {
+    %template(IntVector) std::vector<int>;
+    %template(IntIntVector) std::vector<std::vector<int>>;
+    %template(IntIntIntVector) std::vector<std::vector<std::vector<int>>>;
+    // %template(FloatVector) std::vector<float>;
+    %template(DoubleVector) std::vector<double>;
+    %template(VecMatrixXi) std::vector<Eigen::MatrixXi>;
+};
+
+// Include header files with kernel prototypes
 %include "connected_graphlet.h"
 %include "graphlet.h"
 %include "rest.h"
 %include "wl.h"
-
-namespace std {
-%template(IntVector) std::vector<int>;
-%template(IntIntVector) std::vector<std::vector<int>>;
-%template(IntIntIntVector) std::vector<std::vector<std::vector<int>>>;
-/*    %template(FloatVector) std::vector<float>; */
-%template(DoubleVector) std::vector<double>;
-%template(VecMatrixXi) std::vector<Eigen::MatrixXi>;
-};
