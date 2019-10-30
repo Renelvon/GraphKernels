@@ -140,14 +140,11 @@ double exponentialRandomWalkKernel(MatrixXi& e1,
                                    double beta) {
   // map each product (v_1, v_2) of vertics to a number H(v_1, v_2)
   MatrixXi H(v1_label.size(), v2_label.size());
-  int n_vx = productMapping(v1_label, v2_label, H);
+  auto n_vx = productMapping(v1_label, v2_label, H);
 
   // compute the adjacency matrix Ax of the direct product graph
-  SparseMatrix<double> Ax(n_vx, n_vx);
-  MatrixXd dAx(n_vx, n_vx);
-
-  dAx = productAdjacency(e1, e2, v1_label, v2_label, H);
-  Ax = dAx.sparseView();
+  MatrixXd dAx = productAdjacency(e1, e2, v1_label, v2_label, H);
+  SparseMatrix<double> Ax = dAx.sparseView();
 
   // compute e^{beta * Ax}
   SelfAdjointEigenSolver<MatrixXd> es(Ax);
@@ -155,21 +152,14 @@ double exponentialRandomWalkKernel(MatrixXi& e1,
   MatrixXd D = x.asDiagonal();
   MatrixXd V = es.eigenvectors();
 
-  MatrixXd I(n_vx, n_vx);
-  I.setIdentity();
+  // prepare identity matrix
+  auto I = MatrixXd::Identity(n_vx, n_vx);
+
   FullPivLU<MatrixXd> solver(V);
   MatrixXd V_inv = solver.solve(I);
   MatrixXd Res = V * D * V_inv;
 
-  // compute the total sum
-  double K = 0;
-  for (auto i = 0L; i < Res.rows(); i++) {
-    for (auto j = 0L; j < Res.cols(); j++) {
-      K += Res(i, j);
-    }
-  }
-
-  return K;
+  return Res.sum();
 }
 
 MatrixXd CalculateExponentialRandomWalkKernelPy(
