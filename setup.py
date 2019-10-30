@@ -4,7 +4,7 @@
 Setup script for graphkernels package. Uses SWIG.
 """
 
-from os import path
+import pathlib
 
 import numpy as np
 import pkgconfig
@@ -12,9 +12,9 @@ import setuptools
 
 import graphkernels
 
-THIS_DIR = path.dirname(__file__)
-GK_DIR = path.join(THIS_DIR, 'graphkernels')
-CPP_DIR = path.join(GK_DIR, 'cppkernels')
+THIS_PATH = pathlib.Path('.')
+GK_PATH = THIS_PATH / 'graphkernels'
+CPP_PATH = GK_PATH / 'cppkernels'
 
 
 CPP_FLAGS = [
@@ -44,7 +44,7 @@ except pkgconfig.PackageNotFoundError as e:
         """
     raise
 
-LIBRARY_DIRS = [np.get_include(), *_INFO['include_dirs'], CPP_DIR]
+LIBRARY_DIRS = [np.get_include(), *_INFO['include_dirs'], str(CPP_PATH)]
 
 LIBRARIES = _INFO['libraries']
 
@@ -57,11 +57,11 @@ def main():
             setuptools.Extension(
                 '_graphkernels',
                 sources=[
-                    path.join(GK_DIR, 'graphkernels.i'),  # Interface
-                    path.join(CPP_DIR, 'connected_graphlet.cpp'),
-                    path.join(CPP_DIR, 'graphlet.cpp'),
-                    path.join(CPP_DIR, 'rest.cpp'),
-                    path.join(CPP_DIR, 'wl.cpp'),
+                    str(GK_PATH / 'graphkernels.i'),  # Interface
+                    str(CPP_PATH / 'connected_graphlet.cpp'),
+                    str(CPP_PATH / 'graphlet.cpp'),
+                    str(CPP_PATH / 'rest.cpp'),
+                    str(CPP_PATH / 'wl.cpp'),
                 ],
                 swig_opts=(*SWIG_OPTS, *INCLUDE_DIR_FLAGS),
                 extra_compile_args=CPP_FLAGS,
