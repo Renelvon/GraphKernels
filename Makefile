@@ -21,7 +21,7 @@ check:
 	check-manifest
 	cpplint --recursive $(NAME)/cppkernels
 	pylint setup.py $(NAME)
-	pyroma -n 9 .
+	pyroma -n 10 .
 
 clean:
 	git clean -xfd
