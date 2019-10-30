@@ -11,6 +11,20 @@ from graphkernels import graphkernels as gkCpy
 from .utilities import GetAdjMatList, GetGKInput
 
 
+def _do_calculate_histogram(G, gk_par, kernel_id=None):
+    if not isinstance(kernel_id, int):
+        raise TypeError('Histogram Kernel index must be integer')
+
+    if kernel_id <= 0:
+        raise ValueError('Histogram Kernel index must be positive')
+
+    # Extract graph info.
+    E, V_label, _, _, _ = GetGKInput(G)
+
+    # Compute designated kernel
+    return gkCpy.CalculateHistogramKernelPy(E, V_label, gk_par, kernel_id)
+
+
 def _do_calculate(G, gk_par, kernel_id=None):
     if not isinstance(kernel_id, int):
         raise TypeError('Kernel index must be integer')
@@ -31,25 +45,25 @@ def _do_calculate(G, gk_par, kernel_id=None):
 def CalculateEdgeHistKernel(G, par=-1.0):
     """Edge Histogram Kernel"""
     gk_par = gkCpy.DoubleVector([par])
-    return _do_calculate(G, gk_par, 1)
+    return _do_calculate_histogram(G, gk_par, 1)
 
 
 def CalculateVertexHistKernel(G, par=-1.0):
     """Vertex Histogram Kernel"""
     gk_par = gkCpy.DoubleVector([par])
-    return _do_calculate(G, gk_par, 2)
+    return _do_calculate_histogram(G, gk_par, 2)
 
 
 def CalculateVertexEdgeHistKernel(G, par=-1.0):
     """Vertex Edge Histogram Kernel"""
     gk_par = gkCpy.DoubleVector([par])
-    return _do_calculate(G, gk_par, 3)
+    return _do_calculate_histogram(G, gk_par, 3)
 
 
 def CalculateVertexVertexEdgeHistKernel(G, par=1):
     """Vertex Vertex Edge Histogram Kernel"""
     gk_par = gkCpy.DoubleVector([par])
-    return _do_calculate(G, gk_par, 4)
+    return _do_calculate_histogram(G, gk_par, 4)
 
 
 # === RBF Kernels on Histograms ===
@@ -58,19 +72,19 @@ def CalculateVertexVertexEdgeHistKernel(G, par=1):
 def CalculateEdgeHistGaussKernel(G, par=1):
     """Edge Histogram RBF Kernel"""
     gk_par = gkCpy.DoubleVector([par])
-    return _do_calculate(G, gk_par, 5)
+    return _do_calculate_histogram(G, gk_par, 5)
 
 
 def CalculateVertexHistGaussKernel(G, par=1):
     """Vertex Histogram RBF Kernel"""
     gk_par = gkCpy.DoubleVector([par])
-    return _do_calculate(G, gk_par, 6)
+    return _do_calculate_histogram(G, gk_par, 6)
 
 
 def CalculateVertexEdgeHistGaussKernel(G, par=1):
     """Vertex Edge Histogram RBF Kernel"""
     gk_par = gkCpy.DoubleVector([par])
-    return _do_calculate(G, gk_par, 7)
+    return _do_calculate_histogram(G, gk_par, 7)
 
 
 # === Random Walk Kernels ===
