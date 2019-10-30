@@ -7,6 +7,9 @@ SETUP=setup.py
 
 all: build
 
+bdist_wheel: build_ext
+	$(PYTHON) $(SETUP) bdist_wheel
+
 build_ext:
 	$(PYTHON) $(SETUP) build_ext
 
