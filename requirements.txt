@@ -2,6 +2,7 @@ black
 check-manifest>=0.38
 cpplint>=1.4.1
 numpy>=1.13.3
+pip>=10.0
 pkgconfig
 pylint
 pyroma>=2.4
