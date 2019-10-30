@@ -11,10 +11,14 @@
 #include <numeric>
 
 using std::iota;
+using std::vector;
 
 using Eigen::FullPivLU;
+using Eigen::MatrixXd;
+using Eigen::MatrixXi;
 using Eigen::SelfAdjointEigenSolver;
 using Eigen::SparseMatrix;
+using Eigen::VectorXd;
 
 using Tuple3_t = Eigen::Triplet<double>;
 

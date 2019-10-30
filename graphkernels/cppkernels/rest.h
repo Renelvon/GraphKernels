@@ -9,38 +9,32 @@
 
 #include <vector>
 
-using std::vector;
-
-using Eigen::VectorXd;
-using Eigen::MatrixXd;
-using Eigen::MatrixXi;
-
 // Random Walk kernels
 // ===================
 
-double geometricRandomWalkKernel(MatrixXi& e1,
-                                 MatrixXi& e2,
-                                 vector<int>& v1_label,
-                                 vector<int>& v2_label,
+double geometricRandomWalkKernel(Eigen::MatrixXi& e1,
+                                 Eigen::MatrixXi& e2,
+                                 std::vector<int>& v1_label,
+                                 std::vector<int>& v2_label,
                                  double lambda);
 
-double exponentialRandomWalkKernel(MatrixXi& e1,
-                                   MatrixXi& e2,
-                                   vector<int>& v1_label,
-                                   vector<int>& v2_label,
+double exponentialRandomWalkKernel(Eigen::MatrixXi& e1,
+                                   Eigen::MatrixXi& e2,
+                                   std::vector<int>& v1_label,
+                                   std::vector<int>& v2_label,
                                    double beta);
 
-double kstepRandomWalkKernel(MatrixXi& e1,
-                             MatrixXi& e2,
-                             vector<int>& v1_label,
-                             vector<int>& v2_label,
-                             vector<double>& lambda_list);
+double kstepRandomWalkKernel(Eigen::MatrixXi& e1,
+                             Eigen::MatrixXi& e2,
+                             std::vector<int>& v1_label,
+                             std::vector<int>& v2_label,
+                             std::vector<double>& lambda_list);
 
-double computeKernelValue(MatrixXi& e1,
-                          MatrixXi& e2,
-                          vector<int>& v1_label,
-                          vector<int>& v2_label,
-                          vector<double>& par,
+double computeKernelValue(Eigen::MatrixXi& e1,
+                          Eigen::MatrixXi& e2,
+                          std::vector<int>& v1_label,
+                          std::vector<int>& v2_label,
+                          std::vector<double>& par,
                           int kernel_type);
 
 Eigen::MatrixXd CalculateKernelPy(std::vector<Eigen::MatrixXi>& E,
