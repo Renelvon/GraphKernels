@@ -33,7 +33,7 @@ CPP_FLAGS = [
     '-Wno-unused-variable',
 ]
 
-SWIG_OPTS = ('-builtin', '-c++', '-O', '-py3', '-Wall')
+SWIG_OPTS = ['-builtin', '-c++', '-O', '-py3', '-Wall']
 
 try:
     _INFO = pkgconfig.parse('eigen3 python3')
@@ -59,7 +59,7 @@ def main():
             setuptools.Extension(
                 '_graphkernels',
                 sources=[str(GK_PATH / 'graphkernels.i'), *CPP_SOURCES],
-                swig_opts=(*SWIG_OPTS, *INCLUDE_DIR_FLAGS),
+                swig_opts=[*SWIG_OPTS, *INCLUDE_DIR_FLAGS],
                 extra_compile_args=CPP_FLAGS,
                 extra_link_args=CPP_FLAGS,
                 include_dirs=LIBRARY_DIRS,
