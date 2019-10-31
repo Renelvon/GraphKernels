@@ -8,7 +8,7 @@ import numpy as np
 from graphkernels import graphkernels as gkCpy
 
 
-def GetGraphInfo(g):
+def _get_graph_info(g):
     """Extract graphs information from an igraph object"""
 
     # matrix of edges
@@ -53,13 +53,7 @@ def GetGraphInfo(g):
         np.asarray(g.vs[v_attr_name]).reshape(len(g.vs), 1).astype(int)
     )
 
-    return {
-        'edge': E,
-        'vlabel': v_attr_values,
-        'vsize': len(g.vs),
-        'esize': len(g.es),
-        'maxdegree': g.maxdegree(),
-    }
+    return E, v_attr_values, len(g.vs), len(g.es), g.maxdegree()
 
 
 def GetGKInput(G):
@@ -76,12 +70,12 @@ def GetGKInput(G):
     D_max = gkCpy.IntVector()
 
     for graph in G:
-        g_info = GetGraphInfo(graph)
-        E.append(g_info['edge'])
-        V_label.append(gkCpy.IntVector(g_info['vlabel'].reshape(-1).tolist()))
-        V_count.append(g_info['vsize'])
-        E_count.append(g_info['esize'])
-        D_max.append(g_info['maxdegree'])
+        edge, vlabel, vsize, esize, maxdegree = _get_graph_info(graph)
+        E.append(edge)
+        V_label.append(gkCpy.IntVector(vlabel.reshape(-1).tolist()))
+        V_count.append(vsize)
+        E_count.append(esize)
+        D_max.append(maxdegree)
 
     return E, V_label, V_count, E_count, D_max
 
