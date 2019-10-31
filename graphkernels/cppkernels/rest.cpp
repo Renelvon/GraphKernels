@@ -238,34 +238,3 @@ MatrixXd CalculateKStepRandomWalkKernelPy(
 
     return K;
 }
-
-MatrixXd CalculateKernelPy(vector<MatrixXi>& E,
-        vector<vector<int>>& V_label,
-        vector<double>& par,
-        int kernel_type) {
-    MatrixXd K(V_label.size(), V_label.size());
-    for (auto i = 0; i < V_label.size(); ++i) {
-        for (auto j = i; j < V_label.size(); ++j) {
-            // compute a kernel value of a pair of graphs
-            switch (kernel_type) {
-                case 8:
-                    K(i, j) = geometricRandomWalkKernel(
-                            E[i], E[j], V_label[i], V_label[j], par[0]);
-                    break;
-                case 9:
-                    K(i, j) = exponentialRandomWalkKernel(
-                            E[i], E[j], V_label[i], V_label[j], par[0]);
-                    break;
-                case 10:
-                    K(i, j) = kstepRandomWalkKernel(
-                            E[i], E[j], V_label[i], V_label[j], par);
-                    break;
-                default:
-                    K(i, j) = 42.0;  // FIXME: THIS SHOULD NEVER HAPPEN
-            }
-            K(j, i) = K(i, j);
-        }
-    }
-
-    return K;
-}

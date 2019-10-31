@@ -27,10 +27,4 @@ Eigen::MatrixXd CalculateKStepRandomWalkKernelPy(
         std::vector<std::vector<int>>& V_label,
         std::vector<double>& par);
 
-Eigen::MatrixXd CalculateKernelPy(
-        std::vector<Eigen::MatrixXi>& E,
-        std::vector<std::vector<int>>& V_label,
-        std::vector<double>& par,
-        int kernel_type);
-
 #endif  // GRAPHKERNELS_CPPKERNELS_REST_H_

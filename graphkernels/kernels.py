@@ -25,20 +25,6 @@ def _do_calculate_histogram(G, gk_par, kernel_id=None):
     return gkCpy.CalculateHistogramKernelPy(E, V_label, gk_par, kernel_id)
 
 
-def _do_calculate(G, gk_par, kernel_id=None):
-    if not isinstance(kernel_id, int):
-        raise TypeError('Kernel index must be integer')
-
-    if kernel_id <= 0:
-        raise ValueError('Kernel index must be positive')
-
-    # Extract graph info.
-    E, V_label, _, _, _ = GetGKInput(G)
-
-    # Compute designated kernel
-    return gkCpy.CalculateKernelPy(E, V_label, gk_par, kernel_id)
-
-
 # === Linear Kernels on Histograms ===
 
 
@@ -92,23 +78,25 @@ def CalculateVertexEdgeHistGaussKernel(G, par=1):
 
 def CalculateGeometricRandomWalkKernel(G, par=1):
     """Geometric Random Walk Kernel"""
-    gk_par = gkCpy.DoubleVector([par])
-    return _do_calculate(G, gk_par, 8)
+    E, V_label, _, _, _ = GetGKInput(G)
+    return gkCpy.CalculateGeometricRandomWalkKernelPy(E, V_label, par)
 
 
 def CalculateExponentialRandomWalkKernel(G, par=1):
     """Exponential Random Walk Kernel"""
-    gk_par = gkCpy.DoubleVector([par])
-    return _do_calculate(G, gk_par, 9)
+    E, V_label, _, _, _ = GetGKInput(G)
+    return gkCpy.CalculateExponentialRandomWalkKernelPy(E, V_label, par)
 
 
 def CalculateKStepRandomWalkKernel(G, par=1):
     """K-step Random Walk Kernel"""
     # Allow user to provide own list of k-step weights
     if isinstance(par, (int, float, complex)):
-        par = [par]
-    gk_par = gkCpy.DoubleVector(par)
-    return _do_calculate(G, gk_par, 10)
+        gk_par = gkCpy.DoubleVector([par])
+    else:
+        gk_par = gkCpy.DoubleVector(par)
+    E, V_label, _, _, _ = GetGKInput(G)
+    return gkCpy.CalculateKStepRandomWalkKernelPy(E, V_label, gk_par)
 
 
 # === Advanced Kernels ===
