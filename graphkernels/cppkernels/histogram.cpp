@@ -145,61 +145,50 @@ double vertexVertexEdgeHistogramKernel(MatrixXi& e1,
          lambda * vertexEdgeHistogramKernel(e1, e2, v1_label, v2_label, -1.0);
 }
 
-// compute a kernel value of a pair of graphs
-double computeHistogramKernelValue(MatrixXi& e1,
-                                   MatrixXi& e2,
-                                   vector<int>& v1_label,
-                                   vector<int>& v2_label,
-                                   vector<double>& par,
-                                   int kernel_type) {
-  double Kval;
-  switch (kernel_type) {
-    case 1:  // edge histogram kernel
-      Kval = edgeHistogramKernel(e1, e2, -1.0);
-      break;
-    case 2:  // vertex histogram kernel
-      Kval = vertexHistogramKernel(v1_label, v2_label, -1.0);
-      break;
-    case 3:  // vertex-edge histogram kernel
-      Kval = vertexEdgeHistogramKernel(e1, e2, v1_label, v2_label, -1.0);
-      break;
-    case 4:  // vertex-vertex-edge histogram kernel
-      Kval =
-          vertexVertexEdgeHistogramKernel(e1, e2, v1_label, v2_label, par[0]);
-      break;
-    case 5:  // edge histogram kernel (Gaussian)
-      Kval = edgeHistogramKernel(e1, e2, par[0]);
-      break;
-    case 6:  // vertex histogram kernel (Gaussian)
-      Kval = vertexHistogramKernel(v1_label, v2_label, par[0]);
-      break;
-    case 7:  // vertex-edge histogram kernel (Gaussian)
-      Kval = vertexEdgeHistogramKernel(e1, e2, v1_label, v2_label, par[0]);
-      break;
-    default:
-      Kval = 0;
-      break;
-  }
-  return Kval;
-}
+MatrixXd CalculateHistogramKernelPy(
+        vector<MatrixXi>& E,
+        vector<vector<int>>& V_label,
+        vector<double>& par,
+        int kernel_type) {
+    MatrixXd K(V_label.size(), V_label.size());
 
-MatrixXd CalculateHistogramKernelPy(vector<MatrixXi>& E,
-                                    vector<vector<int>>& V_label,
-                                    vector<double>& par,
-                                    int kernel_type) {
-  MatrixXd K(V_label.size(), V_label.size());
-
-  for (auto i = 0; i < V_label.size(); ++i) {
-    for (auto j = i; j < V_label.size(); ++j) {
-      K(i, j) = computeHistogramKernelValue(E[i],
-                                            E[j],
-                                            V_label[i],
-                                            V_label[j],
-                                            par,
-                                            kernel_type);
-      K(j, i) = K(i, j);
+    for (auto i = 0; i < V_label.size(); ++i) {
+        for (auto j = i; j < V_label.size(); ++j) {
+            auto Kval = 0.0;
+            switch (kernel_type) {
+                // Simple kernels
+                case 1:
+                    Kval = edgeHistogramKernel(E[i], E[j], -1.0);
+                    break;
+                case 2:
+                    Kval = vertexHistogramKernel(V_label[i], V_label[j], -1.0);
+                    break;
+                case 3:
+                    Kval = vertexEdgeHistogramKernel(
+                            E[i], E[j], V_label[i], V_label[j], -1.0);
+                    break;
+                case 4:
+                    Kval = vertexVertexEdgeHistogramKernel(
+                            E[i], E[j], V_label[i], V_label[j], par[0]);
+                    break;
+                // Gaussian kernels
+                case 5:
+                    Kval = edgeHistogramKernel(E[i], E[j], par[0]);
+                    break;
+                case 6:
+                    Kval = vertexHistogramKernel(
+                            V_label[i], V_label[j], par[0]);
+                    break;
+                case 7:
+                    Kval = vertexEdgeHistogramKernel(
+                            E[i], E[j], V_label[i], V_label[j], par[0]);
+                    break;
+                default:
+                    Kval = 42.0;  // FIXME: THIS SHOULD NEVER HAPPEN!
+            }
+            K(j, i) = K(i, j) = Kval;
+        }
     }
-  }
 
-  return K;
+    return K;
 }
