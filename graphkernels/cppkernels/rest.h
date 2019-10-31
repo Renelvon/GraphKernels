@@ -12,9 +12,25 @@
 // Random Walk kernels
 // ===================
 
-Eigen::MatrixXd CalculateKernelPy(std::vector<Eigen::MatrixXi>& E,
-                                  std::vector<std::vector<int>>& V_label,
-                                  std::vector<double>& par,
-                                  int kernel_type);
+Eigen::MatrixXd CalculateGeometricRandomWalkKernelPy(
+        std::vector<Eigen::MatrixXi>& E,
+        std::vector<std::vector<int>>& V_label,
+        double par);
+
+Eigen::MatrixXd CalculateExponentialRandomWalkKernelPy(
+        std::vector<Eigen::MatrixXi>& E,
+        std::vector<std::vector<int>>& V_label,
+        double par);
+
+Eigen::MatrixXd CalculateKStepRandomWalkKernelPy(
+        std::vector<Eigen::MatrixXi>& E,
+        std::vector<std::vector<int>>& V_label,
+        std::vector<double>& par);
+
+Eigen::MatrixXd CalculateKernelPy(
+        std::vector<Eigen::MatrixXi>& E,
+        std::vector<std::vector<int>>& V_label,
+        std::vector<double>& par,
+        int kernel_type);
 
 #endif  // GRAPHKERNELS_CPPKERNELS_REST_H_

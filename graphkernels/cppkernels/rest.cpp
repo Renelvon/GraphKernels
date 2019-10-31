@@ -69,8 +69,6 @@ MatrixXd productAdjacency(MatrixXi& e1,
   return dAx;
 }
 
-
-// geometric random walk karnel
 double geometricRandomWalkKernel(MatrixXi& e1,
                                  MatrixXi& e2,
                                  vector<int>& v1_label,
@@ -115,7 +113,22 @@ double geometricRandomWalkKernel(MatrixXi& e1,
   return x.sum();
 }
 
-// exponential random walk karnel
+MatrixXd CalculateGeometricRandomWalkKernelPy(
+        vector<MatrixXi>& E,
+        vector<vector<int>>& V_label,
+        double lambda) {
+    MatrixXd K(V_label.size(), V_label.size());
+
+    for (auto i = 0; i < V_label.size(); ++i) {
+        for (auto j = i; j < V_label.size(); ++j) {
+            K(j, i) = K(i, j) = geometricRandomWalkKernel(
+                    E[i], E[j], V_label[i], V_label[j], lambda);
+        }
+    }
+
+    return K;
+}
+
 double exponentialRandomWalkKernel(MatrixXi& e1,
                                    MatrixXi& e2,
                                    vector<int>& v1_label,
@@ -155,7 +168,22 @@ double exponentialRandomWalkKernel(MatrixXi& e1,
   return K;
 }
 
-// k-step product graph karnel
+MatrixXd CalculateExponentialRandomWalkKernelPy(
+        vector<MatrixXi>& E,
+        vector<vector<int>>& V_label,
+        double beta) {
+    MatrixXd K(V_label.size(), V_label.size());
+
+    for (auto i = 0; i < V_label.size(); ++i) {
+        for (auto j = i; j < V_label.size(); ++j) {
+            K(j, i) = K(i, j) = exponentialRandomWalkKernel(
+                    E[i], E[j], V_label[i], V_label[j], beta);
+        }
+    }
+
+    return K;
+}
+
 double kstepRandomWalkKernel(MatrixXi& e1,
                              MatrixXi& e2,
                              vector<int>& v1_label,
@@ -194,6 +222,21 @@ double kstepRandomWalkKernel(MatrixXi& e1,
   }
 
   return K;
+}
+
+MatrixXd CalculateKStepRandomWalkKernelPy(
+        vector<MatrixXi>& E,
+        vector<vector<int>>& V_label,
+        vector<double>& par) {
+    MatrixXd K(V_label.size(), V_label.size());
+    for (auto i = 0; i < V_label.size(); ++i) {
+        for (auto j = i; j < V_label.size(); ++j) {
+            K(j, i) = K(i, j) = kstepRandomWalkKernel(
+                    E[i], E[j], V_label[i], V_label[j], par);
+        }
+    }
+
+    return K;
 }
 
 MatrixXd CalculateKernelPy(vector<MatrixXi>& E,
