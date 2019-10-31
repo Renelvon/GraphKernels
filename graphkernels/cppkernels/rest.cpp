@@ -208,24 +208,17 @@ double kstepRandomWalkKernel(MatrixXi& e1,
   dAx = productAdjacency(e1, e2, v1_label, v2_label, H);
   Ax = dAx.sparseView();
 
-  // compute products until k
-  auto k_max = static_cast<int>(lambda_list.size()) - 1;
-  SparseMatrix<double> Ax_pow = I;
-  SparseMatrix<double> Sum = lambda_list[0] * I;
-  for (int k = 1; k <= k_max; k++) {
-    Ax_pow = Ax * Ax_pow;
-    Sum += lambda_list[k] * Ax_pow;
+  auto Sum = SparseMatrix<double>{n_vx, n_vx};
+  Sum.setZero();
+
+  // compute products until k using:
+  // https://en.wikipedia.org/wiki/Horner%27s_method
+  auto k = lambda_list.size();
+  while (k-- > 0) {
+    Sum = (Sum * Ax) + lambda_list[k] * I;
   }
 
-  // compute the total sum
-  double K = 0;
-  for (auto i = 0L; i < Sum.outerSize(); ++i) {
-    for (SparseMatrix<double>::InnerIterator it(Sum, i); it; ++it) {
-      K += it.value();
-    }
-  }
-
-  return K;
+  return Sum.sum();
 }
 
 MatrixXd CalculateKStepRandomWalkKernelPy(
