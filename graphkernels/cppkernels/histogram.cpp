@@ -13,9 +13,9 @@ using Eigen::MatrixXi;
 // ==================== Functions used in kernels ==================== //
 // =================================================================== //
 // select linear kernel or Gaussian kernel in histogram kernels
-double selectLinearGaussian(vector<int>& h1, vector<int>& h2, double sigma) {
+double selectLinearGaussian(vector<int>& h1, vector<int>& h2, double gamma) {
   double K = 0;
-  if (sigma < 0) {
+  if (gamma < 0) {
     // linear kernel
     for (auto i = 0; i < h1.size(); ++i) {
       K += static_cast<double>(h1[i]) * h2[i];
@@ -26,14 +26,14 @@ double selectLinearGaussian(vector<int>& h1, vector<int>& h2, double sigma) {
         const auto diff = static_cast<double>(h1[i]) - h2[i];
         K += diff * diff;
     }
-    K = exp(-1.0 * K / (2.0 * sigma * sigma));
+    K = exp(- gamma * K);
   }
   return K;
 }
 
 
 // edge histogram karnel
-double edgeHistogramKernel(MatrixXi& e1, MatrixXi& e2, double sigma) {
+double edgeHistogramKernel(MatrixXi& e1, MatrixXi& e2, double gamma) {
   int e_label_max = 0;
   for (auto i = 0L; i < e1.rows(); i++) {
       if (e1(i, 2) > e_label_max) {
@@ -56,13 +56,13 @@ double edgeHistogramKernel(MatrixXi& e1, MatrixXi& e2, double sigma) {
     (h2[e2(i, 2)])++;
   }
 
-  return selectLinearGaussian(h1, h2, sigma);
+  return selectLinearGaussian(h1, h2, gamma);
 }
 
 // vertex histogram karnel
 double vertexHistogramKernel(vector<int>& v1_label,
                              vector<int>& v2_label,
-                             double sigma) {
+                             double gamma) {
   int v1_label_max = *max_element(v1_label.begin(), v1_label.end());
   int v2_label_max = *max_element(v2_label.begin(), v2_label.end());
   int v_label_max = v1_label_max > v2_label_max ? v1_label_max : v2_label_max;
@@ -77,7 +77,7 @@ double vertexHistogramKernel(vector<int>& v1_label,
     ++h2[i];
   }
 
-  return selectLinearGaussian(h1, h2, sigma);
+  return selectLinearGaussian(h1, h2, gamma);
 }
 
 // vertex-edge histogram karnel
@@ -85,7 +85,7 @@ double vertexEdgeHistogramKernel(MatrixXi& e1,
                                  MatrixXi& e2,
                                  vector<int>& v1_label,
                                  vector<int>& v2_label,
-                                 double sigma) {
+                                 double gamma) {
   int e_label_max = 0;
   for (auto i = 0L; i < e1.rows(); i++) {
       if (e1(i, 2) > e_label_max) {
@@ -132,7 +132,7 @@ double vertexEdgeHistogramKernel(MatrixXi& e1,
         e2(i, 2) * v_label_max * v_label_max])++;
   }
 
-  return selectLinearGaussian(h1, h2, sigma);
+  return selectLinearGaussian(h1, h2, gamma);
 }
 
 // vertex-vertex-edge histogram karnel

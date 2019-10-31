@@ -50,40 +50,40 @@ def CalculateVertexVertexEdgeHistKernel(G, par=1.0):
 # === RBF Kernels on Histograms ===
 
 
-def CalculateEdgeHistGaussKernel(G, par=1.0):
+def CalculateEdgeHistGaussKernel(G, gamma=0.5):
     """Edge Histogram RBF Kernel"""
-    if not isinstance(par, (float, int)):
-        raise TypeError('par must be a scalar (float or integer)')
+    if not isinstance(gamma, (float, int)):
+        raise TypeError('gamma must be a positive scalar (float or integer)')
 
-    if par == 0:
-        warnings.warn('Invoking kernel with par == 0.0')
+    if gamma <= 0.0:
+        raise ValueError('gamma must be a positive scalar (float or integer)')
 
     E, V_label, _, _, _ = GetGKInput(G)
-    return gkCpy.CalculateHistogramKernelPy(E, V_label, float(par), 5)
+    return gkCpy.CalculateHistogramKernelPy(E, V_label, float(gamma), 5)
 
 
-def CalculateVertexHistGaussKernel(G, par=1.0):
+def CalculateVertexHistGaussKernel(G, gamma=0.5):
     """Vertex Histogram RBF Kernel"""
-    if not isinstance(par, (float, int)):
-        raise TypeError('par must be a scalar (float or integer)')
+    if not isinstance(gamma, (float, int)):
+        raise TypeError('gamma must be a positive scalar (float or integer)')
 
-    if par == 0:
-        warnings.warn('Invoking kernel with par == 0.0')
+    if gamma <= 0.0:
+        raise ValueError('gamma must be a positive scalar (float or integer)')
 
     E, V_label, _, _, _ = GetGKInput(G)
-    return gkCpy.CalculateHistogramKernelPy(E, V_label, float(par), 6)
+    return gkCpy.CalculateHistogramKernelPy(E, V_label, float(gamma), 6)
 
 
-def CalculateVertexEdgeHistGaussKernel(G, par=1.0):
+def CalculateVertexEdgeHistGaussKernel(G, gamma=0.5):
     """Vertex Edge Histogram RBF Kernel"""
-    if not isinstance(par, (float, int)):
-        raise TypeError('par must be a scalar (float or integer)')
+    if not isinstance(gamma, (float, int)):
+        raise TypeError('gamma must be a positive scalar (float or integer)')
 
-    if par == 0:
-        warnings.warn('Invoking kernel with par == 0.0')
+    if gamma <= 0.0:
+        raise ValueError('gamma must be a positive scalar (float or integer)')
 
     E, V_label, _, _, _ = GetGKInput(G)
-    return gkCpy.CalculateHistogramKernelPy(E, V_label, float(par), 7)
+    return gkCpy.CalculateHistogramKernelPy(E, V_label, float(gamma), 7)
 
 
 # === Random Walk Kernels ===
