@@ -199,46 +199,36 @@ double kstepRandomWalkKernel(MatrixXi& e1,
   return K;
 }
 
-// compute a kernel value of a pair of graphs
-double computeKernelValue(MatrixXi& e1,
-                          MatrixXi& e2,
-                          vector<int>& v1_label,
-                          vector<int>& v2_label,
-                          vector<double>& par,
-                          int kernel_type) {
-  double Kval;
-  switch (kernel_type) {
-    case 8:  // geometric random walk kernel
-      Kval = geometricRandomWalkKernel(e1, e2, v1_label, v2_label, par[0]);
-      break;
-    case 9:  // exponential random walk kernel
-      Kval = exponentialRandomWalkKernel(e1, e2, v1_label, v2_label, par[0]);
-      break;
-    case 10:  // k-step random walk kernel
-      Kval = kstepRandomWalkKernel(e1, e2, v1_label, v2_label, par);
-      break;
-    default:
-      Kval = 0;
-      break;
-  }
-  return Kval;
-}
-
 MatrixXd CalculateKernelPy(vector<MatrixXi>& E,
-                           vector<vector<int>>& V_label,
-                           vector<double>& par,
-                           int kernel_type) {
-  MatrixXd K(V_label.size(), V_label.size());
+        vector<vector<int>>& V_label,
+        vector<double>& par,
+        int kernel_type) {
+    MatrixXd K(V_label.size(), V_label.size());
 
-  vector<int> idx(V_label.size());
-  iota(idx.begin(), idx.end(), 0);
-  for (auto&& i : idx) {
-    for (auto&& j : idx) {
-      K(i, j) = computeKernelValue(E[i], E[j], V_label[i], V_label[j], par,
-                                   kernel_type);
-      K(j, i) = K(i, j);
+    vector<int> idx(V_label.size());
+    iota(idx.begin(), idx.end(), 0);
+    for (auto&& i : idx) {
+        for (auto&& j : idx) {
+            // compute a kernel value of a pair of graphs
+            switch (kernel_type) {
+                case 8:
+                    K(i, j) = geometricRandomWalkKernel(
+                            E[i], E[j], V_label[i], V_label[j], par[0]);
+                    break;
+                case 9:
+                    K(i, j) = exponentialRandomWalkKernel(
+                            E[i], E[j], V_label[i], V_label[j], par[0]);
+                    break;
+                case 10:
+                    K(i, j) = kstepRandomWalkKernel(
+                            E[i], E[j], V_label[i], V_label[j], par);
+                    break;
+                default:
+                    K(i, j) = 42.0;  // FIXME: THIS SHOULD NEVER HAPPEN
+            }
+            K(j, i) = K(i, j);
+        }
     }
-  }
 
-  return K;
+    return K;
 }
