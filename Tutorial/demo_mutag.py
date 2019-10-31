@@ -39,7 +39,7 @@ def compute_all_kernels(graphs):
         gk.CalculateVertexEdgeHistGaussKernel(graphs),
         gk.CalculateGeometricRandomWalkKernel(graphs),
 #       gk.CalculateExponentialRandomWalkKernel(graphs),
-        gk.CalculateKStepRandomWalkKernel(graphs),
+        gk.CalculateKStepRandomWalkKernel(graphs, [1.0]),
         gk.CalculateWLKernel(graphs),
         gk.CalculateConnectedGraphletKernel(graphs, 3),
         gk.CalculateConnectedGraphletKernel(graphs, 4),
