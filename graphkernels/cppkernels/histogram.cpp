@@ -4,9 +4,6 @@
 
 #include "histogram.h"
 
-#include <numeric>
-
-using std::iota;
 using std::vector;
 
 using Eigen::MatrixXd;
@@ -192,10 +189,8 @@ MatrixXd CalculateHistogramKernelPy(vector<MatrixXi>& E,
                                     int kernel_type) {
   MatrixXd K(V_label.size(), V_label.size());
 
-  vector<int> idx(V_label.size());
-  iota(idx.begin(), idx.end(), 0);
-  for (auto&& i : idx) {
-    for (auto&& j : idx) {
+  for (auto i = 0; i < V_label.size(); ++i) {
+    for (auto j = i; j < V_label.size(); ++j) {
       K(i, j) = computeHistogramKernelValue(E[i],
                                             E[j],
                                             V_label[i],
