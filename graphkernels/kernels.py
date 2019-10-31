@@ -76,10 +76,14 @@ def CalculateVertexEdgeHistGaussKernel(G, par=1):
 # === Random Walk Kernels ===
 
 
-def CalculateGeometricRandomWalkKernel(G, par=1):
+def CalculateGeometricRandomWalkKernel(
+    G, par=1, max_iterations=100, eps=10.0 ** (-10)
+):
     """Geometric Random Walk Kernel"""
     E, V_label, _, _, _ = GetGKInput(G)
-    return gkCpy.CalculateGeometricRandomWalkKernelPy(E, V_label, par)
+    return gkCpy.CalculateGeometricRandomWalkKernelPy(
+        E, V_label, par, max_iterations, eps
+    )
 
 
 def CalculateExponentialRandomWalkKernel(G, par=1):

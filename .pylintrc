@@ -62,6 +62,7 @@ confidence=
 # --disable=W".
 enable=all
 disable=
+    bad-continuation,
     consider-using-enumerate,
     fixme,
     invalid-name,

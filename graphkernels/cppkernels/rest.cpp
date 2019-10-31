@@ -73,7 +73,9 @@ double geometricRandomWalkKernel(MatrixXi& e1,
                                  MatrixXi& e2,
                                  vector<int>& v1_label,
                                  vector<int>& v2_label,
-                                 double lambda) {
+                                 double lambda,
+                                 int max_iterations,
+                                 double eps) {
   // map each product (v_1, v_2) of vertics to a number H(v_1, v_2)
   MatrixXi H(v1_label.size(), v2_label.size());
   int n_vx = productMapping(v1_label, v2_label, H);
@@ -98,10 +100,9 @@ double geometricRandomWalkKernel(MatrixXi& e1,
   VectorXd x_pre(n_vx);
   x_pre.setZero();
 
-  double eps = pow(10, -10);
   int count = 0;
   while ((x - x_pre).squaredNorm() > eps) {
-    if (count > 100) {
+    if (count > max_iterations) {
       // cout << "does not converge until " << count - 1 << " iterations" <<
       // endl;
       break;
@@ -116,13 +117,16 @@ double geometricRandomWalkKernel(MatrixXi& e1,
 MatrixXd CalculateGeometricRandomWalkKernelPy(
         vector<MatrixXi>& E,
         vector<vector<int>>& V_label,
-        double lambda) {
+        double lambda,
+        int max_iterations,
+        double eps) {
     MatrixXd K(V_label.size(), V_label.size());
 
     for (auto i = 0; i < V_label.size(); ++i) {
         for (auto j = i; j < V_label.size(); ++j) {
             K(j, i) = K(i, j) = geometricRandomWalkKernel(
-                    E[i], E[j], V_label[i], V_label[j], lambda);
+                    E[i], E[j], V_label[i], V_label[j], lambda,
+                    max_iterations, eps);
         }
     }
 

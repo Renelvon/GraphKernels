@@ -15,7 +15,9 @@
 Eigen::MatrixXd CalculateGeometricRandomWalkKernelPy(
         std::vector<Eigen::MatrixXi>& E,
         std::vector<std::vector<int>>& V_label,
-        double par);
+        double par,
+        int max_iterations,
+        double eps);
 
 Eigen::MatrixXd CalculateExponentialRandomWalkKernelPy(
         std::vector<Eigen::MatrixXi>& E,
