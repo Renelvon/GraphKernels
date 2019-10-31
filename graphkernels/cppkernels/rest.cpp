@@ -8,9 +8,6 @@
 #include <Eigen/LU>
 #include <Eigen/Sparse>
 
-#include <numeric>
-
-using std::iota;
 using std::vector;
 
 using Eigen::FullPivLU;
@@ -204,11 +201,8 @@ MatrixXd CalculateKernelPy(vector<MatrixXi>& E,
         vector<double>& par,
         int kernel_type) {
     MatrixXd K(V_label.size(), V_label.size());
-
-    vector<int> idx(V_label.size());
-    iota(idx.begin(), idx.end(), 0);
-    for (auto&& i : idx) {
-        for (auto&& j : idx) {
+    for (auto i = 0; i < V_label.size(); ++i) {
+        for (auto j = i; j < V_label.size(); ++j) {
             // compute a kernel value of a pair of graphs
             switch (kernel_type) {
                 case 8:
