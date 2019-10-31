@@ -2,6 +2,9 @@
 Functions for computing the graph kernels
 """
 
+import collections
+import warnings
+
 import numpy as np
 from igraph import Graph
 
@@ -23,20 +26,6 @@ def _do_calculate_histogram(G, gk_par, kernel_id=None):
 
     # Compute designated kernel
     return gkCpy.CalculateHistogramKernelPy(E, V_label, gk_par, kernel_id)
-
-
-def _do_calculate(G, gk_par, kernel_id=None):
-    if not isinstance(kernel_id, int):
-        raise TypeError('Kernel index must be integer')
-
-    if kernel_id <= 0:
-        raise ValueError('Kernel index must be positive')
-
-    # Extract graph info.
-    E, V_label, _, _, _ = GetGKInput(G)
-
-    # Compute designated kernel
-    return gkCpy.CalculateKernelPy(E, V_label, gk_par, kernel_id)
 
 
 # === Linear Kernels on Histograms ===
@@ -90,25 +79,59 @@ def CalculateVertexEdgeHistGaussKernel(G, par=1):
 # === Random Walk Kernels ===
 
 
-def CalculateGeometricRandomWalkKernel(G, par=1):
+def CalculateGeometricRandomWalkKernel(
+    G, par=1.0, max_iterations=100, eps=10.0 ** (-10)
+):
     """Geometric Random Walk Kernel"""
-    gk_par = gkCpy.DoubleVector([par])
-    return _do_calculate(G, gk_par, 8)
+    if not isinstance(par, (float, int)):
+        raise TypeError('par must be a scalar (float or integer)')
+
+    if par == 0:
+        warnings.warn('Invoking kernel with par == 0.0')
+
+    if not isinstance(max_iterations, int):
+        raise TypeError('max_iterations must be a positive integer')
+
+    if max_iterations <= 0:
+        raise ValueError('max_iterations must be a positive integer')
+
+    if not isinstance(eps, (float, int)):
+        raise TypeError('eps must be a non-negative scalar (float or integer)')
+
+    if eps < 0.0:
+        raise ValueError('eps must be a non-negative scalar (float or integer)')
+
+    E, V_label, _, _, _ = GetGKInput(G)
+    return gkCpy.CalculateGeometricRandomWalkKernelPy(
+        E, V_label, float(par), max_iterations, float(eps)
+    )
 
 
-def CalculateExponentialRandomWalkKernel(G, par=1):
+def CalculateExponentialRandomWalkKernel(G, par=1.0):
     """Exponential Random Walk Kernel"""
-    gk_par = gkCpy.DoubleVector([par])
-    return _do_calculate(G, gk_par, 9)
+    if not isinstance(par, (float, int)):
+        raise TypeError('par must be a scalar (float or integer)')
+
+    if par == 0:
+        warnings.warn('Invoking kernel with par == 0.0')
+
+    E, V_label, _, _, _ = GetGKInput(G)
+    return gkCpy.CalculateExponentialRandomWalkKernelPy(E, V_label, float(par))
 
 
-def CalculateKStepRandomWalkKernel(G, par=1):
-    """K-step Random Walk Kernel"""
-    # Allow user to provide own list of k-step weights
-    if isinstance(par, (int, float, complex)):
-        par = [par]
-    gk_par = gkCpy.DoubleVector(par)
-    return _do_calculate(G, gk_par, 10)
+def CalculateKStepRandomWalkKernel(G, par):
+    """K-step Random Walk Kernel
+
+    Allow user to provide own list of k-step weights.
+    """
+    if not isinstance(par, collections.Sequence):
+        raise TypeError(
+            'par must be a sequence of scalars (floats or integers)'
+        )
+
+    gk_par = gkCpy.DoubleVector([float(p) for p in par])
+    E, V_label, _, _, _ = GetGKInput(G)
+    return gkCpy.CalculateKStepRandomWalkKernelPy(E, V_label, gk_par)
 
 
 # === Advanced Kernels ===
