@@ -20,19 +20,19 @@ using Eigen::VectorXd;
 using Tuple3_t = Eigen::Triplet<double>;
 
 // map each product (v_1, v_2) of vertics to a number H(v_1, v_2)
-int productMapping(vector<int>& v1_label,
-                   vector<int>& v2_label,
-                   MatrixXi& H) {
-  int n_vx = 0;
-  for (auto i = 0; i < v1_label.size(); ++i) {
-    for (auto j = 0; j < v2_label.size(); ++j) {
-      if (v1_label[i] == v2_label[j]) {
-        H(i, j) = n_vx;
-        n_vx++;
-      }
+int productMapping(
+        vector<int>& v1_label,
+        vector<int>& v2_label,
+        MatrixXi& H) {
+    auto n_vx = 0;
+    for (auto i = 0; i < v1_label.size(); ++i) {
+        for (auto j = 0; j < v2_label.size(); ++j) {
+            if (v1_label[i] == v2_label[j]) {
+                H(i, j) = n_vx++;
+            }
+        }
     }
-  }
-  return n_vx;
+    return n_vx;
 }
 
 // compute the adjacency matrix Ax of the direct product graph (sparse)
@@ -41,10 +41,9 @@ MatrixXd productAdjacency(MatrixXi& e1,
                           vector<int>& v1_label,
                           vector<int>& v2_label,
                           MatrixXi& H) {
-  auto n_vx = v1_label.size() * v2_label.size();
+  const auto n_vx = v1_label.size() * v2_label.size();
 
   SparseMatrix<double> Ax(n_vx, n_vx);
-  MatrixXd dAx;
 
   vector<Tuple3_t> v;
 
@@ -64,43 +63,35 @@ MatrixXd productAdjacency(MatrixXi& e1,
   }
 
   Ax.setFromTriplets(v.begin(), v.end());
-  dAx = MatrixXd(Ax);
-
-  return dAx;
+  return MatrixXd(Ax);
 }
 
-double geometricRandomWalkKernel(MatrixXi& e1,
-                                 MatrixXi& e2,
-                                 vector<int>& v1_label,
-                                 vector<int>& v2_label,
-                                 double lambda,
-                                 int max_iterations,
-                                 double eps) {
+double geometricRandomWalkKernel(
+        MatrixXi& e1,
+        MatrixXi& e2,
+        vector<int>& v1_label,
+        vector<int>& v2_label,
+        double lambda,
+        int max_iterations,
+        double eps) {
   // map each product (v_1, v_2) of vertics to a number H(v_1, v_2)
   MatrixXi H(v1_label.size(), v2_label.size());
-  int n_vx = productMapping(v1_label, v2_label, H);
+  const auto n_vx = productMapping(v1_label, v2_label, H);
 
   // prepare identity matrix
   SparseMatrix<double> I(n_vx, n_vx);
   I.setIdentity();
 
   // compute the adjacency matrix Ax of the direct product graph
-  SparseMatrix<double> Ax(n_vx, n_vx);
-  MatrixXd dAx(n_vx, n_vx);
-
-  dAx = productAdjacency(e1, e2, v1_label, v2_label, H);
-  Ax = dAx.sparseView();
+  MatrixXd dAx = productAdjacency(e1, e2, v1_label, v2_label, H);
+  SparseMatrix<double> Ax = dAx.sparseView();
 
   // inverse of I - lambda * Ax by fixed-poInt iterations
-  VectorXd I_vec(n_vx);
-  for (int i = 0; i < n_vx; i++) {
-      I_vec[i] = 1;
-  }
-  VectorXd x = I_vec;
-  VectorXd x_pre(n_vx);
-  x_pre.setZero();
+  const VectorXd I_vec = VectorXd::Ones(n_vx);
+  auto x = I_vec;
+  VectorXd x_pre = VectorXd::Zero(n_vx);
 
-  int count = 0;
+  auto count = 0;
   while ((x - x_pre).squaredNorm() > eps) {
     if (count > max_iterations) {
       // cout << "does not converge until " << count - 1 << " iterations" <<
@@ -109,7 +100,7 @@ double geometricRandomWalkKernel(MatrixXi& e1,
     }
     x_pre = x;
     x = I_vec + lambda * Ax * x_pre;
-    count++;
+    ++count;
   }
   return x.sum();
 }
@@ -140,7 +131,7 @@ double exponentialRandomWalkKernel(MatrixXi& e1,
                                    double beta) {
   // map each product (v_1, v_2) of vertics to a number H(v_1, v_2)
   MatrixXi H(v1_label.size(), v2_label.size());
-  auto n_vx = productMapping(v1_label, v2_label, H);
+  const auto n_vx = productMapping(v1_label, v2_label, H);
 
   // compute the adjacency matrix Ax of the direct product graph
   MatrixXd dAx = productAdjacency(e1, e2, v1_label, v2_label, H);
@@ -153,7 +144,7 @@ double exponentialRandomWalkKernel(MatrixXi& e1,
   MatrixXd V = es.eigenvectors();
 
   // prepare identity matrix
-  auto I = MatrixXd::Identity(n_vx, n_vx);
+  const auto I = MatrixXd::Identity(n_vx, n_vx);
 
   FullPivLU<MatrixXd> solver(V);
   MatrixXd V_inv = solver.solve(I);
@@ -185,18 +176,15 @@ double kstepRandomWalkKernel(MatrixXi& e1,
                              vector<double>& lambda_list) {
   // map each product (v_1, v_2) of vertics to a number H(v_1, v_2)
   MatrixXi H(v1_label.size(), v2_label.size());
-  int n_vx = productMapping(v1_label, v2_label, H);
+  const auto n_vx = productMapping(v1_label, v2_label, H);
 
   // prepare identity matrix
   SparseMatrix<double> I(n_vx, n_vx);
   I.setIdentity();
 
   // compute the adjacency matrix Ax of the direct product graph
-  SparseMatrix<double> Ax(n_vx, n_vx);
-  MatrixXd dAx(n_vx, n_vx);
-
-  dAx = productAdjacency(e1, e2, v1_label, v2_label, H);
-  Ax = dAx.sparseView();
+  MatrixXd dAx = productAdjacency(e1, e2, v1_label, v2_label, H);
+  SparseMatrix<double> Ax = dAx.sparseView();
 
   auto Sum = SparseMatrix<double>{n_vx, n_vx};
   Sum.setZero();
