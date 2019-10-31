@@ -4,31 +4,29 @@
 
 #include "histogram.h"
 
+#include <cmath>
+
+using std::exp;
 using std::vector;
 
 using Eigen::MatrixXd;
 using Eigen::MatrixXi;
 
-// =================================================================== //
-// ==================== Functions used in kernels ==================== //
-// =================================================================== //
-// select linear kernel or Gaussian kernel in histogram kernels
-double selectLinearGaussian(vector<int>& h1, vector<int>& h2, double gamma) {
-  double K = 0;
-  if (gamma < 0) {
-    // linear kernel
+double linear_kernel(vector<int>& h1, vector<int>& h2) {
+    auto sum = 0.0;
     for (auto i = 0; i < h1.size(); ++i) {
-      K += static_cast<double>(h1[i]) * h2[i];
+        sum += static_cast<double>(h1[i]) * h2[i];
     }
-  } else {
-    // Gaussian kernel
+    return sum;
+}
+
+double rbf_kernel(vector<int>& h1, vector<int>& h2, double gamma) {
+    double sum = 0.0;
     for (auto i = 0; i < h1.size(); ++i) {
         const auto diff = static_cast<double>(h1[i]) - h2[i];
-        K += diff * diff;
+        sum += diff * diff;
     }
-    K = exp(- gamma * K);
-  }
-  return K;
+    return exp(- gamma * sum);
 }
 
 
@@ -56,7 +54,11 @@ double edgeHistogramKernel(MatrixXi& e1, MatrixXi& e2, double gamma) {
     (h2[e2(i, 2)])++;
   }
 
-  return selectLinearGaussian(h1, h2, gamma);
+  if (gamma > 0.0) {
+      return rbf_kernel(h1, h2, gamma);
+  }
+
+  return linear_kernel(h1, h2);
 }
 
 // vertex histogram karnel
@@ -77,7 +79,11 @@ double vertexHistogramKernel(vector<int>& v1_label,
     ++h2[i];
   }
 
-  return selectLinearGaussian(h1, h2, gamma);
+  if (gamma > 0.0) {
+      return rbf_kernel(h1, h2, gamma);
+  }
+
+  return linear_kernel(h1, h2);
 }
 
 // vertex-edge histogram karnel
@@ -132,7 +138,11 @@ double vertexEdgeHistogramKernel(MatrixXi& e1,
         e2(i, 2) * v_label_max * v_label_max])++;
   }
 
-  return selectLinearGaussian(h1, h2, gamma);
+  if (gamma > 0.0) {
+      return rbf_kernel(h1, h2, gamma);
+  }
+
+  return linear_kernel(h1, h2);
 }
 
 // vertex-vertex-edge histogram karnel
