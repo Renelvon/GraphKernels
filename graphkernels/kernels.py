@@ -14,66 +14,76 @@ from graphkernels import graphkernels as gkCpy
 from .utilities import GetAdjMatList, GetGKInput
 
 
-def _do_calculate_histogram(G, gk_par, kernel_id=None):
-    if not isinstance(kernel_id, int):
-        raise TypeError('Histogram Kernel index must be integer')
-
-    if kernel_id <= 0:
-        raise ValueError('Histogram Kernel index must be positive')
-
-    # Extract graph info.
-    E, V_label, _, _, _ = GetGKInput(G)
-
-    # Compute designated kernel
-    return gkCpy.CalculateHistogramKernelPy(E, V_label, gk_par, kernel_id)
-
-
 # === Linear Kernels on Histograms ===
 
 
-def CalculateEdgeHistKernel(G, par=-1.0):
+def CalculateEdgeHistKernel(G):
     """Edge Histogram Kernel"""
-    gk_par = gkCpy.DoubleVector([par])
-    return _do_calculate_histogram(G, gk_par, 1)
+    E, V_label, _, _, _ = GetGKInput(G)
+    return gkCpy.CalculateHistogramKernelPy(E, V_label, -1.0, 1)
 
 
-def CalculateVertexHistKernel(G, par=-1.0):
+def CalculateVertexHistKernel(G):
     """Vertex Histogram Kernel"""
-    gk_par = gkCpy.DoubleVector([par])
-    return _do_calculate_histogram(G, gk_par, 2)
+    E, V_label, _, _, _ = GetGKInput(G)
+    return gkCpy.CalculateHistogramKernelPy(E, V_label, -1.0, 2)
 
 
-def CalculateVertexEdgeHistKernel(G, par=-1.0):
+def CalculateVertexEdgeHistKernel(G):
     """Vertex Edge Histogram Kernel"""
-    gk_par = gkCpy.DoubleVector([par])
-    return _do_calculate_histogram(G, gk_par, 3)
+    E, V_label, _, _, _ = GetGKInput(G)
+    return gkCpy.CalculateHistogramKernelPy(E, V_label, -1.0, 3)
 
 
-def CalculateVertexVertexEdgeHistKernel(G, par=1):
+def CalculateVertexVertexEdgeHistKernel(G, par=1.0):
     """Vertex Vertex Edge Histogram Kernel"""
-    gk_par = gkCpy.DoubleVector([par])
-    return _do_calculate_histogram(G, gk_par, 4)
+    if not isinstance(par, (float, int)):
+        raise TypeError('par must be a scalar (float or integer)')
+
+    if par == 0:
+        warnings.warn('Invoking kernel with par == 0.0')
+
+    E, V_label, _, _, _ = GetGKInput(G)
+    return gkCpy.CalculateHistogramKernelPy(E, V_label, float(par), 4)
 
 
 # === RBF Kernels on Histograms ===
 
 
-def CalculateEdgeHistGaussKernel(G, par=1):
+def CalculateEdgeHistGaussKernel(G, par=1.0):
     """Edge Histogram RBF Kernel"""
-    gk_par = gkCpy.DoubleVector([par])
-    return _do_calculate_histogram(G, gk_par, 5)
+    if not isinstance(par, (float, int)):
+        raise TypeError('par must be a scalar (float or integer)')
+
+    if par == 0:
+        warnings.warn('Invoking kernel with par == 0.0')
+
+    E, V_label, _, _, _ = GetGKInput(G)
+    return gkCpy.CalculateHistogramKernelPy(E, V_label, float(par), 5)
 
 
-def CalculateVertexHistGaussKernel(G, par=1):
+def CalculateVertexHistGaussKernel(G, par=1.0):
     """Vertex Histogram RBF Kernel"""
-    gk_par = gkCpy.DoubleVector([par])
-    return _do_calculate_histogram(G, gk_par, 6)
+    if not isinstance(par, (float, int)):
+        raise TypeError('par must be a scalar (float or integer)')
+
+    if par == 0:
+        warnings.warn('Invoking kernel with par == 0.0')
+
+    E, V_label, _, _, _ = GetGKInput(G)
+    return gkCpy.CalculateHistogramKernelPy(E, V_label, float(par), 6)
 
 
-def CalculateVertexEdgeHistGaussKernel(G, par=1):
+def CalculateVertexEdgeHistGaussKernel(G, par=1.0):
     """Vertex Edge Histogram RBF Kernel"""
-    gk_par = gkCpy.DoubleVector([par])
-    return _do_calculate_histogram(G, gk_par, 7)
+    if not isinstance(par, (float, int)):
+        raise TypeError('par must be a scalar (float or integer)')
+
+    if par == 0:
+        warnings.warn('Invoking kernel with par == 0.0')
+
+    E, V_label, _, _, _ = GetGKInput(G)
+    return gkCpy.CalculateHistogramKernelPy(E, V_label, float(par), 7)
 
 
 # === Random Walk Kernels ===

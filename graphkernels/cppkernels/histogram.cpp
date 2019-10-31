@@ -148,7 +148,7 @@ double vertexVertexEdgeHistogramKernel(MatrixXi& e1,
 MatrixXd CalculateHistogramKernelPy(
         vector<MatrixXi>& E,
         vector<vector<int>>& V_label,
-        vector<double>& par,
+        double par,
         int kernel_type) {
     MatrixXd K(V_label.size(), V_label.size());
 
@@ -169,19 +169,19 @@ MatrixXd CalculateHistogramKernelPy(
                     break;
                 case 4:
                     Kval = vertexVertexEdgeHistogramKernel(
-                            E[i], E[j], V_label[i], V_label[j], par[0]);
+                            E[i], E[j], V_label[i], V_label[j], par);
                     break;
                 // Gaussian kernels
                 case 5:
-                    Kval = edgeHistogramKernel(E[i], E[j], par[0]);
+                    Kval = edgeHistogramKernel(E[i], E[j], par);
                     break;
                 case 6:
                     Kval = vertexHistogramKernel(
-                            V_label[i], V_label[j], par[0]);
+                            V_label[i], V_label[j], par);
                     break;
                 case 7:
                     Kval = vertexEdgeHistogramKernel(
-                            E[i], E[j], V_label[i], V_label[j], par[0]);
+                            E[i], E[j], V_label[i], V_label[j], par);
                     break;
                 default:
                     Kval = 42.0;  // FIXME: THIS SHOULD NEVER HAPPEN!
