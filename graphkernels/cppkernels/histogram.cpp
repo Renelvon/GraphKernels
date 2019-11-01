@@ -31,7 +31,6 @@ double rbf_kernel(vector<int>& h1, vector<int>& h2, double gamma) {
     return exp(- gamma * sum);
 }
 
-
 double edgeHistogramKernel(MatrixXi& e1, MatrixXi& e2, double gamma) {
     const auto e12 = e1.col(2);
     const auto e22 = e2.col(2);
@@ -55,29 +54,30 @@ double edgeHistogramKernel(MatrixXi& e1, MatrixXi& e2, double gamma) {
     return linear_kernel(h1, h2);
 }
 
-// vertex histogram karnel
-double vertexHistogramKernel(vector<int>& v1_label,
-                             vector<int>& v2_label,
-                             double gamma) {
-  int v1_label_max = *max_element(v1_label.begin(), v1_label.end());
-  int v2_label_max = *max_element(v2_label.begin(), v2_label.end());
-  int v_label_max = v1_label_max > v2_label_max ? v1_label_max : v2_label_max;
+double vertexHistogramKernel(
+        vector<int>& v1_label,
+        vector<int>& v2_label,
+        double gamma) {
+    const auto v1_label_max = *max_element(v1_label.cbegin(), v1_label.cend());
+    const auto v2_label_max = *max_element(v2_label.cbegin(), v2_label.cend());
+    const auto v_label_high = 1 + max(v1_label_max, v2_label_max);
 
-  vector<int> h1(v_label_max + 1, 0);
-  vector<int> h2(v_label_max + 1, 0);
+    vector<int> h1(v_label_high, 0);
+    vector<int> h2(v_label_high, 0);
 
-  for (int i : v1_label) {
-    ++h1[i];
-  }
-  for (int i : v2_label) {
-    ++h2[i];
-  }
+    for (int i : v1_label) {
+        ++h1[i];
+    }
 
-  if (gamma > 0.0) {
-      return rbf_kernel(h1, h2, gamma);
-  }
+    for (int i : v2_label) {
+        ++h2[i];
+    }
 
-  return linear_kernel(h1, h2);
+    if (gamma > 0.0) {
+        return rbf_kernel(h1, h2, gamma);
+    }
+
+    return linear_kernel(h1, h2);
 }
 
 // vertex-edge histogram karnel
