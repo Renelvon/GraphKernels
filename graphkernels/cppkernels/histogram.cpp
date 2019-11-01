@@ -6,9 +6,11 @@
 
 #include <algorithm>
 #include <cmath>
+#include <tuple>
 
 using std::exp;
 using std::max;
+using std::minmax;
 using std::vector;
 
 using Eigen::MatrixXd;
@@ -83,63 +85,55 @@ double vertexHistogramKernel(
     return linear_kernel(h1, h2);
 }
 
-// vertex-edge histogram karnel
-double vertexEdgeHistogramKernel(MatrixXi& e1,
-                                 MatrixXi& e2,
-                                 vector<int>& v1_label,
-                                 vector<int>& v2_label,
-                                 double gamma) {
-  int e_label_max = 0;
-  for (auto i = 0L; i < e1.rows(); i++) {
-      if (e1(i, 2) > e_label_max) {
-          e_label_max = e1(i, 2);
-      }
-  }
-  for (auto i = 0L; i < e2.rows(); i++) {
-      if (e2(i, 2) > e_label_max) {
-          e_label_max = e2(i, 2);
-      }
-  }
-  e_label_max++;
+double vertexEdgeHistogramKernel(
+        MatrixXi& e1,
+        MatrixXi& e2,
+        vector<int>& v1_label,
+        vector<int>& v2_label,
+        double gamma) {
+    const auto e12 = e1.col(2);
+    const auto e22 = e2.col(2);
+    const auto e_label_high = max_plus_one(e12.maxCoeff(), e22.maxCoeff());
 
-  int v1_label_max = *max_element(v1_label.begin(), v1_label.end());
-  int v2_label_max = *max_element(v2_label.begin(), v2_label.end());
-  int v_label_max = v1_label_max > v2_label_max ? v1_label_max : v2_label_max;
-  v_label_max++;
+    const auto v1_label_max = *max_element(v1_label.cbegin(), v1_label.cend());
+    const auto v2_label_max = *max_element(v2_label.cbegin(), v2_label.cend());
+    const auto v_label_high = max_plus_one(v1_label_max, v2_label_max);
 
-  vector<int> h1(v_label_max * v_label_max * e_label_max, 0);
-  vector<int> h2(v_label_max * v_label_max * e_label_max, 0);
+    const auto v_size = v_label_high * v_label_high * e_label_high;
+    vector<int> h1(v_size, 0);
+    vector<int> h2(v_size, 0);
 
-  int v1;
-  int v2;
-  for (auto i = 0L; i < e1.rows(); i++) {
-    v1 = e1(i, 0);
-    v2 = e1(i, 1);
-    if (v2 > v1) {
-      int v_tmp = v1;
-      v1 = v2;
-      v2 = v_tmp;
+    const auto e10 = e1.col(0);
+    const auto e11 = e1.col(1);
+    for (auto i = 0; i < e10.size(); ++i) {
+        int v_min;
+        int v_max;
+        std::tie(v_min, v_max) = minmax(e10(i), e11(i));
+
+        ++h1[v1_label[v_max]
+           + v1_label[v_min] * v_label_high
+           + e12(i)          * v_label_high * v_label_high
+        ];
     }
-    (h1[v1_label[v1] + v1_label[v2] * v_label_max +
-        e1(i, 2) * v_label_max * v_label_max])++;
-  }
-  for (auto i = 0L; i < e2.rows(); i++) {
-    v1 = e2(i, 0);
-    v2 = e2(i, 1);
-    if (v2 > v1) {
-      int v_tmp = v1;
-      v1 = v2;
-      v2 = v_tmp;
+
+    const auto e20 = e2.col(0);
+    const auto e21 = e2.col(1);
+    for (auto i = 0; i < e20.size(); ++i) {
+        int v_min;
+        int v_max;
+        std::tie(v_min, v_max) = minmax(e20(i), e21(i));
+
+        ++h2[v2_label[v_max]
+           + v2_label[v_min] * v_label_high
+           + e22(i)          * v_label_high * v_label_high
+        ];
     }
-    (h2[v2_label[v1] + v2_label[v2] * v_label_max +
-        e2(i, 2) * v_label_max * v_label_max])++;
-  }
 
-  if (gamma > 0.0) {
-      return rbf_kernel(h1, h2, gamma);
-  }
+    if (gamma > 0.0) {
+        return rbf_kernel(h1, h2, gamma);
+    }
 
-  return linear_kernel(h1, h2);
+    return linear_kernel(h1, h2);
 }
 
 // vertex-vertex-edge histogram karnel
