@@ -4,9 +4,11 @@
 
 #include "histogram.h"
 
+#include <algorithm>
 #include <cmath>
 
 using std::exp;
+using std::max;
 using std::vector;
 
 using Eigen::MatrixXd;
@@ -30,35 +32,27 @@ double rbf_kernel(vector<int>& h1, vector<int>& h2, double gamma) {
 }
 
 
-// edge histogram karnel
 double edgeHistogramKernel(MatrixXi& e1, MatrixXi& e2, double gamma) {
-  int e_label_max = 0;
-  for (auto i = 0L; i < e1.rows(); i++) {
-      if (e1(i, 2) > e_label_max) {
-          e_label_max = e1(i, 2);
-      }
-  }
-  for (auto i = 0L; i < e2.rows(); i++) {
-      if (e2(i, 2) > e_label_max) {
-          e_label_max = e2(i, 2);
-      }
-  }
+    const auto e12 = e1.col(2);
+    const auto e22 = e2.col(2);
+    const auto label_high = 1 + max(e12.maxCoeff(), e22.maxCoeff());
 
-  vector<int> h1(e_label_max + 1, 0);
-  vector<int> h2(e_label_max + 1, 0);
+    vector<int> h1(label_high, 0);
+    vector<int> h2(label_high, 0);
 
-  for (auto i = 0L; i < e1.rows(); i++) {
-    (h1[e1(i, 2)])++;
-  }
-  for (auto i = 0L; i < e2.rows(); i++) {
-    (h2[e2(i, 2)])++;
-  }
+    for (auto i = 0; i < e12.size(); ++i) {
+        ++h1[e12(i)];
+    }
 
-  if (gamma > 0.0) {
-      return rbf_kernel(h1, h2, gamma);
-  }
+    for (auto i = 0; i < e22.size(); ++i) {
+        ++h2[e22(i)];
+    }
 
-  return linear_kernel(h1, h2);
+    if (gamma > 0.0) {
+        return rbf_kernel(h1, h2, gamma);
+    }
+
+    return linear_kernel(h1, h2);
 }
 
 // vertex histogram karnel
