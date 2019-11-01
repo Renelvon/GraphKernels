@@ -31,10 +31,13 @@ double rbf_kernel(vector<int>& h1, vector<int>& h2, double gamma) {
     return exp(- gamma * sum);
 }
 
+template< class T>
+constexpr T max_plus_one(T a, T b) {return 1 + max(a, b);}
+
 double edgeHistogramKernel(MatrixXi& e1, MatrixXi& e2, double gamma) {
     const auto e12 = e1.col(2);
     const auto e22 = e2.col(2);
-    const auto label_high = 1 + max(e12.maxCoeff(), e22.maxCoeff());
+    const auto label_high = max_plus_one(e12.maxCoeff(), e22.maxCoeff());
 
     vector<int> h1(label_high, 0);
     vector<int> h2(label_high, 0);
@@ -60,7 +63,7 @@ double vertexHistogramKernel(
         double gamma) {
     const auto v1_label_max = *max_element(v1_label.cbegin(), v1_label.cend());
     const auto v2_label_max = *max_element(v2_label.cbegin(), v2_label.cend());
-    const auto v_label_high = 1 + max(v1_label_max, v2_label_max);
+    const auto v_label_high = max_plus_one(v1_label_max, v2_label_max);
 
     vector<int> h1(v_label_high, 0);
     vector<int> h2(v_label_high, 0);
