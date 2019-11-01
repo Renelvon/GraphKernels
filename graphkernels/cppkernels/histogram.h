@@ -12,7 +12,7 @@
 Eigen::MatrixXd CalculateHistogramKernelPy(
     std::vector<Eigen::MatrixXi>& E,
     std::vector<std::vector<int>>& V_label,
-    std::vector<double>& par,
+    double par,
     int kernel_type);
 
 #endif  // GRAPHKERNELS_CPPKERNELS_HISTOGRAM_H_
