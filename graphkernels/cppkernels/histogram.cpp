@@ -148,25 +148,25 @@ MatrixXd CalculateHistogramKernelPy(
             auto Kval = 0.0;
             switch (kernel_type) {
                 // Simple kernels
-                case 1:
+                case 0:
                     Kval = edgeHistogramKernel(E[i], E[j], -1.0);
                     break;
-                case 2:
+                case 1:
                     Kval = vertexHistogramKernel(V_label[i], V_label[j], -1.0);
                     break;
-                case 3:
+                case 2:
                     Kval = vertexEdgeHistogramKernel(
                             E[i], E[j], V_label[i], V_label[j], -1.0);
                     break;
                 // Gaussian kernels
-                case 5:
+                case 3:
                     Kval = edgeHistogramKernel(E[i], E[j], par);
                     break;
-                case 6:
+                case 4:
                     Kval = vertexHistogramKernel(
                             V_label[i], V_label[j], par);
                     break;
-                case 7:
+                case 5:
                     Kval = vertexEdgeHistogramKernel(
                             E[i], E[j], V_label[i], V_label[j], par);
                     break;

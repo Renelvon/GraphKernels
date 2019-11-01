@@ -20,30 +20,19 @@ from .utilities import GetAdjMatList, GetGKInput
 def CalculateEdgeHistKernel(G):
     """Edge Histogram Kernel"""
     E, V_label, _, _, _ = GetGKInput(G)
-    return gkCpy.CalculateHistogramKernelPy(E, V_label, -1.0, 1)
+    return gkCpy.CalculateHistogramKernelPy(E, V_label, -1.0, 0)
 
 
 def CalculateVertexHistKernel(G):
     """Vertex Histogram Kernel"""
     E, V_label, _, _, _ = GetGKInput(G)
-    return gkCpy.CalculateHistogramKernelPy(E, V_label, -1.0, 2)
+    return gkCpy.CalculateHistogramKernelPy(E, V_label, -1.0, 1)
 
 
 def CalculateVertexEdgeHistKernel(G):
     """Vertex Edge Histogram Kernel"""
     E, V_label, _, _, _ = GetGKInput(G)
-    return gkCpy.CalculateHistogramKernelPy(E, V_label, -1.0, 3)
-
-
-def CalculateVertexVertexEdgeHistKernel(G, par=1.0):
-    """Vertex Vertex Edge Histogram Kernel"""
-    if not isinstance(par, (float, int)):
-        raise TypeError('par must be a scalar (float or integer)')
-
-    if par == 0:
-        warnings.warn('Invoking kernel with par == 0.0')
-
-    return CalculateVertexHistKernel(G) + par * CalculateVertexEdgeHistKernel(G)
+    return gkCpy.CalculateHistogramKernelPy(E, V_label, -1.0, 2)
 
 
 # === RBF Kernels on Histograms ===
@@ -58,7 +47,7 @@ def CalculateEdgeHistGaussKernel(G, gamma=0.5):
         raise ValueError('gamma must be a positive scalar (float or integer)')
 
     E, V_label, _, _, _ = GetGKInput(G)
-    return gkCpy.CalculateHistogramKernelPy(E, V_label, float(gamma), 5)
+    return gkCpy.CalculateHistogramKernelPy(E, V_label, float(gamma), 3)
 
 
 def CalculateVertexHistGaussKernel(G, gamma=0.5):
@@ -70,7 +59,7 @@ def CalculateVertexHistGaussKernel(G, gamma=0.5):
         raise ValueError('gamma must be a positive scalar (float or integer)')
 
     E, V_label, _, _, _ = GetGKInput(G)
-    return gkCpy.CalculateHistogramKernelPy(E, V_label, float(gamma), 6)
+    return gkCpy.CalculateHistogramKernelPy(E, V_label, float(gamma), 4)
 
 
 def CalculateVertexEdgeHistGaussKernel(G, gamma=0.5):
@@ -82,7 +71,21 @@ def CalculateVertexEdgeHistGaussKernel(G, gamma=0.5):
         raise ValueError('gamma must be a positive scalar (float or integer)')
 
     E, V_label, _, _, _ = GetGKInput(G)
-    return gkCpy.CalculateHistogramKernelPy(E, V_label, float(gamma), 7)
+    return gkCpy.CalculateHistogramKernelPy(E, V_label, float(gamma), 5)
+
+
+# === Compound Histogram Kernels ===
+
+
+def CalculateVertexVertexEdgeHistKernel(G, par=1.0):
+    """Vertex Vertex Edge Histogram Kernel"""
+    if not isinstance(par, (float, int)):
+        raise TypeError('par must be a scalar (float or integer)')
+
+    if par == 0:
+        warnings.warn('Invoking kernel with par == 0.0')
+
+    return CalculateVertexHistKernel(G) + par * CalculateVertexEdgeHistKernel(G)
 
 
 # === Random Walk Kernels ===
