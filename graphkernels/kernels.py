@@ -43,8 +43,7 @@ def CalculateVertexVertexEdgeHistKernel(G, par=1.0):
     if par == 0:
         warnings.warn('Invoking kernel with par == 0.0')
 
-    E, V_label, _, _, _ = GetGKInput(G)
-    return gkCpy.CalculateHistogramKernelPy(E, V_label, float(par), 4)
+    return CalculateVertexHistKernel(G) + par * CalculateVertexEdgeHistKernel(G)
 
 
 # === RBF Kernels on Histograms ===

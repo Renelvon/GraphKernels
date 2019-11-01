@@ -136,16 +136,6 @@ double vertexEdgeHistogramKernel(
     return linear_kernel(h1, h2);
 }
 
-// vertex-vertex-edge histogram karnel
-double vertexVertexEdgeHistogramKernel(MatrixXi& e1,
-                                       MatrixXi& e2,
-                                       vector<int>& v1_label,
-                                       vector<int>& v2_label,
-                                       double lambda) {
-  return vertexHistogramKernel(v1_label, v2_label, -1.0) +
-         lambda * vertexEdgeHistogramKernel(e1, e2, v1_label, v2_label, -1.0);
-}
-
 MatrixXd CalculateHistogramKernelPy(
         vector<MatrixXi>& E,
         vector<vector<int>>& V_label,
@@ -167,10 +157,6 @@ MatrixXd CalculateHistogramKernelPy(
                 case 3:
                     Kval = vertexEdgeHistogramKernel(
                             E[i], E[j], V_label[i], V_label[j], -1.0);
-                    break;
-                case 4:
-                    Kval = vertexVertexEdgeHistogramKernel(
-                            E[i], E[j], V_label[i], V_label[j], par);
                     break;
                 // Gaussian kernels
                 case 5:
