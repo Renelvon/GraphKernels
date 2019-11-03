@@ -16,45 +16,21 @@ using std::vector;
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
-// ========================================================= //
-// ==================== Graphlet kernel ==================== //
-// ========================================================= //
 // ===== graphlet kernel for k = 4 ===== //
 int find_min(int a, int b, int c) {
-    int m;
-    int mini = a;
-    if (b < mini) {
-        mini = b;
-    }
-    if (c < mini) {
-        mini = c;
-    }
-    if (mini == a) {
-        if (mini == b) {
-            if (mini == c) {
-                m = 7;
-            } else {
-                m = 4;
-            }
-        } else {
-            if (mini == c) {
-                m = 5;
-            } else {
-                m = 1;
-            }
+    const auto minabc = min(a, min(b, c));
+    if (minabc == a) {
+        if (minabc == b) {
+            return (minabc == c) ? 7 : 4;
         }
-    } else {
-        if (mini == b) {
-            if (mini == c) {
-                m = 6;
-            } else {
-                m = 2;
-            }
-        } else {
-            m = 3;
-        }
+        return (minabc == c) ? 5 : 1;
     }
-    return m;
+
+    if (minabc == b) {
+        return (minabc == c) ? 6 : 2;
+    }
+
+    return 3;
 }
 
 void card_ThreeInter(
