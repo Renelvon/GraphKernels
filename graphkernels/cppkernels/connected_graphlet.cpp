@@ -299,49 +299,41 @@ VectorXd countConnectedGraphletsThree(
     return (csum == 0.0) ? count_gr : count_gr / csum;
 }
 
-MatrixXd CalculateConnectedGraphletKernelPy(
+MatrixXd CalculateConnectedGraphletKernelThreePy(
         vector<MatrixXi>& graph_adj_all,
-        vector<vector<vector<int>>>& graph_adjlist_all,
-        int k) {
-    int freq_size = 0;
-
-    switch (k) {
-        case 3:
-            freq_size = 2;
-            break;
-        case 4:
-            freq_size = 6;
-            break;
-        case 5:
-            freq_size = 21;
-            break;
-        default:
-            {}  // FIXME: THIS SHOULD NEVER HAPPEN.
-    }
-
+        vector<vector<vector<int>>>& graph_adjlist_all) {
+    auto freq_size = 2;
     MatrixXd freq(graph_adjlist_all.size(), freq_size);
 
-    VectorXd count_g;
+    for (auto i = 0; i < graph_adjlist_all.size(); ++i) {
+        freq.row(i) = countConnectedGraphletsThree(graph_adj_all[i],
+                graph_adjlist_all[i], freq_size);
+    }
+    return freq * freq.transpose();
+}
+
+MatrixXd CalculateConnectedGraphletKernelFourPy(
+        vector<MatrixXi>& graph_adj_all,
+        vector<vector<vector<int>>>& graph_adjlist_all) {
+    auto freq_size = 6;
+    MatrixXd freq(graph_adjlist_all.size(), freq_size);
 
     for (auto i = 0; i < graph_adjlist_all.size(); ++i) {
-        if (k == 3) {
-            count_g = countConnectedGraphletsThree(graph_adj_all[i],
-                    graph_adjlist_all[i], freq_size);
+        freq.row(i) = countConnectedGraphletsFour(graph_adj_all[i],
+                graph_adjlist_all[i], freq_size);
+    }
+    return freq * freq.transpose();
+}
 
-        } else if (k == 4) {
-            count_g = countConnectedGraphletsFour(graph_adj_all[i],
-                    graph_adjlist_all[i], freq_size);
+MatrixXd CalculateConnectedGraphletKernelFivePy(
+        vector<MatrixXi>& graph_adj_all,
+        vector<vector<vector<int>>>& graph_adjlist_all) {
+    auto freq_size = 21;
+    MatrixXd freq(graph_adjlist_all.size(), freq_size);
 
-        } else if (k == 5) {
-            count_g = countConnectedGraphletsFive(graph_adj_all[i],
-                    graph_adjlist_all[i], freq_size);
-        }
-
-        freq.row(i) = count_g;
-
-        if (freq.row(i).sum() != 0) {
-            freq.row(i) /= freq.row(i).sum();
-        }
+    for (auto i = 0; i < graph_adjlist_all.size(); ++i) {
+        freq.row(i) = countConnectedGraphletsFive(graph_adj_all[i],
+                graph_adjlist_all[i], freq_size);
     }
     return freq * freq.transpose();
 }
