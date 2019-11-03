@@ -1,5 +1,5 @@
 /* Copyright (c) 2018-2019 the `graphkernels` developers
- * All rigths reserved.
+ * All rights reserved.
  */
 
 #include "wl.h"
