@@ -375,9 +375,7 @@ VectorXd countGraphletsThree(vector<vector<int>>& al, VectorXd& count_gr) {
     vector<double> w = {1.0 / 6.0, 1.0 / 4.0, 1.0 / 2.0};
     vector<double> card(3);
 
-    vector<int> L1(al.size());
-    iota(L1.begin(), L1.end(), 0);
-    for (auto&& i : L1) {
+    for (auto i = 0; i < n; ++i) {
         for (auto&& j : al[i]) {
             getCardinality(al[i], al[j], card);
             count_gr(0) += w[0] * card[2];
@@ -410,13 +408,10 @@ MatrixXd CalculateGraphletKernelPy(
 
     MatrixXd freq(graph_adjlist_all.size(), freq_size);
 
-    vector<int> idx_graph(graph_adjlist_all.size());
-    iota(idx_graph.begin(), idx_graph.end(), 0);
-
     VectorXd count_g;
     VectorXd freq_row;
 
-    for (auto&& i : idx_graph) {
+    for (auto i = 0; i < graph_adjlist_all.size(); ++i) {
         freq_row = VectorXd::Zero(freq_size);
 
         if (k == 3) {
