@@ -246,7 +246,8 @@ void getIndices(
     }
 }
 
-VectorXd countGraphletsFour(vector<vector<int>>& al, VectorXd& count_gr) {
+VectorXd countGraphletsFour(vector<vector<int>>& al, int freq_size) {
+    VectorXd count_gr = VectorXd::Zero(freq_size);
     auto n = static_cast<double>(al.size());
     vector<double> w = {
         1.0 / 12.0, 1.0 / 10.0, 1.0 / 8.0, 1.0 / 6.0,
@@ -370,7 +371,8 @@ void getCardinality(
     card[1] -= j;
 }
 
-VectorXd countGraphletsThree(vector<vector<int>>& al, VectorXd& count_gr) {
+VectorXd countGraphletsThree(vector<vector<int>>& al, int freq_size) {
+    VectorXd count_gr = VectorXd::Zero(freq_size);
     auto n = static_cast<double>(al.size());
     vector<double> w = {1.0 / 6.0, 1.0 / 4.0, 1.0 / 2.0};
     vector<double> card(3);
@@ -392,7 +394,6 @@ VectorXd countGraphletsThree(vector<vector<int>>& al, VectorXd& count_gr) {
 MatrixXd CalculateGraphletKernelPy(
         vector<vector<vector<int>>>& graph_adjlist_all,
         int k) {
-
     int freq_size = 0;
 
     switch (k) {
@@ -407,17 +408,13 @@ MatrixXd CalculateGraphletKernelPy(
     }
 
     MatrixXd freq(graph_adjlist_all.size(), freq_size);
-
     VectorXd count_g;
-    VectorXd freq_row;
 
     for (auto i = 0; i < graph_adjlist_all.size(); ++i) {
-        freq_row = VectorXd::Zero(freq_size);
-
         if (k == 3) {
-            count_g = countGraphletsThree(graph_adjlist_all[i], freq_row);
+            count_g = countGraphletsThree(graph_adjlist_all[i], freq_size);
         } else if (k == 4) {
-            count_g = countGraphletsFour(graph_adjlist_all[i], freq_row);
+            count_g = countGraphletsFour(graph_adjlist_all[i], freq_size);
         }
 
         freq.row(i) = count_g;
@@ -427,7 +424,5 @@ MatrixXd CalculateGraphletKernelPy(
         }
     }
 
-    MatrixXd K = freq * freq.transpose();
-
-    return K;
+    return freq * freq.transpose();
 }
