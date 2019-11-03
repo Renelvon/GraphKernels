@@ -224,7 +224,7 @@ void getIndices(
 
 VectorXd countGraphletsFour(vector<vector<int>>& al, int freq_size) {
     VectorXd count_gr = VectorXd::Zero(freq_size);
-    const auto n = static_cast<double>(al.size());
+    const auto n = al.size();
     vector<double> w = {
         1.0 / 12.0, 1.0 / 10.0, 1.0 / 8.0, 1.0 / 6.0,
         1.0 / 8.0,  1.0 / 6.0,  1.0 / 6.0, 1.0 / 4.0,
@@ -354,7 +354,7 @@ void getCardinality(
 
 VectorXd countGraphletsThree(vector<vector<int>>& al, int freq_size) {
     VectorXd count_gr = VectorXd::Zero(freq_size);
-    const auto n = static_cast<double>(al.size());
+    const auto n = al.size();
     vector<double> w = {1.0 / 6.0, 1.0 / 4.0, 1.0 / 2.0};
     vector<double> card(3);
 
