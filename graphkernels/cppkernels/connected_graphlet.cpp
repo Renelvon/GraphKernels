@@ -7,9 +7,7 @@
 #include <Eigen/Sparse>
 
 #include <algorithm>
-#include <numeric>
 
-using std::iota;
 using std::sort;
 using std::vector;
 
@@ -20,16 +18,14 @@ using Eigen::VectorXd;
 
 
 void getMinValue(MatrixXi& iam, vector<int>& idx, vector<int>& sums) {
-    SparseMatrix<int> am;
-    am = iam.sparseView();
+    SparseMatrix<int> am = iam.sparseView();
 
     sums.clear();
     sums.resize(idx.size());
     fill(sums.begin(), sums.end(), 0);
     for (auto i = 0; i < idx.size(); ++i) {
-        int k = idx[i];
-        for (SparseMatrix<int>::InnerIterator it(am, k); it; ++it) {
-            if (find(idx.begin(), idx.end(), it.row()) != idx.end()) {
+        for (SparseMatrix<int>::InnerIterator it(am, idx[i]); it; ++it) {
+            if (find(idx.cbegin(), idx.cend(), it.row()) != idx.cend()) {
                 sums[i] += it.value();
             }
         }
@@ -41,7 +37,7 @@ VectorXd countConnectedGraphletsFive(
         MatrixXi& am,
         vector<vector<int>>& al,
         VectorXd& count_gr) {
-    auto n = static_cast<int>(al.size());
+    const auto n = static_cast<int>(al.size());
 
     vector<double> w = {
         1.0 / 120.0, 1.0 / 72.0, 1.0 / 48.0, 1.0 / 36.0, 1.0 / 28.0, 1.0 / 20.0,
@@ -49,12 +45,10 @@ VectorXd countConnectedGraphletsFive(
         1.0 / 2.0,   1.0 / 12.0, 1.0 / 12.0, 1.0 / 4.0,  1.0 / 4.0,  1.0 / 2.0,
         0.0,         0.0,        0.0};
     // int n = (int)am.rows();
-    vector<int> L1(n);
-    iota(L1.begin(), L1.end(), 0);
     vector<int> idx(5);
     vector<int> sums;
 
-    for (auto&& i : L1) {
+    for (auto i = 0; i < n; ++i) {
         for (auto&& j : al[i]) {
             for (auto&& k : al[j]) {
                 if (k != i) {
@@ -62,7 +56,7 @@ VectorXd countConnectedGraphletsFive(
                         if (l != i && l != j) {
                             for (auto&& m : al[l]) {
                                 if (m != i && m != j && m != k) {
-                                    int aux =
+                                    const auto aux =
                                         am.coeff(i, k) + am.coeff(i, l) +
                                         am.coeff(i, m) + am.coeff(j, l) +
                                         am.coeff(j, m) + am.coeff(k, m);
@@ -77,8 +71,8 @@ VectorXd countConnectedGraphletsFive(
                                         idx[3] = l;
                                         idx[4] = m;
                                         getMinValue(am, idx, sums);
-                                        int aux1 = *min_element(
-                                                sums.begin(), sums.end());
+                                        const auto aux1 = *min_element(
+                                                sums.cbegin(), sums.cend());
                                         if (aux1 == 2) {
                                             count_gr[3] += w[3];
                                         } else {
@@ -109,7 +103,7 @@ VectorXd countConnectedGraphletsFive(
                                         idx[4] = m;
                                         getMinValue(am, idx, sums);
                                         vector<int> aux1;
-                                        copy(sums.begin(), sums.end(),
+                                        copy(sums.cbegin(), sums.cend(),
                                                 back_inserter(aux1));
                                         sort(aux1.begin(), aux1.end());
                                         if (aux1[0] == 1) {
@@ -143,7 +137,7 @@ VectorXd countConnectedGraphletsFive(
                                         idx[4] = m;
                                         getMinValue(am, idx, sums);
                                         vector<int> aux1;
-                                        copy(sums.begin(), sums.end(),
+                                        copy(sums.cbegin(), sums.cend(),
                                                 back_inserter(aux1));
                                         sort(aux1.begin(), aux1.end());
                                         if (aux1[0] == 2) {
@@ -229,17 +223,15 @@ VectorXd countConnectedGraphletsFour(
         VectorXd& count_gr) {
     vector<double> w = {1.0 / 24.0, 1.0 / 12.0, 1.0 / 4.0,
                         0.0,        1.0 / 8.0,  1.0 / 2.0};
-    auto n = static_cast<int>(am.rows());
-    vector<int> L1(n);
-    iota(L1.begin(), L1.end(), 0);
 
-    for (auto&& i : L1) {
+    const auto n = static_cast<int>(am.rows());
+    for (auto i = 0; i < n; ++i) {
         for (auto&& j : al[i]) {
             for (auto&& k : al[j]) {
                 if (k != i) {
                     for (auto&& l : al[k]) {
                         if (l != i && l != j) {
-                            int aux =
+                            const auto aux =
                                 am.coeff(i, k) +
                                 am.coeff(i, l) +
                                 am.coeff(j, l);
@@ -283,11 +275,9 @@ VectorXd countConnectedGraphletsThree(
         vector<vector<int>>& al,
         VectorXd& count_gr) {
     vector<double> w = {1.0 / 2.0, 1.0 / 6.0};
-    auto n = static_cast<int>(am.rows());
-    vector<int> L1(n);
-    iota(L1.begin(), L1.end(), 0);
 
-    for (auto&& i : L1) {
+    const auto n = static_cast<int>(am.rows());
+    for (auto i = 0; i < n; ++i) {
         for (auto&& j : al[i]) {
             for (auto&& k : al[j]) {
                 if (k != i) {
@@ -325,13 +315,10 @@ MatrixXd CalculateConnectedGraphletKernelPy(
 
     MatrixXd freq(graph_adjlist_all.size(), freq_size);
 
-    vector<int> idx_graph(graph_adjlist_all.size());
-    iota(idx_graph.begin(), idx_graph.end(), 0);
-
     VectorXd count_g;
     VectorXd freq_row;
 
-    for (auto&& i : idx_graph) {
+    for (auto i = 0; i < graph_adjlist_all.size(); ++i) {
         freq_row = VectorXd::Zero(freq_size);
 
         if (k == 3) {
@@ -353,7 +340,5 @@ MatrixXd CalculateConnectedGraphletKernelPy(
             freq.row(i) /= freq.row(i).sum();
         }
     }
-    MatrixXd K = freq * freq.transpose();
-
-    return K;
+    return freq * freq.transpose();
 }
