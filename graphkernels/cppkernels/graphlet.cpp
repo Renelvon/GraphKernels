@@ -318,7 +318,9 @@ VectorXd countGraphletsFour(vector<vector<int>>& al, int freq_size) {
 
     count_gr(10) = n * (n - 1.0) * (n - 2.0) * (n - 3.0) / (4.0 * 3.0 * 2.0) -
         count_gr.head(10).sum();
-    return count_gr;
+
+    const auto csum = count_gr.sum();
+    return (csum == 0.0) ? count_gr : count_gr / csum;
 }
 
 // ===== graphlet kernel for k = 3 ===== //
@@ -367,41 +369,38 @@ VectorXd countGraphletsThree(vector<vector<int>>& al, int freq_size) {
     }
     count_gr(3) = n * (n - 1.0) * (n - 2.0) / 6.0 -
         (count_gr(0) + count_gr(1) + count_gr(2));
-    return count_gr;
+
+    const auto csum = count_gr.sum();
+    return (csum == 0.0) ? count_gr : count_gr / csum;
+}
+
+MatrixXd CalculateGraphletKernelThreePy(
+        vector<vector<vector<int>>>& graph_adjlist_all) {
+    constexpr auto freq_size = 4;
+    MatrixXd freq(graph_adjlist_all.size(), freq_size);
+
+    for (auto i = 0; i < graph_adjlist_all.size(); ++i) {
+        freq.row(i) = countGraphletsThree(graph_adjlist_all[i], freq_size);
+    }
+    return freq * freq.transpose();
+}
+
+MatrixXd CalculateGraphletKernelFourPy(
+        vector<vector<vector<int>>>& graph_adjlist_all) {
+    constexpr auto freq_size = 11;
+    MatrixXd freq(graph_adjlist_all.size(), freq_size);
+
+    for (auto i = 0; i < graph_adjlist_all.size(); ++i) {
+        freq.row(i) = countGraphletsFour(graph_adjlist_all[i], freq_size);
+    }
+    return freq * freq.transpose();
 }
 
 MatrixXd CalculateGraphletKernelPy(
         vector<vector<vector<int>>>& graph_adjlist_all,
         int k) {
-    int freq_size = 0;
-
-    switch (k) {
-        case 3:
-            freq_size = 4;
-            break;
-        case 4:
-            freq_size = 11;
-            break;
-        default:
-            {}  // FIXME: THIS SHOULD NEVER HAPPEN.
+    if (k == 3) {
+        return CalculateGraphletKernelThreePy(graph_adjlist_all);
     }
-
-    MatrixXd freq(graph_adjlist_all.size(), freq_size);
-    VectorXd count_g;
-
-    for (auto i = 0; i < graph_adjlist_all.size(); ++i) {
-        if (k == 3) {
-            count_g = countGraphletsThree(graph_adjlist_all[i], freq_size);
-        } else if (k == 4) {
-            count_g = countGraphletsFour(graph_adjlist_all[i], freq_size);
-        }
-
-        freq.row(i) = count_g;
-
-        if (freq.row(i).sum() != 0) {
-            freq.row(i) /= freq.row(i).sum();
-        }
-    }
-
-    return freq * freq.transpose();
+    return CalculateGraphletKernelFourPy(graph_adjlist_all);
 }
