@@ -224,7 +224,7 @@ void getIndices(
 
 VectorXd countGraphletsFour(vector<vector<int>>& al, int freq_size) {
     VectorXd count_gr = VectorXd::Zero(freq_size);
-    auto n = static_cast<double>(al.size());
+    const auto n = static_cast<double>(al.size());
     vector<double> w = {
         1.0 / 12.0, 1.0 / 10.0, 1.0 / 8.0, 1.0 / 6.0,
         1.0 / 8.0,  1.0 / 6.0,  1.0 / 6.0, 1.0 / 4.0,
@@ -258,7 +258,8 @@ VectorXd countGraphletsFour(vector<vector<int>>& al, int freq_size) {
                 inter_count[2] += 0.5 * card[0];
                 inter_count[2] += 0.5 * card[1];
                 inter_count[2] += card[2];
-                inter_count[6] += n - accumulate(card.begin(), card.end(), 0);
+                inter_count[6] += n - accumulate(
+                        card.cbegin(), card.cend(), 0.0);
                 K += 0.5 * card[6] + 0.5 * (card[4] - 1.0) +
                     0.5 * (card[5] - 1.0) + card[2];
             }
@@ -266,9 +267,9 @@ VectorXd countGraphletsFour(vector<vector<int>>& al, int freq_size) {
             v.resize(diff1.size());
             sort(diff1.begin(), diff1.end());
             sort(al[i].begin(), al[i].end());
-            auto it = set_difference(diff1.begin(), diff1.end(), al[i].begin(),
-                    al[i].end(), v.begin());
-            v.resize(it - v.begin());
+            auto it = set_difference(diff1.cbegin(), diff1.cend(),
+                    al[i].cbegin(), al[i].cend(), v.begin());
+            v.resize(it - v.cbegin());
             for (auto&& k : v) {
                 card_ThreeInter(al[i], al[j], al[k], card);
                 inter_count[1] += 0.5 * card[6];
@@ -278,16 +279,17 @@ VectorXd countGraphletsFour(vector<vector<int>>& al, int freq_size) {
                 inter_count[3] += 0.5 * (card[0] - 2.0);
                 inter_count[5] += 0.5 * card[1];
                 inter_count[5] += card[2];
-                inter_count[7] += n - accumulate(card.begin(), card.end(), 0);
+                inter_count[7] += n - accumulate(
+                        card.cbegin(), card.cend(), 0.0);
                 K += 0.5 * card[6] + 0.5 * card[4] +
                     0.5 * (card[5] - 1.0) + card[2];
             }
             v.clear();
             v.resize(diff2.size());
             sort(diff2.begin(), diff2.end());
-            it = set_difference(diff2.begin(), diff2.end(), v1.begin(),
-                    v1.end(), v.begin());
-            v.resize(it - v.begin());
+            it = set_difference(diff2.cbegin(), diff2.cend(), v1.cbegin(),
+                    v1.cend(), v.begin());
+            v.resize(it - v.cbegin());
             for (auto&& k : v) {
                 card_ThreeInter(al[i], al[j], al[k], card);
                 inter_count[1] += 0.5 * card[6];
@@ -297,7 +299,8 @@ VectorXd countGraphletsFour(vector<vector<int>>& al, int freq_size) {
                 inter_count[5] += 0.5 * card[0];
                 inter_count[3] += 0.5 * (card[1] - 2.0);
                 inter_count[5] += card[2];
-                inter_count[7] += n - accumulate(card.begin(), card.end(), 0);
+                inter_count[7] += n - accumulate(
+                        card.cbegin(), card.cend(), 0.0);
                 K += 0.5 * card[6] + 0.5 * (card[4] - 1.0) +
                     0.5 * card[5] + card[2];
             }
@@ -349,7 +352,7 @@ void getCardinality(
 
 VectorXd countGraphletsThree(vector<vector<int>>& al, int freq_size) {
     VectorXd count_gr = VectorXd::Zero(freq_size);
-    auto n = static_cast<double>(al.size());
+    const auto n = static_cast<double>(al.size());
     vector<double> w = {1.0 / 6.0, 1.0 / 4.0, 1.0 / 2.0};
     vector<double> card(3);
 
@@ -359,7 +362,7 @@ VectorXd countGraphletsThree(vector<vector<int>>& al, int freq_size) {
             count_gr(0) += w[0] * card[2];
             count_gr(1) += w[1] * (card[0] + card[1] - 2.0);
             count_gr(2) += w[2] * (
-                    n - accumulate(card.begin(), card.end(), 0.0));
+                    n - accumulate(card.cbegin(), card.cend(), 0.0));
         }
     }
     count_gr(3) = n * (n - 1.0) * (n - 2.0) / 6.0 -
