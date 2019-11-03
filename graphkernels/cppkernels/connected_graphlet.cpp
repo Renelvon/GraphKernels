@@ -36,15 +36,16 @@ void getMinValue(MatrixXi& iam, vector<int>& idx, vector<int>& sums) {
 VectorXd countConnectedGraphletsFive(
         MatrixXi& am,
         vector<vector<int>>& al,
-        VectorXd& count_gr) {
-    const auto n = static_cast<int>(al.size());
-
+        int freq_size) {
     vector<double> w = {
         1.0 / 120.0, 1.0 / 72.0, 1.0 / 48.0, 1.0 / 36.0, 1.0 / 28.0, 1.0 / 20.0,
         1.0 / 14.0,  1.0 / 10.0, 1.0 / 12.0, 1.0 / 8.0,  1.0 / 8.0,  1.0 / 4.0,
         1.0 / 2.0,   1.0 / 12.0, 1.0 / 12.0, 1.0 / 4.0,  1.0 / 4.0,  1.0 / 2.0,
         0.0,         0.0,        0.0};
-    // int n = (int)am.rows();
+
+    const auto n = al.size();
+    VectorXd count_gr = VectorXd::Zero(freq_size);
+
     vector<int> idx(5);
     vector<int> sums;
 
@@ -214,17 +215,19 @@ VectorXd countConnectedGraphletsFive(
             }
         }
     }
-    return count_gr;
+    const auto csum = count_gr.sum();
+    return (csum == 0.0) ? count_gr : count_gr / csum;
 }
 
 VectorXd countConnectedGraphletsFour(
         MatrixXi& am,
         vector<vector<int>>& al,
-        VectorXd& count_gr) {
+        int freq_size) {
     vector<double> w = {1.0 / 24.0, 1.0 / 12.0, 1.0 / 4.0,
                         0.0,        1.0 / 8.0,  1.0 / 2.0};
 
-    const auto n = static_cast<int>(am.rows());
+    VectorXd count_gr = VectorXd::Zero(freq_size);
+    const auto n = am.rows();
     for (auto i = 0; i < n; ++i) {
         for (auto&& j : al[i]) {
             for (auto&& k : al[j]) {
@@ -267,16 +270,18 @@ VectorXd countConnectedGraphletsFour(
             }
         }
     }
-    return count_gr;
+    const auto csum = count_gr.sum();
+    return (csum == 0.0) ? count_gr : count_gr / csum;
 }
 
 VectorXd countConnectedGraphletsThree(
         MatrixXi& am,
         vector<vector<int>>& al,
-        VectorXd& count_gr) {
+        int freq_size) {
     vector<double> w = {1.0 / 2.0, 1.0 / 6.0};
 
-    const auto n = static_cast<int>(am.rows());
+    VectorXd count_gr = VectorXd::Zero(freq_size);
+    const auto n = am.rows();
     for (auto i = 0; i < n; ++i) {
         for (auto&& j : al[i]) {
             for (auto&& k : al[j]) {
@@ -290,7 +295,8 @@ VectorXd countConnectedGraphletsThree(
             }
         }
     }
-    return count_gr;
+    const auto csum = count_gr.sum();
+    return (csum == 0.0) ? count_gr : count_gr / csum;
 }
 
 MatrixXd CalculateConnectedGraphletKernelPy(
@@ -316,22 +322,19 @@ MatrixXd CalculateConnectedGraphletKernelPy(
     MatrixXd freq(graph_adjlist_all.size(), freq_size);
 
     VectorXd count_g;
-    VectorXd freq_row;
 
     for (auto i = 0; i < graph_adjlist_all.size(); ++i) {
-        freq_row = VectorXd::Zero(freq_size);
-
         if (k == 3) {
             count_g = countConnectedGraphletsThree(graph_adj_all[i],
-                    graph_adjlist_all[i], freq_row);
+                    graph_adjlist_all[i], freq_size);
 
         } else if (k == 4) {
             count_g = countConnectedGraphletsFour(graph_adj_all[i],
-                    graph_adjlist_all[i], freq_row);
+                    graph_adjlist_all[i], freq_size);
 
         } else if (k == 5) {
             count_g = countConnectedGraphletsFive(graph_adj_all[i],
-                    graph_adjlist_all[i], freq_row);
+                    graph_adjlist_all[i], freq_size);
         }
 
         freq.row(i) = count_g;
