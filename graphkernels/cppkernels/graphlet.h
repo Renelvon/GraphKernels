@@ -12,7 +12,7 @@
 // Graphlet kernel for k = 3, 4
 // ----------------------------
 Eigen::MatrixXd CalculateGraphletKernelPy(
-    std::vector<std::vector<std::vector<int>>>& graph_adjlist_all,
-    int k);
+        std::vector<std::vector<std::vector<int>>>& graph_adjlist_all,
+        int k);
 
 #endif  // GRAPHKERNELS_CPPKERNELS_GRAPHLET_H_

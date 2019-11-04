@@ -34,9 +34,9 @@ int find_min(int a, int b, int c) {
 }
 
 void card_ThreeInter(
-        vector<int>& L1,
-        vector<int>& L2,
-        vector<int>& L3,
+        const vector<int>& L1,
+        const vector<int>& L2,
+        const vector<int>& L3,
         vector<int>& card) {
     card.resize(7);
     fill(card.begin(), card.end(), 0);
@@ -167,8 +167,8 @@ void card_ThreeInter(
 }
 
 void getIndices(
-        vector<int>& o_set1,
-        vector<int>& o_set2,
+        const vector<int>& o_set1,
+        const vector<int>& o_set2,
         vector<int>& inter,
         vector<int>& diff1,
         vector<int>& diff2) {
@@ -325,8 +325,8 @@ VectorXd countGraphletsFour(vector<vector<int>>& al, int freq_size) {
 
 // ===== graphlet kernel for k = 3 ===== //
 void getCardinality(
-        vector<int>& o_set1,
-        vector<int>& o_set2,
+        const vector<int>& o_set1,
+        const vector<int>& o_set2,
         vector<double>& card) {
     card.resize(3);
     fill(card.begin(), card.end(), 0.0);
@@ -352,7 +352,7 @@ void getCardinality(
     card[1] -= j;
 }
 
-VectorXd countGraphletsThree(vector<vector<int>>& al, int freq_size) {
+VectorXd countGraphletsThree(const vector<vector<int>>& al, int freq_size) {
     VectorXd count_gr = VectorXd::Zero(freq_size);
     const auto n = al.size();
     vector<double> w = {1.0 / 6.0, 1.0 / 4.0, 1.0 / 2.0};
@@ -375,7 +375,7 @@ VectorXd countGraphletsThree(vector<vector<int>>& al, int freq_size) {
 }
 
 MatrixXd CalculateGraphletKernelThreePy(
-        vector<vector<vector<int>>>& graph_adjlist_all) {
+        const vector<vector<vector<int>>>& graph_adjlist_all) {
     constexpr auto freq_size = 4;
     MatrixXd freq(graph_adjlist_all.size(), freq_size);
 
