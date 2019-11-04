@@ -9,11 +9,16 @@
 
 #include <vector>
 
-// Connected Graphlet kernel for k = 3, 4, 5
-// -----------------------------------------
-Eigen::MatrixXd CalculateConnectedGraphletKernelPy(
-    std::vector<Eigen::MatrixXi>& graph_adj_all,
-    std::vector<std::vector<std::vector<int>>>& graph_adjlist_all,
-    int k);
+Eigen::MatrixXd CalculateConnectedGraphletKernelThreePy(
+        std::vector<Eigen::MatrixXi>& graph_adj_all,
+        std::vector<std::vector<std::vector<int>>>& graph_adjlist_all);
+
+Eigen::MatrixXd CalculateConnectedGraphletKernelFourPy(
+        std::vector<Eigen::MatrixXi>& graph_adj_all,
+        std::vector<std::vector<std::vector<int>>>& graph_adjlist_all);
+
+Eigen::MatrixXd CalculateConnectedGraphletKernelFivePy(
+        std::vector<Eigen::MatrixXi>& graph_adj_all,
+        std::vector<std::vector<std::vector<int>>>& graph_adjlist_all);
 
 #endif  // GRAPHKERNELS_CPPKERNELS_CONNECTED_GRAPHLET_H_

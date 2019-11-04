@@ -191,15 +191,23 @@ def CalculateConnectedGraphletKernel(G, par=4):
     par : size of graphlets used (k)
     """
     if not isinstance(par, int):
-        raise TypeError('Size of graphlets must be an integer')
+        raise TypeError('Size of connected graphlets must be a integer')
 
-    if par not in (3, 4, 5):
+    if par < 3 or par > 5:
         raise ValueError(
             "Connected Graphlet kernel supports only: k = 3, 4 or 5"
         )
 
     adj_mat, adj_list = GetAdjMatList(G)  # Extract graph info.
-    return gkCpy.CalculateConnectedGraphletKernelPy(adj_mat, adj_list, par)
+
+    if par == 3:
+        return gkCpy.CalculateConnectedGraphletKernelThreePy(adj_mat, adj_list)
+
+    if par == 4:
+        return gkCpy.CalculateConnectedGraphletKernelFourPy(adj_mat, adj_list)
+
+    # par == 5
+    return gkCpy.CalculateConnectedGraphletKernelFivePy(adj_mat, adj_list)
 
 
 def _floyd_transform(gg):
