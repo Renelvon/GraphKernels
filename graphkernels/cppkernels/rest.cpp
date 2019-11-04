@@ -40,28 +40,28 @@ SparseMatrix<double> productAdjacency(
         const vector<int>& v1_label,
         const vector<int>& v2_label,
         MatrixXi& H) {
-  const auto n_vx = v1_label.size() * v2_label.size();
+    const auto n_vx = v1_label.size() * v2_label.size();
 
-  SparseMatrix<double> Ax(n_vx, n_vx);
+    SparseMatrix<double> Ax(n_vx, n_vx);
 
-  vector<Eigen::Triplet<double>> v;
+    vector<Eigen::Triplet<double>> v;
 
-  for (auto i = 0L; i < e1.rows(); i++) {
-    for (auto j = 0L; j < e2.rows(); j++) {
-      if (v1_label[e1(i, 0)] == v2_label[e2(j, 0)] &&
-          v1_label[e1(i, 1)] == v2_label[e2(j, 1)] && e1(i, 2) == e2(j, 2)) {
-        v.emplace_back(H(e1(i, 0), e2(j, 0)), H(e1(i, 1), e2(j, 1)), 1.0);
-        v.emplace_back(H(e1(i, 1), e2(j, 1)), H(e1(i, 0), e2(j, 0)), 1.0);
-      }
-      if (v1_label[e1(i, 0)] == v2_label[e2(j, 1)] &&
-          v1_label[e1(i, 1)] == v2_label[e2(j, 0)] && e1(i, 2) == e2(j, 2)) {
-        v.emplace_back(H(e1(i, 0), e2(j, 1)), H(e1(i, 1), e2(j, 0)), 1.0);
-        v.emplace_back(H(e1(i, 1), e2(j, 0)), H(e1(i, 0), e2(j, 1)), 1.0);
-      }
+    for (auto i = 0L; i < e1.rows(); i++) {
+        for (auto j = 0L; j < e2.rows(); j++) {
+            if (v1_label[e1(i, 0)] == v2_label[e2(j, 0)] &&
+                    v1_label[e1(i, 1)] == v2_label[e2(j, 1)] && e1(i, 2) == e2(j, 2)) {
+                v.emplace_back(H(e1(i, 0), e2(j, 0)), H(e1(i, 1), e2(j, 1)), 1.0);
+                v.emplace_back(H(e1(i, 1), e2(j, 1)), H(e1(i, 0), e2(j, 0)), 1.0);
+            }
+            if (v1_label[e1(i, 0)] == v2_label[e2(j, 1)] &&
+                    v1_label[e1(i, 1)] == v2_label[e2(j, 0)] && e1(i, 2) == e2(j, 2)) {
+                v.emplace_back(H(e1(i, 0), e2(j, 1)), H(e1(i, 1), e2(j, 0)), 1.0);
+                v.emplace_back(H(e1(i, 1), e2(j, 0)), H(e1(i, 0), e2(j, 1)), 1.0);
+            }
+        }
     }
-  }
-  Ax.setFromTriplets(v.begin(), v.end());
-  return Ax;
+    Ax.setFromTriplets(v.begin(), v.end());
+    return Ax;
 }
 
 double geometricRandomWalkKernel(
@@ -72,34 +72,34 @@ double geometricRandomWalkKernel(
         double lambda,
         int max_iterations,
         double eps) {
-  // map each product (v_1, v_2) of vertics to a number H(v_1, v_2)
-  MatrixXi H(v1_label.size(), v2_label.size());
-  const auto n_vx = productMapping(v1_label, v2_label, H);
+    // map each product (v_1, v_2) of vertics to a number H(v_1, v_2)
+    MatrixXi H(v1_label.size(), v2_label.size());
+    const auto n_vx = productMapping(v1_label, v2_label, H);
 
-  // prepare identity matrix
-  SparseMatrix<double> I(n_vx, n_vx);
-  I.setIdentity();
+    // prepare identity matrix
+    SparseMatrix<double> I(n_vx, n_vx);
+    I.setIdentity();
 
-  // compute the adjacency matrix Ax of the direct product graph
-  SparseMatrix<double> Ax = productAdjacency(e1, e2, v1_label, v2_label, H);
+    // compute the adjacency matrix Ax of the direct product graph
+    SparseMatrix<double> Ax = productAdjacency(e1, e2, v1_label, v2_label, H);
 
-  // inverse of I - lambda * Ax by fixed-poInt iterations
-  const VectorXd I_vec = VectorXd::Ones(n_vx);
-  auto x = I_vec;
-  VectorXd x_pre = VectorXd::Zero(n_vx);
+    // inverse of I - lambda * Ax by fixed-poInt iterations
+    const VectorXd I_vec = VectorXd::Ones(n_vx);
+    auto x = I_vec;
+    VectorXd x_pre = VectorXd::Zero(n_vx);
 
-  auto count = 0;
-  while ((x - x_pre).squaredNorm() > eps) {
-    if (count > max_iterations) {
-      // cout << "does not converge until " << count - 1 << " iterations" <<
-      // endl;
-      break;
+    auto count = 0;
+    while ((x - x_pre).squaredNorm() > eps) {
+        if (count > max_iterations) {
+            // cout << "does not converge until " << count - 1 << " iterations" <<
+            // endl;
+            break;
+        }
+        x_pre = x;
+        x = I_vec + lambda * Ax * x_pre;
+        ++count;
     }
-    x_pre = x;
-    x = I_vec + lambda * Ax * x_pre;
-    ++count;
-  }
-  return x.sum();
+    return x.sum();
 }
 
 MatrixXd CalculateGeometricRandomWalkKernelPy(
