@@ -13,20 +13,20 @@
 // ===================
 
 Eigen::MatrixXd CalculateGeometricRandomWalkKernelPy(
-        std::vector<Eigen::MatrixXi>& E,
-        std::vector<std::vector<int>>& V_label,
+        const std::vector<Eigen::MatrixXi>& E,
+        const std::vector<std::vector<int>>& V_label,
         double par,
         int max_iterations,
         double eps);
 
 Eigen::MatrixXd CalculateExponentialRandomWalkKernelPy(
-        std::vector<Eigen::MatrixXi>& E,
-        std::vector<std::vector<int>>& V_label,
+        const std::vector<Eigen::MatrixXi>& E,
+        const std::vector<std::vector<int>>& V_label,
         double par);
 
 Eigen::MatrixXd CalculateKStepRandomWalkKernelPy(
-        std::vector<Eigen::MatrixXi>& E,
-        std::vector<std::vector<int>>& V_label,
-        std::vector<double>& par);
+        const std::vector<Eigen::MatrixXi>& E,
+        const std::vector<std::vector<int>>& V_label,
+        const std::vector<double>& par);
 
 #endif  // GRAPHKERNELS_CPPKERNELS_REST_H_
