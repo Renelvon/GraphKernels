@@ -16,7 +16,7 @@ using std::vector;
 using Eigen::MatrixXd;
 using Eigen::MatrixXi;
 
-double linear_kernel(vector<int>& h1, vector<int>& h2) {
+double linear_kernel(const vector<int>& h1, const vector<int>& h2) {
     auto sum = 0.0;
     for (auto i = 0; i < h1.size(); ++i) {
         sum += static_cast<double>(h1[i]) * h2[i];
@@ -24,7 +24,7 @@ double linear_kernel(vector<int>& h1, vector<int>& h2) {
     return sum;
 }
 
-double rbf_kernel(vector<int>& h1, vector<int>& h2, double gamma) {
+double rbf_kernel(const vector<int>& h1, const vector<int>& h2, double gamma) {
     double sum = 0.0;
     for (auto i = 0; i < h1.size(); ++i) {
         const auto diff = static_cast<double>(h1[i]) - h2[i];
@@ -36,7 +36,10 @@ double rbf_kernel(vector<int>& h1, vector<int>& h2, double gamma) {
 template< class T>
 constexpr T max_plus_one(T a, T b) {return 1 + max(a, b);}
 
-double edgeHistogramKernel(MatrixXi& e1, MatrixXi& e2, double gamma) {
+double edgeHistogramKernel(
+        const MatrixXi& e1,
+        const MatrixXi& e2,
+        double gamma) {
     const auto e12 = e1.col(2);
     const auto e22 = e2.col(2);
     const auto label_high = max_plus_one(e12.maxCoeff(), e22.maxCoeff());
@@ -60,8 +63,8 @@ double edgeHistogramKernel(MatrixXi& e1, MatrixXi& e2, double gamma) {
 }
 
 double vertexHistogramKernel(
-        vector<int>& v1_label,
-        vector<int>& v2_label,
+        const vector<int>& v1_label,
+        const vector<int>& v2_label,
         double gamma) {
     const auto v1_label_max = *max_element(v1_label.cbegin(), v1_label.cend());
     const auto v2_label_max = *max_element(v2_label.cbegin(), v2_label.cend());
@@ -86,10 +89,10 @@ double vertexHistogramKernel(
 }
 
 double vertexEdgeHistogramKernel(
-        MatrixXi& e1,
-        MatrixXi& e2,
-        vector<int>& v1_label,
-        vector<int>& v2_label,
+        const MatrixXi& e1,
+        const MatrixXi& e2,
+        const vector<int>& v1_label,
+        const vector<int>& v2_label,
         double gamma) {
     const auto e12 = e1.col(2);
     const auto e22 = e2.col(2);
@@ -137,8 +140,8 @@ double vertexEdgeHistogramKernel(
 }
 
 MatrixXd CalculateHistogramKernelPy(
-        vector<MatrixXi>& E,
-        vector<vector<int>>& V_label,
+        const vector<MatrixXi>& E,
+        const vector<vector<int>>& V_label,
         double par,
         int kernel_type) {
     MatrixXd K(V_label.size(), V_label.size());

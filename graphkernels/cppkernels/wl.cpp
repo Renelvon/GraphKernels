@@ -19,7 +19,7 @@ using Eigen::MatrixXd;
 using Eigen::MatrixXi;
 
 // bucket sort used in Weisfeiler-Leiman graph kernel
-void bucketsort(vector<int>& x, vector<int>& index, int label_max) {
+void bucketsort(const vector<int>& x, vector<int>& index, int label_max) {
     vector<vector<int>> buckets(label_max + 1);
 
     for (auto itr = index.begin(), end = index.end(); itr != end; ++itr) {
@@ -36,11 +36,11 @@ void bucketsort(vector<int>& x, vector<int>& index, int label_max) {
 
 // Weisfeiler-Leiman graph kernel
 MatrixXd WLKernelMatrix(
-        vector<MatrixXi>& E,
-        vector<vector<int>>& V_label,
-        vector<int>& num_v,
-        vector<int>& num_e,
-        vector<int>& degree_max,
+        const vector<MatrixXi>& E,
+        const vector<vector<int>>& V_label,
+        const vector<int>& num_v,
+        const vector<int>& num_e,
+        const vector<int>& degree_max,
         int h_max) {
     const auto v_size = V_label.size();
     MatrixXd K_mat = MatrixXd::Zero(v_size, v_size);

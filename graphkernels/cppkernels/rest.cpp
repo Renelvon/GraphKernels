@@ -19,8 +19,8 @@ using Eigen::VectorXd;
 
 // map each product (v_1, v_2) of vertics to a number H(v_1, v_2)
 int productMapping(
-        vector<int>& v1_label,
-        vector<int>& v2_label,
+        const vector<int>& v1_label,
+        const vector<int>& v2_label,
         MatrixXi& H) {
     auto n_vx = 0;
     for (auto i = 0; i < v1_label.size(); ++i) {
@@ -35,10 +35,10 @@ int productMapping(
 
 // compute the adjacency matrix Ax of the direct product graph (sparse)
 SparseMatrix<double> productAdjacency(
-        MatrixXi& e1,
-        MatrixXi& e2,
-        vector<int>& v1_label,
-        vector<int>& v2_label,
+        const MatrixXi& e1,
+        const MatrixXi& e2,
+        const vector<int>& v1_label,
+        const vector<int>& v2_label,
         MatrixXi& H) {
   const auto n_vx = v1_label.size() * v2_label.size();
 
@@ -65,10 +65,10 @@ SparseMatrix<double> productAdjacency(
 }
 
 double geometricRandomWalkKernel(
-        MatrixXi& e1,
-        MatrixXi& e2,
-        vector<int>& v1_label,
-        vector<int>& v2_label,
+        const MatrixXi& e1,
+        const MatrixXi& e2,
+        const vector<int>& v1_label,
+        const vector<int>& v2_label,
         double lambda,
         int max_iterations,
         double eps) {
@@ -103,8 +103,8 @@ double geometricRandomWalkKernel(
 }
 
 MatrixXd CalculateGeometricRandomWalkKernelPy(
-        vector<MatrixXi>& E,
-        vector<vector<int>>& V_label,
+        const vector<MatrixXi>& E,
+        const vector<vector<int>>& V_label,
         double lambda,
         int max_iterations,
         double eps) {
@@ -122,10 +122,10 @@ MatrixXd CalculateGeometricRandomWalkKernelPy(
 }
 
 double exponentialRandomWalkKernel(
-        MatrixXi& e1,
-        MatrixXi& e2,
-        vector<int>& v1_label,
-        vector<int>& v2_label,
+        const MatrixXi& e1,
+        const MatrixXi& e2,
+        const vector<int>& v1_label,
+        const vector<int>& v2_label,
         double beta) {
     // map each product (v_1, v_2) of vertics to a number H(v_1, v_2)
     MatrixXi H(v1_label.size(), v2_label.size());
@@ -151,8 +151,8 @@ double exponentialRandomWalkKernel(
 }
 
 MatrixXd CalculateExponentialRandomWalkKernelPy(
-        vector<MatrixXi>& E,
-        vector<vector<int>>& V_label,
+        const vector<MatrixXi>& E,
+        const vector<vector<int>>& V_label,
         double beta) {
     MatrixXd K(V_label.size(), V_label.size());
 
@@ -167,11 +167,11 @@ MatrixXd CalculateExponentialRandomWalkKernelPy(
 }
 
 double kstepRandomWalkKernel(
-        MatrixXi& e1,
-        MatrixXi& e2,
-        vector<int>& v1_label,
-        vector<int>& v2_label,
-        vector<double>& lambda_list) {
+        const MatrixXi& e1,
+        const MatrixXi& e2,
+        const vector<int>& v1_label,
+        const vector<int>& v2_label,
+        const vector<double>& lambda_list) {
     // map each product (v_1, v_2) of vertics to a number H(v_1, v_2)
     MatrixXi H(v1_label.size(), v2_label.size());
     const auto n_vx = productMapping(v1_label, v2_label, H);
@@ -197,9 +197,9 @@ double kstepRandomWalkKernel(
 }
 
 MatrixXd CalculateKStepRandomWalkKernelPy(
-        vector<MatrixXi>& E,
-        vector<vector<int>>& V_label,
-        vector<double>& par) {
+        const vector<MatrixXi>& E,
+        const vector<vector<int>>& V_label,
+        const vector<double>& par) {
     MatrixXd K(V_label.size(), V_label.size());
     for (auto i = 0; i < V_label.size(); ++i) {
         for (auto j = i; j < V_label.size(); ++j) {

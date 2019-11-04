@@ -17,7 +17,7 @@ using Eigen::SparseMatrix;
 using Eigen::VectorXd;
 
 
-void getMinValue(MatrixXi& iam, vector<int>& idx, vector<int>& sums) {
+void getMinValue(const MatrixXi& iam, const vector<int>& idx, vector<int>& sums) {
     SparseMatrix<int> am = iam.sparseView();
 
     sums.clear();
@@ -34,8 +34,8 @@ void getMinValue(MatrixXi& iam, vector<int>& idx, vector<int>& sums) {
 }
 
 VectorXd countConnectedGraphletsFive(
-        MatrixXi& am,
-        vector<vector<int>>& al,
+        const MatrixXi& am,
+        const vector<vector<int>>& al,
         int freq_size) {
     vector<double> w = {
         1.0 / 120.0, 1.0 / 72.0, 1.0 / 48.0, 1.0 / 36.0, 1.0 / 28.0, 1.0 / 20.0,
@@ -220,8 +220,8 @@ VectorXd countConnectedGraphletsFive(
 }
 
 VectorXd countConnectedGraphletsFour(
-        MatrixXi& am,
-        vector<vector<int>>& al,
+        const MatrixXi& am,
+        const vector<vector<int>>& al,
         int freq_size) {
     vector<double> w = {1.0 / 24.0, 1.0 / 12.0, 1.0 / 4.0,
                         0.0,        1.0 / 8.0,  1.0 / 2.0};
@@ -275,8 +275,8 @@ VectorXd countConnectedGraphletsFour(
 }
 
 VectorXd countConnectedGraphletsThree(
-        MatrixXi& am,
-        vector<vector<int>>& al,
+        const MatrixXi& am,
+        const vector<vector<int>>& al,
         int freq_size) {
     vector<double> w = {1.0 / 2.0, 1.0 / 6.0};
 
@@ -300,8 +300,8 @@ VectorXd countConnectedGraphletsThree(
 }
 
 MatrixXd CalculateConnectedGraphletKernelThreePy(
-        vector<MatrixXi>& graph_adj_all,
-        vector<vector<vector<int>>>& graph_adjlist_all) {
+        const vector<MatrixXi>& graph_adj_all,
+        const vector<vector<vector<int>>>& graph_adjlist_all) {
     auto freq_size = 2;
     MatrixXd freq(graph_adjlist_all.size(), freq_size);
 
@@ -313,8 +313,8 @@ MatrixXd CalculateConnectedGraphletKernelThreePy(
 }
 
 MatrixXd CalculateConnectedGraphletKernelFourPy(
-        vector<MatrixXi>& graph_adj_all,
-        vector<vector<vector<int>>>& graph_adjlist_all) {
+        const vector<MatrixXi>& graph_adj_all,
+        const vector<vector<vector<int>>>& graph_adjlist_all) {
     auto freq_size = 6;
     MatrixXd freq(graph_adjlist_all.size(), freq_size);
 
@@ -326,8 +326,8 @@ MatrixXd CalculateConnectedGraphletKernelFourPy(
 }
 
 MatrixXd CalculateConnectedGraphletKernelFivePy(
-        vector<MatrixXi>& graph_adj_all,
-        vector<vector<vector<int>>>& graph_adjlist_all) {
+        const vector<MatrixXi>& graph_adj_all,
+        const vector<vector<vector<int>>>& graph_adjlist_all) {
     auto freq_size = 21;
     MatrixXd freq(graph_adjlist_all.size(), freq_size);
 
