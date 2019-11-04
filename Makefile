@@ -17,10 +17,10 @@ build: build_ext
 	$(PYTHON) $(SETUP) build
 
 check:
-	black setup.py $(NAME)
+	black setup.py $(NAME) Tutorial
 	check-manifest
 	cpplint --recursive $(NAME)/cppkernels
-	pylint setup.py $(NAME)
+	pylint setup.py $(NAME) Tutorial
 	pyroma -n 10 .
 
 clean:
