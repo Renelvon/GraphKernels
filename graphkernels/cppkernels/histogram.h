@@ -10,8 +10,8 @@
 #include <vector>
 
 Eigen::MatrixXd CalculateHistogramKernelPy(
-    std::vector<Eigen::MatrixXi>& E,
-    std::vector<std::vector<int>>& V_label,
+    const std::vector<Eigen::MatrixXi>& E,
+    const std::vector<std::vector<int>>& V_label,
     double par,
     int kernel_type);
 
