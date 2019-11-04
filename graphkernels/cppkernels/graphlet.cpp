@@ -395,12 +395,3 @@ MatrixXd CalculateGraphletKernelFourPy(
     }
     return freq * freq.transpose();
 }
-
-MatrixXd CalculateGraphletKernelPy(
-        vector<vector<vector<int>>>& graph_adjlist_all,
-        int k) {
-    if (k == 3) {
-        return CalculateGraphletKernelThreePy(graph_adjlist_all);
-    }
-    return CalculateGraphletKernelFourPy(graph_adjlist_all);
-}

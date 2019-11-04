@@ -9,10 +9,10 @@
 
 #include <vector>
 
-// Graphlet kernel for k = 3, 4
-// ----------------------------
-Eigen::MatrixXd CalculateGraphletKernelPy(
-        std::vector<std::vector<std::vector<int>>>& graph_adjlist_all,
-        int k);
+Eigen::MatrixXd CalculateGraphletKernelThreePy(
+        const std::vector<std::vector<std::vector<int>>>& graph_adjlist_all);
+
+Eigen::MatrixXd CalculateGraphletKernelFourPy(
+        std::vector<std::vector<std::vector<int>>>& graph_adjlist_all);
 
 #endif  // GRAPHKERNELS_CPPKERNELS_GRAPHLET_H_

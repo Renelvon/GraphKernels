@@ -176,11 +176,16 @@ def CalculateGraphletKernel(G, par=4):
     if not isinstance(par, int):
         raise TypeError('Size of graphlets must be an integer')
 
-    if par not in (3, 4):
+    if par < 3 or par > 4:
         raise ValueError("Graphlet kernel supports only: k = 3 or 4")
 
     _, adj_list = GetAdjMatList(G)  # Extract graph info.
-    return gkCpy.CalculateGraphletKernelPy(adj_list, par)
+
+    if par == 3:
+        return gkCpy.CalculateGraphletKernelThreePy(adj_list)
+
+    # par == 4
+    return gkCpy.CalculateGraphletKernelFourPy(adj_list)
 
 
 def CalculateConnectedGraphletKernel(G, par=4):
@@ -191,7 +196,7 @@ def CalculateConnectedGraphletKernel(G, par=4):
     par : size of graphlets used (k)
     """
     if not isinstance(par, int):
-        raise TypeError('Size of connected graphlets must be a integer')
+        raise TypeError('Size of connected graphlets must be an integer')
 
     if par < 3 or par > 5:
         raise ValueError(
