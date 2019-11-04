@@ -22,10 +22,7 @@ def gen_mutag_graph_paths():
 
 
 def load_mutag_graphs():
-    return tuple(
-        Graph.Read_GraphML(path)
-        for path in gen_mutag_graph_paths()
-    )
+    return tuple(Graph.Read_GraphML(path) for path in gen_mutag_graph_paths())
 
 
 def compute_all_kernels(graphs):
@@ -38,7 +35,7 @@ def compute_all_kernels(graphs):
         gk.CalculateVertexHistGaussKernel(graphs),
         gk.CalculateVertexEdgeHistGaussKernel(graphs),
         gk.CalculateGeometricRandomWalkKernel(graphs),
-#       gk.CalculateExponentialRandomWalkKernel(graphs),
+        # gk.CalculateExponentialRandomWalkKernel(graphs),
         gk.CalculateKStepRandomWalkKernel(graphs, [1.0]),
         gk.CalculateWLKernel(graphs),
         gk.CalculateConnectedGraphletKernel(graphs, 3),
@@ -46,7 +43,7 @@ def compute_all_kernels(graphs):
         gk.CalculateConnectedGraphletKernel(graphs, 5),
         gk.CalculateGraphletKernel(graphs, 3),
         gk.CalculateGraphletKernel(graphs, 4),
-        gk.CalculateShortestPathKernel(graphs)
+        gk.CalculateShortestPathKernel(graphs),
     )
 
 
@@ -55,7 +52,7 @@ def main():
     Compute all kernels.
     """
     graphs = load_mutag_graphs()
-    for result in  compute_all_kernels(graphs):
+    for result in compute_all_kernels(graphs):
         print(result.sum())
 
 

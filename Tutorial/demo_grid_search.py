@@ -24,29 +24,25 @@ class KernelGridSearchCV:
     """
 
     def __init__(self, clf, param_grid, cv=None, random_state=None, refit=True):
-        self.clf_             = clf
-        self.grid_            = param_grid
-        self.cv_              = cv
-        self.random_state_    = random_state
-        self.refit_           = refit
-        self.best_estimator_  = None
-        self.best_score_      = None
-        self.best_params_     = None
+        self.clf_ = clf
+        self.grid_ = param_grid
+        self.cv_ = cv
+        self.random_state_ = random_state
+        self.refit_ = refit
+        self.best_estimator_ = None
+        self.best_score_ = None
+        self.best_params_ = None
 
     def fit(self, X, y):
 
         # Use stratified k-folds with a user-specified number
         if self.cv_ is None:
             cv = KFold(
-                n_splits=3,
-                shuffle=True,
-                random_state=self.random_state_
+                n_splits=3, shuffle=True, random_state=self.random_state_
             )
         elif isinstance(self.cv_, int):
             cv = StratifiedKFold(
-                n_splits=self.cv_,
-                shuffle=True,
-                random_state=self.random_state_
+                n_splits=self.cv_, shuffle=True, random_state=self.random_state_
             )
         else:
             cv = self.cv_
@@ -60,8 +56,8 @@ class KernelGridSearchCV:
             for train, test in cv.split(np.zeros(len(y)), y):
                 X_train = X[train][:, train]
                 y_train = y[train]
-                X_test  = X[test][:, train]
-                y_test  = y[test]
+                X_test = X[test][:, train]
+                y_test = y[test]
 
                 clf.fit(X_train, y_train)
 
@@ -72,8 +68,8 @@ class KernelGridSearchCV:
             score = np.mean(scores)
             if self.best_score_ is None or score > self.best_score_:
                 self.best_estimator_ = clone(clf)
-                self.best_score_     = score
-                self.best_params_    = parameters
+                self.best_score_ = score
+                self.best_params_ = parameters
 
 
 def main():
@@ -87,7 +83,7 @@ def main():
     kernels = {
         'vertex_histogram': gk.CalculateVertexHistKernel,
         'edge_histogram': gk.CalculateEdgeHistKernel,
-        'weisfeiler_lehman': gk.CalculateWLKernel
+        'weisfeiler_lehman': gk.CalculateWLKernel,
     }
 
     kernel_matrices = dict()
@@ -106,9 +102,7 @@ def main():
 
         # Prepare a parameter grid to train an SVM classifier with
         # cross-validation.
-        grid = {
-            'C': 10. ** np.arange(-2, 3)
-        }
+        grid = {'C': 10.0 ** np.arange(-2, 3)}
 
         # Calling the classifier like this ensures that we can use
         # our kernel matrices from above.
@@ -117,10 +111,9 @@ def main():
         grid_search = KernelGridSearchCV(
             clf,
             param_grid=grid,
-            cv=10, # 10-fold cross-validation; the interface also
-                   # supports your own cross-validator script for
-                   # more specific cases
-
+            # 10-fold cross-validation; the interface also supports your own
+            # cross-validator script for more specific cases
+            cv=10,
             # Make this tutorial reproducible
             random_state=42,
         )
@@ -135,7 +128,12 @@ def main():
         # as well.
         clf = grid_search.best_estimator_
 
-        print('10-fold cross-validation for {} yields an accuracy of {:2.2f}'.format(kernel_name, grid_search.best_score_ * 100.0))
+        print(
+            '10-fold cross-validation for {} yields an accuracy of {:2.2f}'.format(
+                kernel_name, grid_search.best_score_ * 100.0
+            )
+        )
+
 
 if __name__ == '__main__':
     main()
