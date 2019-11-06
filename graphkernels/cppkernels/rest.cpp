@@ -76,12 +76,13 @@ double geometricRandomWalkKernel(
     MatrixXi H(v1_label.size(), v2_label.size());
     const auto n_vx = productMapping(v1_label, v2_label, H);
 
+    // compute the adjacency matrix Ax of the direct product graph
+    SparseMatrix<double> Lx = lambda * productAdjacency(
+            e1, e2, v1_label, v2_label, H);
+
     // prepare identity matrix
     SparseMatrix<double> I(n_vx, n_vx);
     I.setIdentity();
-
-    // compute the adjacency matrix Ax of the direct product graph
-    SparseMatrix<double> Ax = productAdjacency(e1, e2, v1_label, v2_label, H);
 
     // inverse of I - lambda * Ax by fixed-poInt iterations
     const VectorXd I_vec = VectorXd::Ones(n_vx);
@@ -96,7 +97,7 @@ double geometricRandomWalkKernel(
             break;
         }
         x_pre = x;
-        x = I_vec + lambda * Ax * x_pre;
+        x = I_vec + Lx * x_pre;
         ++count;
     }
     return x.sum();
@@ -176,12 +177,12 @@ double kstepRandomWalkKernel(
     MatrixXi H(v1_label.size(), v2_label.size());
     const auto n_vx = productMapping(v1_label, v2_label, H);
 
+    // compute the adjacency matrix Ax of the direct product graph
+    SparseMatrix<double> Ax = productAdjacency(e1, e2, v1_label, v2_label, H);
+
     // prepare identity matrix
     SparseMatrix<double> I(n_vx, n_vx);
     I.setIdentity();
-
-    // compute the adjacency matrix Ax of the direct product graph
-    SparseMatrix<double> Ax = productAdjacency(e1, e2, v1_label, v2_label, H);
 
     auto Sum = SparseMatrix<double>{n_vx, n_vx};
     Sum.setZero();
