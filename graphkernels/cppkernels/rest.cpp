@@ -20,10 +20,13 @@ using Eigen::SelfAdjointEigenSolver;
 using Eigen::SparseMatrix;
 using Eigen::VectorXd;
 
-// store each valid vertex pair (v_1, v_2) in a vector
-auto productMapping(
+// compute the adjacency matrix Ax of the direct product graph (sparse)
+SparseMatrix<double> productAdjacency(
+        const MatrixXi& e1,
+        const MatrixXi& e2,
         const vector<int>& v1_label,
         const vector<int>& v2_label) {
+    // store each valid vertex pair (v_1, v_2) in a vector
     vector<pair<int, int>> pairs;
     for (auto i = 0; i < v1_label.size(); ++i) {
         for (auto j = 0; j < v2_label.size(); ++j) {
@@ -32,16 +35,7 @@ auto productMapping(
             }
         }
     }
-    return pairs;
-}
 
-// compute the adjacency matrix Ax of the direct product graph (sparse)
-SparseMatrix<double> productAdjacency(
-        const MatrixXi& e1,
-        const MatrixXi& e2,
-        const vector<int>& v1_label,
-        const vector<int>& v2_label,
-        const vector<pair<int, int>>& pairs) {
     MatrixXi H = MatrixXi::Zero(v1_label.size(), v2_label.size());
 
     auto new_label = 0;
@@ -91,11 +85,9 @@ double geometricRandomWalkKernel(
         double lambda,
         int max_iterations,
         double eps) {
-    const auto pairs = productMapping(v1_label, v2_label);
-
     // compute the adjacency matrix Ax of the direct product graph
     SparseMatrix<double> Lx = lambda * productAdjacency(
-            e1, e2, v1_label, v2_label, pairs);
+            e1, e2, v1_label, v2_label);
 
     // inverse of I - lambda * Ax by fixed-poInt iterations
     const auto n_rows = Lx.rows();
@@ -142,10 +134,8 @@ double exponentialRandomWalkKernel(
         const vector<int>& v1_label,
         const vector<int>& v2_label,
         double beta) {
-    const auto pairs = productMapping(v1_label, v2_label);
-
     // compute the adjacency matrix Ax of the direct product graph
-    SparseMatrix<double> Ax = productAdjacency(e1, e2, v1_label, v2_label, pairs);
+    SparseMatrix<double> Ax = productAdjacency(e1, e2, v1_label, v2_label);
 
     // compute e^{beta * Ax}
     SelfAdjointEigenSolver<MatrixXd> es(Ax);
@@ -186,10 +176,8 @@ double kstepRandomWalkKernel(
         const vector<int>& v1_label,
         const vector<int>& v2_label,
         const vector<double>& lambda_list) {
-    const auto pairs = productMapping(v1_label, v2_label);
-
     // compute the adjacency matrix Ax of the direct product graph
-    SparseMatrix<double> Ax = productAdjacency(e1, e2, v1_label, v2_label, pairs);
+    SparseMatrix<double> Ax = productAdjacency(e1, e2, v1_label, v2_label);
 
     // prepare identity matrix
     const auto n_rows = Ax.rows();
