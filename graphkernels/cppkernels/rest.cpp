@@ -184,7 +184,7 @@ double kstepRandomWalkKernel(
     SparseMatrix<double> I(n_vx, n_vx);
     I.setIdentity();
 
-    auto Sum = SparseMatrix<double>{n_vx, n_vx};
+    auto Sum = SparseMatrix<double>(n_vx, n_vx);
     Sum.setZero();
 
     // compute products until k using:
