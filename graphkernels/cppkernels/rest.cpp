@@ -181,10 +181,10 @@ double kstepRandomWalkKernel(
 
     // prepare identity matrix
     const auto n_rows = Ax.rows();
-    SparseMatrix<double> I(n_rows, n_rows);
+    SparseMatrix<double> I{n_rows, n_rows};
     I.setIdentity();
 
-    auto Sum = SparseMatrix<double>(n_rows, n_rows);
+    auto Sum = SparseMatrix<double>{n_rows, n_rows};
     Sum.setZero();
 
     // compute products until k using:
