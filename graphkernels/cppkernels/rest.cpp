@@ -96,16 +96,11 @@ double geometricRandomWalkKernel(
     VectorXd x_pre = VectorXd::Zero(n_rows);
 
     auto count = 0;
-    while ((x - x_pre).squaredNorm() > eps) {
-        if (count > max_iterations) {
-            // cout << "does not converge until " << count - 1 << " iterations" <<
-            // endl;
-            break;
-        }
+    do {
         x_pre = x;
         x = ones + Lx * x_pre;
         ++count;
-    }
+    } while (count <= max_iterations && (x - x_pre).squaredNorm() > eps);
     return x.sum();
 }
 
@@ -187,7 +182,7 @@ double kstepRandomWalkKernel(
     auto Sum = SparseMatrix<double>{n_rows, n_rows};
     Sum.setZero();
 
-    // compute products until k using:
+    // Compute products until k using:
     // https://en.wikipedia.org/wiki/Horner%27s_method
     auto k = lambda_list.size();
     while (k-- > 0) {
