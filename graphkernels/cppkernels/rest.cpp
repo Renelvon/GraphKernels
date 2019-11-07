@@ -4,19 +4,16 @@
 
 #include "rest.h"
 
-#include <Eigen/Eigenvalues>
-#include <Eigen/LU>
 #include <Eigen/Sparse>
+#include <unsupported/Eigen/MatrixFunctions>
 
 #include <utility>
 
 using std::vector;
 using std::pair;
 
-using Eigen::FullPivLU;
 using Eigen::MatrixXd;
 using Eigen::MatrixXi;
-using Eigen::SelfAdjointEigenSolver;
 using Eigen::SparseMatrix;
 using Eigen::VectorXd;
 
@@ -130,23 +127,9 @@ double exponentialRandomWalkKernel(
         const vector<int>& v2_label,
         double beta) {
     // compute the adjacency matrix Ax of the direct product graph
-    const SparseMatrix<double> Ax = productAdjacency(e1, e2, v1_label, v2_label);
+    const MatrixXd Ax = productAdjacency(e1, e2, v1_label, v2_label);
 
-    // compute e^{beta * Ax}
-    SelfAdjointEigenSolver<MatrixXd> es(Ax);
-    VectorXd x = (beta * es.eigenvalues()).array().exp();
-    MatrixXd D = x.asDiagonal();
-    MatrixXd V = es.eigenvectors();
-
-    // prepare identity matrix
-    const auto n_rows = Ax.rows();
-    const auto I = MatrixXd::Identity(n_rows, n_rows);
-
-    FullPivLU<MatrixXd> solver(V);
-    MatrixXd V_inv = solver.solve(I);
-    MatrixXd Res = V * D * V_inv;
-
-    return Res.sum();
+    return Ax.exp().sum();
 }
 
 MatrixXd CalculateExponentialRandomWalkKernelPy(
