@@ -4,19 +4,16 @@
 
 #include "rest.h"
 
-#include <Eigen/Eigenvalues>
-#include <Eigen/LU>
 #include <Eigen/Sparse>
+#include <unsupported/Eigen/MatrixFunctions>
 
 #include <utility>
 
 using std::vector;
 using std::pair;
 
-using Eigen::FullPivLU;
 using Eigen::MatrixXd;
 using Eigen::MatrixXi;
-using Eigen::SelfAdjointEigenSolver;
 using Eigen::SparseMatrix;
 using Eigen::VectorXd;
 
@@ -86,7 +83,7 @@ double geometricRandomWalkKernel(
         int max_iterations,
         double eps) {
     // compute the adjacency matrix Ax of the direct product graph
-    SparseMatrix<double> Lx = lambda * productAdjacency(
+    const SparseMatrix<double> Lx = lambda * productAdjacency(
             e1, e2, v1_label, v2_label);
 
     // inverse of I - lambda * Ax by fixed-poInt iterations
@@ -96,16 +93,11 @@ double geometricRandomWalkKernel(
     VectorXd x_pre = VectorXd::Zero(n_rows);
 
     auto count = 0;
-    while ((x - x_pre).squaredNorm() > eps) {
-        if (count > max_iterations) {
-            // cout << "does not converge until " << count - 1 << " iterations" <<
-            // endl;
-            break;
-        }
+    do {
         x_pre = x;
         x = ones + Lx * x_pre;
         ++count;
-    }
+    } while (count <= max_iterations && (x - x_pre).squaredNorm() > eps);
     return x.sum();
 }
 
@@ -119,13 +111,13 @@ MatrixXd CalculateGeometricRandomWalkKernelPy(
 
     for (auto i = 0; i < V_label.size(); ++i) {
         for (auto j = i; j < V_label.size(); ++j) {
-            K(j, i) = K(i, j) = geometricRandomWalkKernel(
+            K(i, j) = geometricRandomWalkKernel(
                     E[i], E[j], V_label[i], V_label[j], lambda,
                     max_iterations, eps);
         }
     }
 
-    return K;
+    return K.selfadjointView<Eigen::Upper>();
 }
 
 double exponentialRandomWalkKernel(
@@ -135,23 +127,9 @@ double exponentialRandomWalkKernel(
         const vector<int>& v2_label,
         double beta) {
     // compute the adjacency matrix Ax of the direct product graph
-    SparseMatrix<double> Ax = productAdjacency(e1, e2, v1_label, v2_label);
+    const MatrixXd Ax = productAdjacency(e1, e2, v1_label, v2_label);
 
-    // compute e^{beta * Ax}
-    SelfAdjointEigenSolver<MatrixXd> es(Ax);
-    VectorXd x = (beta * es.eigenvalues()).array().exp();
-    MatrixXd D = x.asDiagonal();
-    MatrixXd V = es.eigenvectors();
-
-    // prepare identity matrix
-    const auto n_rows = Ax.rows();
-    const auto I = MatrixXd::Identity(n_rows, n_rows);
-
-    FullPivLU<MatrixXd> solver(V);
-    MatrixXd V_inv = solver.solve(I);
-    MatrixXd Res = V * D * V_inv;
-
-    return Res.sum();
+    return Ax.exp().sum();
 }
 
 MatrixXd CalculateExponentialRandomWalkKernelPy(
@@ -162,12 +140,12 @@ MatrixXd CalculateExponentialRandomWalkKernelPy(
 
     for (auto i = 0; i < V_label.size(); ++i) {
         for (auto j = i; j < V_label.size(); ++j) {
-            K(j, i) = K(i, j) = exponentialRandomWalkKernel(
+            K(i, j) = exponentialRandomWalkKernel(
                     E[i], E[j], V_label[i], V_label[j], beta);
         }
     }
 
-    return K;
+    return K.selfadjointView<Eigen::Upper>();
 }
 
 double kstepRandomWalkKernel(
@@ -177,17 +155,17 @@ double kstepRandomWalkKernel(
         const vector<int>& v2_label,
         const vector<double>& lambda_list) {
     // compute the adjacency matrix Ax of the direct product graph
-    SparseMatrix<double> Ax = productAdjacency(e1, e2, v1_label, v2_label);
+    const SparseMatrix<double> Ax = productAdjacency(e1, e2, v1_label, v2_label);
 
     // prepare identity matrix
     const auto n_rows = Ax.rows();
-    SparseMatrix<double> I(n_rows, n_rows);
+    SparseMatrix<double> I{n_rows, n_rows};
     I.setIdentity();
 
-    auto Sum = SparseMatrix<double>(n_rows, n_rows);
+    auto Sum = SparseMatrix<double>{n_rows, n_rows};
     Sum.setZero();
 
-    // compute products until k using:
+    // Compute products until k using:
     // https://en.wikipedia.org/wiki/Horner%27s_method
     auto k = lambda_list.size();
     while (k-- > 0) {
@@ -204,10 +182,10 @@ MatrixXd CalculateKStepRandomWalkKernelPy(
     MatrixXd K(V_label.size(), V_label.size());
     for (auto i = 0; i < V_label.size(); ++i) {
         for (auto j = i; j < V_label.size(); ++j) {
-            K(j, i) = K(i, j) = kstepRandomWalkKernel(
+            K(i, j) = kstepRandomWalkKernel(
                     E[i], E[j], V_label[i], V_label[j], par);
         }
     }
 
-    return K;
+    return K.selfadjointView<Eigen::Upper>();
 }
