@@ -114,13 +114,13 @@ MatrixXd CalculateGeometricRandomWalkKernelPy(
 
     for (auto i = 0; i < V_label.size(); ++i) {
         for (auto j = i; j < V_label.size(); ++j) {
-            K(j, i) = K(i, j) = geometricRandomWalkKernel(
+            K(i, j) = geometricRandomWalkKernel(
                     E[i], E[j], V_label[i], V_label[j], lambda,
                     max_iterations, eps);
         }
     }
 
-    return K;
+    return K.selfadjointView<Eigen::Upper>();
 }
 
 double exponentialRandomWalkKernel(
@@ -157,12 +157,12 @@ MatrixXd CalculateExponentialRandomWalkKernelPy(
 
     for (auto i = 0; i < V_label.size(); ++i) {
         for (auto j = i; j < V_label.size(); ++j) {
-            K(j, i) = K(i, j) = exponentialRandomWalkKernel(
+            K(i, j) = exponentialRandomWalkKernel(
                     E[i], E[j], V_label[i], V_label[j], beta);
         }
     }
 
-    return K;
+    return K.selfadjointView<Eigen::Upper>();
 }
 
 double kstepRandomWalkKernel(
@@ -199,10 +199,10 @@ MatrixXd CalculateKStepRandomWalkKernelPy(
     MatrixXd K(V_label.size(), V_label.size());
     for (auto i = 0; i < V_label.size(); ++i) {
         for (auto j = i; j < V_label.size(); ++j) {
-            K(j, i) = K(i, j) = kstepRandomWalkKernel(
+            K(i, j) = kstepRandomWalkKernel(
                     E[i], E[j], V_label[i], V_label[j], par);
         }
     }
 
-    return K;
+    return K.selfadjointView<Eigen::Upper>();
 }
