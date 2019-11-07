@@ -86,7 +86,7 @@ double geometricRandomWalkKernel(
         int max_iterations,
         double eps) {
     // compute the adjacency matrix Ax of the direct product graph
-    SparseMatrix<double> Lx = lambda * productAdjacency(
+    const SparseMatrix<double> Lx = lambda * productAdjacency(
             e1, e2, v1_label, v2_label);
 
     // inverse of I - lambda * Ax by fixed-poInt iterations
@@ -135,7 +135,7 @@ double exponentialRandomWalkKernel(
         const vector<int>& v2_label,
         double beta) {
     // compute the adjacency matrix Ax of the direct product graph
-    SparseMatrix<double> Ax = productAdjacency(e1, e2, v1_label, v2_label);
+    const SparseMatrix<double> Ax = productAdjacency(e1, e2, v1_label, v2_label);
 
     // compute e^{beta * Ax}
     SelfAdjointEigenSolver<MatrixXd> es(Ax);
@@ -177,7 +177,7 @@ double kstepRandomWalkKernel(
         const vector<int>& v2_label,
         const vector<double>& lambda_list) {
     // compute the adjacency matrix Ax of the direct product graph
-    SparseMatrix<double> Ax = productAdjacency(e1, e2, v1_label, v2_label);
+    const SparseMatrix<double> Ax = productAdjacency(e1, e2, v1_label, v2_label);
 
     // prepare identity matrix
     const auto n_rows = Ax.rows();
