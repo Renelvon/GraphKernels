@@ -29,6 +29,8 @@ CPP_FLAGS = [
     '-Wextra',
     '-Wl,-z,defs',
     '-Wpedantic',
+    '-Wno-cast-function-type',
+    '-Wno-deprecated-copy',
     '-Wno-sign-compare',
     '-Wno-unused-parameter',
     '-Wno-unused-variable',
