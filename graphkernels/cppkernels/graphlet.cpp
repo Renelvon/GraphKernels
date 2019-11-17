@@ -16,6 +16,9 @@ using std::vector;
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
+constexpr auto FREQ_SIZE_3 = 4;
+constexpr auto FREQ_SIZE_4 = 11;
+
 // ===== graphlet kernel for k = 4 ===== //
 int find_min(int a, int b, int c) {
     const auto minabc = min(a, min(b, c));
@@ -222,8 +225,8 @@ void getIndices(
     }
 }
 
-VectorXd countGraphletsFour(vector<vector<int>>& al, int freq_size) {
-    VectorXd count_gr = VectorXd::Zero(freq_size);
+VectorXd countGraphletsFour(vector<vector<int>>& al) {
+    VectorXd count_gr = VectorXd::Zero(FREQ_SIZE_4);
     const auto n = al.size();
     vector<double> w = {
         1.0 / 12.0, 1.0 / 10.0, 1.0 / 8.0, 1.0 / 6.0,
@@ -352,8 +355,8 @@ void getCardinality(
     card[1] -= j;
 }
 
-VectorXd countGraphletsThree(const vector<vector<int>>& al, int freq_size) {
-    VectorXd count_gr = VectorXd::Zero(freq_size);
+VectorXd countGraphletsThree(const vector<vector<int>>& al) {
+    VectorXd count_gr = VectorXd::Zero(FREQ_SIZE_3);
     const auto n = al.size();
     vector<double> w = {1.0 / 6.0, 1.0 / 4.0, 1.0 / 2.0};
     vector<double> card(3);
@@ -376,22 +379,20 @@ VectorXd countGraphletsThree(const vector<vector<int>>& al, int freq_size) {
 
 MatrixXd CalculateGraphletKernelThreePy(
         const vector<vector<vector<int>>>& graph_adjlist_all) {
-    constexpr auto freq_size = 4;
-    MatrixXd freq(freq_size, graph_adjlist_all.size());
+    MatrixXd freq(FREQ_SIZE_3, graph_adjlist_all.size());
 
     for (auto i = 0; i < graph_adjlist_all.size(); ++i) {
-        freq.col(i) = countGraphletsThree(graph_adjlist_all[i], freq_size);
+        freq.col(i) = countGraphletsThree(graph_adjlist_all[i]);
     }
     return freq.transpose() * freq;
 }
 
 MatrixXd CalculateGraphletKernelFourPy(
         vector<vector<vector<int>>>& graph_adjlist_all) {
-    constexpr auto freq_size = 11;
-    MatrixXd freq(freq_size, graph_adjlist_all.size());
+    MatrixXd freq(FREQ_SIZE_4, graph_adjlist_all.size());
 
     for (auto i = 0; i < graph_adjlist_all.size(); ++i) {
-        freq.col(i) = countGraphletsFour(graph_adjlist_all[i], freq_size);
+        freq.col(i) = countGraphletsFour(graph_adjlist_all[i]);
     }
     return freq.transpose() * freq;
 }
