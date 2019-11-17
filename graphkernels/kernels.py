@@ -19,14 +19,14 @@ from .utilities import GetAdjMatList, GetGKInput
 
 def CalculateEdgeHistKernel(G):
     """Edge Histogram Kernel"""
-    E, V_label, _, _, _ = GetGKInput(G)
-    return gkCpy.CalculateEdgeHistogramKernelPy(E, V_label)
+    E, _, _, _, _ = GetGKInput(G)
+    return gkCpy.CalculateEdgeHistogramKernelPy(E)
 
 
 def CalculateVertexHistKernel(G):
     """Vertex Histogram Kernel"""
-    E, V_label, _, _, _ = GetGKInput(G)
-    return gkCpy.CalculateVertexHistogramKernelPy(E, V_label)
+    _, V_label, _, _, _ = GetGKInput(G)
+    return gkCpy.CalculateVertexHistogramKernelPy(V_label)
 
 
 def CalculateVertexEdgeHistKernel(G):
@@ -46,8 +46,8 @@ def CalculateEdgeHistGaussKernel(G, gamma=0.5):
     if gamma <= 0.0:
         raise ValueError('gamma must be a positive scalar (float or integer)')
 
-    E, V_label, _, _, _ = GetGKInput(G)
-    return gkCpy.CalculateEdgeHistogramKernelPy(E, V_label, float(gamma))
+    E, _, _, _, _ = GetGKInput(G)
+    return gkCpy.CalculateEdgeHistogramKernelPy(E, float(gamma))
 
 
 def CalculateVertexHistGaussKernel(G, gamma=0.5):
@@ -58,8 +58,8 @@ def CalculateVertexHistGaussKernel(G, gamma=0.5):
     if gamma <= 0.0:
         raise ValueError('gamma must be a positive scalar (float or integer)')
 
-    E, V_label, _, _, _ = GetGKInput(G)
-    return gkCpy.CalculateVertexHistogramKernelPy(E, V_label, float(gamma))
+    _, V_label, _, _, _ = GetGKInput(G)
+    return gkCpy.CalculateVertexHistogramKernelPy(V_label, float(gamma))
 
 
 def CalculateVertexEdgeHistGaussKernel(G, gamma=0.5):

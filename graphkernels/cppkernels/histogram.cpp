@@ -141,12 +141,11 @@ double vertexEdgeHistogramKernel(
 
 MatrixXd CalculateEdgeHistogramKernelPy(
         const vector<MatrixXi>& E,
-        const vector<vector<int>>& V_label,
         double par) {
-    MatrixXd K(V_label.size(), V_label.size());
+    MatrixXd K(E.size(), E.size());
 
-    for (auto i = 0; i < V_label.size(); ++i) {
-        for (auto j = i; j < V_label.size(); ++j) {
+    for (auto i = 0; i < E.size(); ++i) {
+        for (auto j = i; j < E.size(); ++j) {
             K(j, i) = K(i, j) = edgeHistogramKernel(E[i], E[j], par);
         }
     }
@@ -155,7 +154,6 @@ MatrixXd CalculateEdgeHistogramKernelPy(
 }
 
 MatrixXd CalculateVertexHistogramKernelPy(
-        const vector<MatrixXi>& E,
         const vector<vector<int>>& V_label,
         double par) {
     MatrixXd K(V_label.size(), V_label.size());
@@ -163,7 +161,7 @@ MatrixXd CalculateVertexHistogramKernelPy(
     for (auto i = 0; i < V_label.size(); ++i) {
         for (auto j = i; j < V_label.size(); ++j) {
             K(j, i) = K(i, j) = vertexHistogramKernel(
-                V_label[i], V_label[j], par);
+                    V_label[i], V_label[j], par);
         }
     }
 

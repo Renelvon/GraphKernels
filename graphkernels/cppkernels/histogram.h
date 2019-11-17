@@ -11,11 +11,9 @@
 
 Eigen::MatrixXd CalculateEdgeHistogramKernelPy(
     const std::vector<Eigen::MatrixXi>& E,
-    const std::vector<std::vector<int>>& V_label,
     double par = -1.0);
 
 Eigen::MatrixXd CalculateVertexHistogramKernelPy(
-    const std::vector<Eigen::MatrixXi>& E,
     const std::vector<std::vector<int>>& V_label,
     double par = -1.0);
 
