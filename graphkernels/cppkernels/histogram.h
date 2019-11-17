@@ -9,10 +9,17 @@
 
 #include <vector>
 
-Eigen::MatrixXd CalculateHistogramKernelPy(
+Eigen::MatrixXd CalculateEdgeHistogramKernelPy(
+    const std::vector<Eigen::MatrixXi>& E,
+    double par = -1.0);
+
+Eigen::MatrixXd CalculateVertexHistogramKernelPy(
+    const std::vector<std::vector<int>>& V_label,
+    double par = -1.0);
+
+Eigen::MatrixXd CalculateVertexEdgeHistogramKernelPy(
     const std::vector<Eigen::MatrixXi>& E,
     const std::vector<std::vector<int>>& V_label,
-    double par,
-    int kernel_type);
+    double par = -1.0);
 
 #endif  // GRAPHKERNELS_CPPKERNELS_HISTOGRAM_H_

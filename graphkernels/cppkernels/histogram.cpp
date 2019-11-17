@@ -139,46 +139,44 @@ double vertexEdgeHistogramKernel(
     return linear_kernel(h1, h2);
 }
 
-MatrixXd CalculateHistogramKernelPy(
-        const vector<MatrixXi>& E,
+MatrixXd CalculateEdgeHistogramKernelPy(const vector<MatrixXi>& E, double par) {
+    MatrixXd K(E.size(), E.size());
+
+    for (auto i = 0; i < E.size(); ++i) {
+        for (auto j = i; j < E.size(); ++j) {
+            K(i, j) = edgeHistogramKernel(E[i], E[j], par);
+        }
+    }
+
+    return K.selfadjointView<Eigen::Upper>();
+}
+
+MatrixXd CalculateVertexHistogramKernelPy(
         const vector<vector<int>>& V_label,
-        double par,
-        int kernel_type) {
+        double par) {
     MatrixXd K(V_label.size(), V_label.size());
 
     for (auto i = 0; i < V_label.size(); ++i) {
         for (auto j = i; j < V_label.size(); ++j) {
-            auto Kval = 0.0;
-            switch (kernel_type) {
-                // Simple kernels
-                case 0:
-                    Kval = edgeHistogramKernel(E[i], E[j], -1.0);
-                    break;
-                case 1:
-                    Kval = vertexHistogramKernel(V_label[i], V_label[j], -1.0);
-                    break;
-                case 2:
-                    Kval = vertexEdgeHistogramKernel(
-                            E[i], E[j], V_label[i], V_label[j], -1.0);
-                    break;
-                // Gaussian kernels
-                case 3:
-                    Kval = edgeHistogramKernel(E[i], E[j], par);
-                    break;
-                case 4:
-                    Kval = vertexHistogramKernel(
-                            V_label[i], V_label[j], par);
-                    break;
-                case 5:
-                    Kval = vertexEdgeHistogramKernel(
-                            E[i], E[j], V_label[i], V_label[j], par);
-                    break;
-                default:
-                    Kval = 42.0;  // FIXME: THIS SHOULD NEVER HAPPEN!
-            }
-            K(j, i) = K(i, j) = Kval;
+            K(i, j) = vertexHistogramKernel(V_label[i], V_label[j], par);
         }
     }
 
-    return K;
+    return K.selfadjointView<Eigen::Upper>();
+}
+
+MatrixXd CalculateVertexEdgeHistogramKernelPy(
+        const vector<MatrixXi>& E,
+        const vector<vector<int>>& V_label,
+        double par) {
+    MatrixXd K(V_label.size(), V_label.size());
+
+    for (auto i = 0; i < V_label.size(); ++i) {
+        for (auto j = i; j < V_label.size(); ++j) {
+            K(i, j) = vertexEdgeHistogramKernel(
+                    E[i], E[j], V_label[i], V_label[j], par);
+        }
+    }
+
+    return K.selfadjointView<Eigen::Upper>();
 }
