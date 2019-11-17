@@ -9,12 +9,6 @@
 
 #include <vector>
 
-Eigen::MatrixXd CalculateHistogramKernelPy(
-    const std::vector<Eigen::MatrixXi>& E,
-    const std::vector<std::vector<int>>& V_label,
-    double par,
-    int kernel_type);
-
 Eigen::MatrixXd CalculateEdgeHistogramKernelPy(
     const std::vector<Eigen::MatrixXi>& E,
     const std::vector<std::vector<int>>& V_label,
