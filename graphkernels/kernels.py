@@ -20,19 +20,19 @@ from .utilities import GetAdjMatList, GetGKInput
 def CalculateEdgeHistKernel(G):
     """Edge Histogram Kernel"""
     E, V_label, _, _, _ = GetGKInput(G)
-    return gkCpy.CalculateHistogramKernelPy(E, V_label, -1.0, 0)
+    return gkCpy.CalculateEdgeHistogramKernelPy(E, V_label, -1.0)
 
 
 def CalculateVertexHistKernel(G):
     """Vertex Histogram Kernel"""
     E, V_label, _, _, _ = GetGKInput(G)
-    return gkCpy.CalculateHistogramKernelPy(E, V_label, -1.0, 1)
+    return gkCpy.CalculateVertexHistogramKernelPy(E, V_label, -1.0)
 
 
 def CalculateVertexEdgeHistKernel(G):
     """Vertex Edge Histogram Kernel"""
     E, V_label, _, _, _ = GetGKInput(G)
-    return gkCpy.CalculateHistogramKernelPy(E, V_label, -1.0, 2)
+    return gkCpy.CalculateVertexEdgeHistogramKernelPy(E, V_label, -1.0)
 
 
 # === RBF Kernels on Histograms ===
@@ -47,7 +47,7 @@ def CalculateEdgeHistGaussKernel(G, gamma=0.5):
         raise ValueError('gamma must be a positive scalar (float or integer)')
 
     E, V_label, _, _, _ = GetGKInput(G)
-    return gkCpy.CalculateHistogramKernelPy(E, V_label, float(gamma), 3)
+    return gkCpy.CalculateEdgeHistogramKernelPy(E, V_label, float(gamma))
 
 
 def CalculateVertexHistGaussKernel(G, gamma=0.5):
@@ -59,7 +59,7 @@ def CalculateVertexHistGaussKernel(G, gamma=0.5):
         raise ValueError('gamma must be a positive scalar (float or integer)')
 
     E, V_label, _, _, _ = GetGKInput(G)
-    return gkCpy.CalculateHistogramKernelPy(E, V_label, float(gamma), 4)
+    return gkCpy.CalculateVertexHistogramKernelPy(E, V_label, float(gamma))
 
 
 def CalculateVertexEdgeHistGaussKernel(G, gamma=0.5):
@@ -71,7 +71,7 @@ def CalculateVertexEdgeHistGaussKernel(G, gamma=0.5):
         raise ValueError('gamma must be a positive scalar (float or integer)')
 
     E, V_label, _, _, _ = GetGKInput(G)
-    return gkCpy.CalculateHistogramKernelPy(E, V_label, float(gamma), 5)
+    return gkCpy.CalculateVertexEdgeHistogramKernelPy(E, V_label, float(gamma))
 
 
 # === Compound Histogram Kernels ===
