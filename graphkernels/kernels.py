@@ -20,19 +20,19 @@ from .utilities import GetAdjMatList, GetGKInput
 def CalculateEdgeHistKernel(G):
     """Edge Histogram Kernel"""
     E, V_label, _, _, _ = GetGKInput(G)
-    return gkCpy.CalculateEdgeHistogramKernelPy(E, V_label, -1.0)
+    return gkCpy.CalculateEdgeHistogramKernelPy(E, V_label)
 
 
 def CalculateVertexHistKernel(G):
     """Vertex Histogram Kernel"""
     E, V_label, _, _, _ = GetGKInput(G)
-    return gkCpy.CalculateVertexHistogramKernelPy(E, V_label, -1.0)
+    return gkCpy.CalculateVertexHistogramKernelPy(E, V_label)
 
 
 def CalculateVertexEdgeHistKernel(G):
     """Vertex Edge Histogram Kernel"""
     E, V_label, _, _, _ = GetGKInput(G)
-    return gkCpy.CalculateVertexEdgeHistogramKernelPy(E, V_label, -1.0)
+    return gkCpy.CalculateVertexEdgeHistogramKernelPy(E, V_label)
 
 
 # === RBF Kernels on Histograms ===
