@@ -302,38 +302,41 @@ VectorXd countConnectedGraphletsThree(
 MatrixXd CalculateConnectedGraphletKernelThreePy(
         const vector<MatrixXi>& graph_adj_all,
         const vector<vector<vector<int>>>& graph_adjlist_all) {
-    auto freq_size = 2;
-    MatrixXd freq(graph_adjlist_all.size(), freq_size);
+    constexpr auto freq_size = 2;
+    MatrixXd freq(freq_size, graph_adjlist_all.size());
 
     for (auto i = 0; i < graph_adjlist_all.size(); ++i) {
-        freq.row(i) = countConnectedGraphletsThree(graph_adj_all[i],
+        freq.col(i) = countConnectedGraphletsThree(graph_adj_all[i],
                 graph_adjlist_all[i], freq_size);
     }
-    return freq * freq.transpose();
+
+    return freq.transpose() * freq;
 }
 
 MatrixXd CalculateConnectedGraphletKernelFourPy(
         const vector<MatrixXi>& graph_adj_all,
         const vector<vector<vector<int>>>& graph_adjlist_all) {
-    auto freq_size = 6;
-    MatrixXd freq(graph_adjlist_all.size(), freq_size);
+    constexpr auto freq_size = 6;
+    MatrixXd freq(freq_size, graph_adjlist_all.size());
 
     for (auto i = 0; i < graph_adjlist_all.size(); ++i) {
-        freq.row(i) = countConnectedGraphletsFour(graph_adj_all[i],
+        freq.col(i) = countConnectedGraphletsFour(graph_adj_all[i],
                 graph_adjlist_all[i], freq_size);
     }
-    return freq * freq.transpose();
+
+    return freq.transpose() * freq;
 }
 
 MatrixXd CalculateConnectedGraphletKernelFivePy(
         const vector<MatrixXi>& graph_adj_all,
         const vector<vector<vector<int>>>& graph_adjlist_all) {
-    auto freq_size = 21;
-    MatrixXd freq(graph_adjlist_all.size(), freq_size);
+    constexpr auto freq_size = 21;
+    MatrixXd freq(freq_size, graph_adjlist_all.size());
 
     for (auto i = 0; i < graph_adjlist_all.size(); ++i) {
-        freq.row(i) = countConnectedGraphletsFive(graph_adj_all[i],
+        freq.col(i) = countConnectedGraphletsFive(graph_adj_all[i],
                 graph_adjlist_all[i], freq_size);
     }
-    return freq * freq.transpose();
+
+    return freq.transpose() * freq;
 }

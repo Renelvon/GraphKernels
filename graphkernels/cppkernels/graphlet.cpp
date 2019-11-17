@@ -377,21 +377,21 @@ VectorXd countGraphletsThree(const vector<vector<int>>& al, int freq_size) {
 MatrixXd CalculateGraphletKernelThreePy(
         const vector<vector<vector<int>>>& graph_adjlist_all) {
     constexpr auto freq_size = 4;
-    MatrixXd freq(graph_adjlist_all.size(), freq_size);
+    MatrixXd freq(freq_size, graph_adjlist_all.size());
 
     for (auto i = 0; i < graph_adjlist_all.size(); ++i) {
-        freq.row(i) = countGraphletsThree(graph_adjlist_all[i], freq_size);
+        freq.col(i) = countGraphletsThree(graph_adjlist_all[i], freq_size);
     }
-    return freq * freq.transpose();
+    return freq.transpose() * freq;
 }
 
 MatrixXd CalculateGraphletKernelFourPy(
         vector<vector<vector<int>>>& graph_adjlist_all) {
     constexpr auto freq_size = 11;
-    MatrixXd freq(graph_adjlist_all.size(), freq_size);
+    MatrixXd freq(freq_size, graph_adjlist_all.size());
 
     for (auto i = 0; i < graph_adjlist_all.size(); ++i) {
-        freq.row(i) = countGraphletsFour(graph_adjlist_all[i], freq_size);
+        freq.col(i) = countGraphletsFour(graph_adjlist_all[i], freq_size);
     }
-    return freq * freq.transpose();
+    return freq.transpose() * freq;
 }
