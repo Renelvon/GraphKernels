@@ -44,12 +44,30 @@ auto productAdjacency(
     MatrixXi H = MatrixXi::Zero(map1.size(), map2.size());
 
     auto next_label = 0;
-    for (const auto& p1 : map1) {
-        for (const auto& p2 : map2) {
-            if (p1.first == p2.first) {
-                H(p1.second, p2.second) = next_label++;
+    const auto comp = [](const auto& p_a, const auto& p_b){
+        return p_a.first < p_b.first;
+    };
+
+    auto p = map2.cbegin();  // Memoize low limit (see below).
+    for (auto i1 = map1.cbegin(); i1 != map1.cend(); ) {
+        // Find range of map2 that contains vertices labelled "label1".
+        auto [eq_cbegin, eq_cend] = std::equal_range(p, map2.cend(), *i1, comp);
+
+        // Iterate over all equal values in map1.
+        const auto label1 = i1->first;
+        do {
+            const auto num1 = i1->second;
+
+            // Create all pairs between vertex of map1 and range of map2.
+            for (auto p = eq_cbegin; p != eq_cend; ++p) {
+                H(num1, p->second) = next_label++;
             }
-        }
+
+            ++i1;
+        } while (i1 != map1.cend() && i1->first == label1);
+
+        // All vertices with that label have been exhausted in both maps.
+        p = eq_cend;
     }
 
     // Step 2: Compute the adjacency matrix of the direct product graph.
