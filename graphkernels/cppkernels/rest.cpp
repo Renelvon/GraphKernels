@@ -17,8 +17,7 @@ using Eigen::MatrixXi;
 using Eigen::SparseMatrix;
 using Eigen::VectorXd;
 
-// compute the adjacency matrix Ax of the direct product graph (sparse)
-SparseMatrix<double> productAdjacency(
+auto productAdjacency(
         const MatrixXi& e1,
         const MatrixXi& e2,
         const vector<int>& v1_label,
