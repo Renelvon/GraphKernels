@@ -16,6 +16,9 @@ using Eigen::MatrixXi;
 using Eigen::SparseMatrix;
 using Eigen::VectorXd;
 
+constexpr auto FREQ_SIZE_3 = 2;
+constexpr auto FREQ_SIZE_4 = 6;
+constexpr auto FREQ_SIZE_5 = 21;
 
 void getMinValue(const MatrixXi& iam, const vector<int>& idx, vector<int>& sums) {
     SparseMatrix<int> am = iam.sparseView();
@@ -35,8 +38,7 @@ void getMinValue(const MatrixXi& iam, const vector<int>& idx, vector<int>& sums)
 
 VectorXd countConnectedGraphletsFive(
         const MatrixXi& am,
-        const vector<vector<int>>& al,
-        int freq_size) {
+        const vector<vector<int>>& al) {
     vector<double> w = {
         1.0 / 120.0, 1.0 / 72.0, 1.0 / 48.0, 1.0 / 36.0, 1.0 / 28.0, 1.0 / 20.0,
         1.0 / 14.0,  1.0 / 10.0, 1.0 / 12.0, 1.0 / 8.0,  1.0 / 8.0,  1.0 / 4.0,
@@ -44,7 +46,7 @@ VectorXd countConnectedGraphletsFive(
         0.0,         0.0,        0.0};
 
     const auto n = al.size();
-    VectorXd count_gr = VectorXd::Zero(freq_size);
+    VectorXd count_gr = VectorXd::Zero(FREQ_SIZE_5);
 
     vector<int> idx(5);
     vector<int> sums;
@@ -221,12 +223,11 @@ VectorXd countConnectedGraphletsFive(
 
 VectorXd countConnectedGraphletsFour(
         const MatrixXi& am,
-        const vector<vector<int>>& al,
-        int freq_size) {
+        const vector<vector<int>>& al) {
     vector<double> w = {1.0 / 24.0, 1.0 / 12.0, 1.0 / 4.0,
                         0.0,        1.0 / 8.0,  1.0 / 2.0};
 
-    VectorXd count_gr = VectorXd::Zero(freq_size);
+    VectorXd count_gr = VectorXd::Zero(FREQ_SIZE_4);
     const auto n = am.rows();
     for (auto i = 0; i < n; ++i) {
         for (auto&& j : al[i]) {
@@ -276,11 +277,10 @@ VectorXd countConnectedGraphletsFour(
 
 VectorXd countConnectedGraphletsThree(
         const MatrixXi& am,
-        const vector<vector<int>>& al,
-        int freq_size) {
+        const vector<vector<int>>& al) {
     vector<double> w = {1.0 / 2.0, 1.0 / 6.0};
 
-    VectorXd count_gr = VectorXd::Zero(freq_size);
+    VectorXd count_gr = VectorXd::Zero(FREQ_SIZE_3);
     const auto n = am.rows();
     for (auto i = 0; i < n; ++i) {
         for (auto&& j : al[i]) {
@@ -302,38 +302,38 @@ VectorXd countConnectedGraphletsThree(
 MatrixXd CalculateConnectedGraphletKernelThreePy(
         const vector<MatrixXi>& graph_adj_all,
         const vector<vector<vector<int>>>& graph_adjlist_all) {
-    auto freq_size = 2;
-    MatrixXd freq(graph_adjlist_all.size(), freq_size);
+    MatrixXd freq(FREQ_SIZE_3, graph_adjlist_all.size());
 
     for (auto i = 0; i < graph_adjlist_all.size(); ++i) {
-        freq.row(i) = countConnectedGraphletsThree(graph_adj_all[i],
-                graph_adjlist_all[i], freq_size);
+        freq.col(i) = countConnectedGraphletsThree(
+                graph_adj_all[i], graph_adjlist_all[i]);
     }
-    return freq * freq.transpose();
+
+    return freq.transpose() * freq;
 }
 
 MatrixXd CalculateConnectedGraphletKernelFourPy(
         const vector<MatrixXi>& graph_adj_all,
         const vector<vector<vector<int>>>& graph_adjlist_all) {
-    auto freq_size = 6;
-    MatrixXd freq(graph_adjlist_all.size(), freq_size);
+    MatrixXd freq(FREQ_SIZE_4, graph_adjlist_all.size());
 
     for (auto i = 0; i < graph_adjlist_all.size(); ++i) {
-        freq.row(i) = countConnectedGraphletsFour(graph_adj_all[i],
-                graph_adjlist_all[i], freq_size);
+        freq.col(i) = countConnectedGraphletsFour(
+                graph_adj_all[i], graph_adjlist_all[i]);
     }
-    return freq * freq.transpose();
+
+    return freq.transpose() * freq;
 }
 
 MatrixXd CalculateConnectedGraphletKernelFivePy(
         const vector<MatrixXi>& graph_adj_all,
         const vector<vector<vector<int>>>& graph_adjlist_all) {
-    auto freq_size = 21;
-    MatrixXd freq(graph_adjlist_all.size(), freq_size);
+    MatrixXd freq(FREQ_SIZE_5, graph_adjlist_all.size());
 
     for (auto i = 0; i < graph_adjlist_all.size(); ++i) {
-        freq.row(i) = countConnectedGraphletsFive(graph_adj_all[i],
-                graph_adjlist_all[i], freq_size);
+        freq.col(i) = countConnectedGraphletsFive(
+                graph_adj_all[i], graph_adjlist_all[i]);
     }
-    return freq * freq.transpose();
+
+    return freq.transpose() * freq;
 }

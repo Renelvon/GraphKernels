@@ -40,8 +40,6 @@ SparseMatrix<double> productAdjacency(
         H(p.first, p.second) = new_label++;
     }
 
-    SparseMatrix<double> Ax(new_label, new_label);
-
     vector<Eigen::Triplet<double>> v;
 
     for (auto i = 0; i < e1.rows(); ++i) {
@@ -70,7 +68,10 @@ SparseMatrix<double> productAdjacency(
             }
         }
     }
+
+    SparseMatrix<double> Ax(new_label, new_label);
     Ax.setFromTriplets(v.cbegin(), v.cend());
+
     return Ax;
 }
 
@@ -109,8 +110,8 @@ MatrixXd CalculateGeometricRandomWalkKernelPy(
         double eps) {
     MatrixXd K(V_label.size(), V_label.size());
 
-    for (auto i = 0; i < V_label.size(); ++i) {
-        for (auto j = i; j < V_label.size(); ++j) {
+    for (auto j = 0; j < V_label.size(); ++j) {
+        for (auto i = 0; i <= j; ++i) {
             K(i, j) = geometricRandomWalkKernel(
                     E[i], E[j], V_label[i], V_label[j], lambda,
                     max_iterations, eps);
@@ -138,8 +139,8 @@ MatrixXd CalculateExponentialRandomWalkKernelPy(
         double beta) {
     MatrixXd K(V_label.size(), V_label.size());
 
-    for (auto i = 0; i < V_label.size(); ++i) {
-        for (auto j = i; j < V_label.size(); ++j) {
+    for (auto j = 0; j < V_label.size(); ++j) {
+        for (auto i = 0; i <= j; ++i) {
             K(i, j) = exponentialRandomWalkKernel(
                     E[i], E[j], V_label[i], V_label[j], beta);
         }
@@ -180,8 +181,9 @@ MatrixXd CalculateKStepRandomWalkKernelPy(
         const vector<vector<int>>& V_label,
         const vector<double>& par) {
     MatrixXd K(V_label.size(), V_label.size());
-    for (auto i = 0; i < V_label.size(); ++i) {
-        for (auto j = i; j < V_label.size(); ++j) {
+
+    for (auto j = 0; j < V_label.size(); ++j) {
+        for (auto i = 0; i <= j; ++i) {
             K(i, j) = kstepRandomWalkKernel(
                     E[i], E[j], V_label[i], V_label[j], par);
         }
