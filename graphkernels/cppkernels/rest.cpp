@@ -31,19 +31,12 @@ auto order_by_labels(const vector<int>& labels) {
     return map;
 }
 
-auto productAdjacency(
-        const MatrixXi& e1,
-        const MatrixXi& e2,
-        const vector<int>& v1_label,
-        const vector<int>& v2_label) {
-    // Step 0: Order vertices by labels.
-    const auto map1 = order_by_labels(v1_label);
-    const auto map2 = order_by_labels(v2_label);
+auto compute_valid_vertex_pairs(
+        const vector<pair<int, int>>& map1,
+        const vector<pair<int, int>>& map2) {
+    vector<pair<int, int>> pairs;
+    pairs.reserve(map1.size() * map2.size());
 
-    // Step 1: Compute the vertex labels of the direct product graph.
-    MatrixXi H = MatrixXi::Zero(map1.size(), map2.size());
-
-    auto next_label = 0;
     const auto comp = [](const auto& p_a, const auto& p_b){
         return p_a.first < p_b.first;
     };
@@ -60,7 +53,7 @@ auto productAdjacency(
 
             // Create all pairs between vertex of map1 and range of map2.
             for (auto p = eq_cbegin; p != eq_cend; ++p) {
-                H(num1, p->second) = next_label++;
+                pairs.emplace_back(num1, p->second);
             }
 
             ++i1;
@@ -70,7 +63,30 @@ auto productAdjacency(
         p = eq_cend;
     }
 
-    // Step 2: Compute the adjacency matrix of the direct product graph.
+    return pairs;
+}
+
+auto productAdjacency(
+        const MatrixXi& e1,
+        const MatrixXi& e2,
+        const vector<int>& v1_label,
+        const vector<int>& v2_label) {
+    // Step 0: Order vertices by labels.
+    const auto map1 = order_by_labels(v1_label);
+    const auto map2 = order_by_labels(v2_label);
+
+    // Step 1: Compute all valid vertex pairs (vertices of product graph).
+    const auto pairs = compute_valid_vertex_pairs(map1, map2);
+
+    // Step 2: Compute new labels for vertices of the product graph.
+    MatrixXi H = MatrixXi::Zero(map1.size(), map2.size());
+
+    auto next_label = 0;
+    for (const auto& [v1, v2] : pairs) {
+        H(v1, v2) = next_label++;
+    }
+
+    // Step 3: Compute the adjacency matrix of the direct product graph.
     vector<Eigen::Triplet<double>> v;
     for (auto i = 0; i < e1.rows(); ++i) {
         const auto e1_s = e1(i, 0);
