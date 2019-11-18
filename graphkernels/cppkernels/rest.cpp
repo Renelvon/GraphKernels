@@ -40,8 +40,6 @@ SparseMatrix<double> productAdjacency(
         H(p.first, p.second) = new_label++;
     }
 
-    SparseMatrix<double> Ax(new_label, new_label);
-
     vector<Eigen::Triplet<double>> v;
 
     for (auto i = 0; i < e1.rows(); ++i) {
@@ -70,7 +68,10 @@ SparseMatrix<double> productAdjacency(
             }
         }
     }
+
+    SparseMatrix<double> Ax(new_label, new_label);
     Ax.setFromTriplets(v.cbegin(), v.cend());
+
     return Ax;
 }
 
