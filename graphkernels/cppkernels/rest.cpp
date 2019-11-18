@@ -18,31 +18,27 @@ using Eigen::MatrixXi;
 using Eigen::SparseMatrix;
 using Eigen::VectorXd;
 
+auto order_by_labels(const vector<int>& labels) {
+    vector<pair<int, int>> map;
+    map.reserve(labels.size());
+
+    auto idx = 0;
+    for (const auto label : labels) {
+        map.emplace_back(label, idx++);
+    }
+
+    sort(map.begin(), map.end());
+    return map;
+}
+
 auto productAdjacency(
         const MatrixXi& e1,
         const MatrixXi& e2,
         const vector<int>& v1_label,
         const vector<int>& v2_label) {
     // Step 0: Order vertices by labels.
-    vector<pair<int, int>> map1;
-    map1.reserve(v1_label.size());
-
-    auto idx = 0;
-    for (const auto label : v1_label) {
-        map1.emplace_back(label, idx++);
-    }
-
-    sort(map1.begin(), map1.end());
-
-    vector<pair<int, int>> map2;
-    map1.reserve(v2_label.size());
-
-    idx = 0;
-    for (const auto label : v2_label) {
-        map2.emplace_back(label, idx++);
-    }
-
-    sort(map1.begin(), map1.end());
+    const auto map1 = order_by_labels(v1_label);
+    const auto map2 = order_by_labels(v2_label);
 
     // Step 1: Compute the vertex labels of the direct product graph.
     MatrixXi H = MatrixXi::Zero(map1.size(), map2.size());
