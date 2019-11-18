@@ -72,15 +72,13 @@ auto productAdjacency(
         const MatrixXi& e2,
         const vector<int>& v1_label,
         const vector<int>& v2_label) {
-    // Step 0: Order vertices by labels.
-    const auto map1 = order_by_labels(v1_label);
-    const auto map2 = order_by_labels(v2_label);
-
-    // Step 1: Compute all valid vertex pairs (vertices of product graph).
-    const auto pairs = compute_valid_vertex_pairs(map1, map2);
+    // Step 1: Order vertices by labels; compute all valid vertex pairs
+    const auto pairs = compute_valid_vertex_pairs(
+            order_by_labels(v1_label),
+            order_by_labels(v2_label));
 
     // Step 2: Compute new labels for vertices of the product graph.
-    Eigen::Matrix<int, -1, -1, Eigen::RowMajor> H(map1.size(), map2.size());
+    Eigen::Matrix<int, -1, -1, Eigen::RowMajor> H(v1_label.size(), v2_label.size());
 
     auto next_label = 0;
     for (const auto& [v1, v2] : pairs) {
