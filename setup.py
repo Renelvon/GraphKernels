@@ -23,7 +23,7 @@ CPP_FLAGS = [
     '-g0',
     '-march=native',
     '-O3',
-    '-std=c++14',
+    '-std=c++17',
     '-Wall',
     '-Werror',
     '-Wextra',
