@@ -7,6 +7,7 @@
 #include <Eigen/Sparse>
 #include <unsupported/Eigen/MatrixFunctions>
 
+#include <algorithm>
 #include <utility>
 
 using std::vector;
@@ -22,25 +23,41 @@ auto productAdjacency(
         const MatrixXi& e2,
         const vector<int>& v1_label,
         const vector<int>& v2_label) {
-    // store each valid vertex pair (v_1, v_2) in a vector
-    vector<pair<int, int>> pairs;
-    for (auto i = 0; i < v1_label.size(); ++i) {
-        for (auto j = 0; j < v2_label.size(); ++j) {
-            if (v1_label[i] == v2_label[j]) {
-                pairs.emplace_back(i, j);
+    // Step 0: Order vertices by labels.
+    vector<pair<int, int>> map1;
+    map1.reserve(v1_label.size());
+
+    auto idx = 0;
+    for (const auto label : v1_label) {
+        map1.emplace_back(label, idx++);
+    }
+
+    sort(map1.begin(), map1.end());
+
+    vector<pair<int, int>> map2;
+    map1.reserve(v2_label.size());
+
+    idx = 0;
+    for (const auto label : v2_label) {
+        map2.emplace_back(label, idx++);
+    }
+
+    sort(map1.begin(), map1.end());
+
+    // Step 1: Compute the vertex labels of the direct product graph.
+    MatrixXi H = MatrixXi::Zero(map1.size(), map2.size());
+
+    auto next_label = 0;
+    for (const auto& p1 : map1) {
+        for (const auto& p2 : map2) {
+            if (p1.first == p2.first) {
+                H(p1.second, p2.second) = next_label++;
             }
         }
     }
 
-    MatrixXi H = MatrixXi::Zero(v1_label.size(), v2_label.size());
-
-    auto new_label = 0;
-    for (const auto& p : pairs) {
-        H(p.first, p.second) = new_label++;
-    }
-
+    // Step 2: Compute the adjacency matrix of the direct product graph.
     vector<Eigen::Triplet<double>> v;
-
     for (auto i = 0; i < e1.rows(); ++i) {
         const auto e1_s = e1(i, 0);
         const auto e1_t = e1(i, 1);
@@ -68,7 +85,7 @@ auto productAdjacency(
         }
     }
 
-    SparseMatrix<double> Ax(new_label, new_label);
+    SparseMatrix<double> Ax(next_label, next_label);
     Ax.setFromTriplets(v.cbegin(), v.cend());
 
     return Ax;
