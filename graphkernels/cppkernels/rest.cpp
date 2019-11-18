@@ -63,6 +63,7 @@ auto compute_valid_vertex_pairs(
         p = eq_cend;
     }
 
+    sort(pairs.begin(), pairs.end());
     return pairs;
 }
 
@@ -79,7 +80,7 @@ auto productAdjacency(
     const auto pairs = compute_valid_vertex_pairs(map1, map2);
 
     // Step 2: Compute new labels for vertices of the product graph.
-    MatrixXi H = MatrixXi::Zero(map1.size(), map2.size());
+    Eigen::Matrix<int, -1, -1, Eigen::RowMajor> H(map1.size(), map2.size());
 
     auto next_label = 0;
     for (const auto& [v1, v2] : pairs) {
