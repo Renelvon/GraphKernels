@@ -196,10 +196,10 @@ VectorXd countConnectedGraphletsFive(
             }
         }
         // count graphlets of type 19 and 21
-        for (auto m = 3 - 0; m < al[i].size(); ++m) {
-            for (auto l = m - 1; l < al[i].size(); ++l) {
-                for (auto k = l - 1; k < al[i].size(); ++k) {
-                    for (auto j = k - 1; j < al[i].size(); ++j) {
+        for (auto m = al[i].size(); m-- > 3;) {
+            for (auto l = m; l-- > 2;) {
+                for (auto k = l; k-- > 1;) {
+                    for (auto j = k; j-- > 0;) {
                         auto aux =
                             am.coeff(al[i][j], al[i][k]) +
                             am.coeff(al[i][j], al[i][l]) +
@@ -259,9 +259,9 @@ VectorXd countConnectedGraphletsFour(
         }
 
         // count "stars"
-        for (auto l = 2 - 0; l < al[i].size(); ++l) {
-            for (auto k = l - 1; k < al[i].size(); ++k) {
-                for (auto j = k - 1; j < al[i].size(); ++j) {
+        for (auto l = al[i].size(); l-- > 2;) {
+            for (auto k = l; k-- > 1;) {
+                for (auto j = k; j-- > 0;) {
                     if (am.coeff(al[i][j], al[i][k]) == 0 &&
                             am.coeff(al[i][j], al[i][l]) == 0 &&
                             am.coeff(al[i][k], al[i][l]) == 0) {
