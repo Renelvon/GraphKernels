@@ -7,6 +7,7 @@
 #include <Eigen/Sparse>
 #include <unsupported/Eigen/MatrixFunctions>
 
+#include <algorithm>
 #include <utility>
 
 using std::vector;
@@ -17,31 +18,75 @@ using Eigen::MatrixXi;
 using Eigen::SparseMatrix;
 using Eigen::VectorXd;
 
-// compute the adjacency matrix Ax of the direct product graph (sparse)
-SparseMatrix<double> productAdjacency(
+auto order_by_labels(const vector<int>& labels) {
+    vector<pair<int, int>> map;
+    map.reserve(labels.size());
+
+    auto idx = 0;
+    for (const auto label : labels) {
+        map.emplace_back(label, idx++);
+    }
+
+    sort(map.begin(), map.end());
+    return map;
+}
+
+auto compute_valid_vertex_pairs(
+        const vector<pair<int, int>>& map1,
+        const vector<pair<int, int>>& map2) {
+    vector<pair<int, int>> pairs;
+    pairs.reserve(map1.size() * map2.size());
+
+    const auto comp = [](const auto& p_a, const auto& p_b){
+        return p_a.first < p_b.first;
+    };
+
+    auto p = map2.cbegin();  // Memoize low limit (see below).
+    for (auto i1 = map1.cbegin(); i1 != map1.cend(); ) {
+        // Find range of map2 that contains vertices labelled "label1".
+        auto [eq_cbegin, eq_cend] = std::equal_range(p, map2.cend(), *i1, comp);
+
+        // Iterate over all equal values in map1.
+        const auto label1 = i1->first;
+        do {
+            const auto num1 = i1->second;
+
+            // Create all pairs between vertex of map1 and range of map2.
+            for (auto p = eq_cbegin; p != eq_cend; ++p) {
+                pairs.emplace_back(num1, p->second);
+            }
+
+            ++i1;
+        } while (i1 != map1.cend() && i1->first == label1);
+
+        // All vertices with that label have been exhausted in both maps.
+        p = eq_cend;
+    }
+
+    sort(pairs.begin(), pairs.end());
+    return pairs;
+}
+
+auto productAdjacency(
         const MatrixXi& e1,
         const MatrixXi& e2,
         const vector<int>& v1_label,
         const vector<int>& v2_label) {
-    // store each valid vertex pair (v_1, v_2) in a vector
-    vector<pair<int, int>> pairs;
-    for (auto i = 0; i < v1_label.size(); ++i) {
-        for (auto j = 0; j < v2_label.size(); ++j) {
-            if (v1_label[i] == v2_label[j]) {
-                pairs.emplace_back(i, j);
-            }
-        }
+    // Step 1: Order vertices by labels; compute all valid vertex pairs
+    const auto pairs = compute_valid_vertex_pairs(
+            order_by_labels(v1_label),
+            order_by_labels(v2_label));
+
+    // Step 2: Compute new labels for vertices of the product graph.
+    Eigen::Matrix<int, -1, -1, Eigen::RowMajor> H(v1_label.size(), v2_label.size());
+
+    auto next_label = 0;
+    for (const auto& [v1, v2] : pairs) {
+        H(v1, v2) = next_label++;
     }
 
-    MatrixXi H = MatrixXi::Zero(v1_label.size(), v2_label.size());
-
-    auto new_label = 0;
-    for (const auto& p : pairs) {
-        H(p.first, p.second) = new_label++;
-    }
-
+    // Step 3: Compute the adjacency matrix of the direct product graph.
     vector<Eigen::Triplet<double>> v;
-
     for (auto i = 0; i < e1.rows(); ++i) {
         const auto e1_s = e1(i, 0);
         const auto e1_t = e1(i, 1);
@@ -69,7 +114,7 @@ SparseMatrix<double> productAdjacency(
         }
     }
 
-    SparseMatrix<double> Ax(new_label, new_label);
+    SparseMatrix<double> Ax(next_label, next_label);
     Ax.setFromTriplets(v.cbegin(), v.cend());
 
     return Ax;
