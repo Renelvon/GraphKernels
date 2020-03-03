@@ -92,10 +92,12 @@ def GetAdjMatList(G):
 
         al_cur = np.asarray(graph.get_adjlist())  # adjacency list of i-th graph
 
-        for j in range(len(al_cur)):
-            al_cur[j] = gkCpy.IntVector(al_cur[j])
-
-        adj_list.append(gkCpy.IntIntVector(al_cur))
+        vs = gkCpy.IntIntVector()
+        for neighbours in al_cur:
+            if isinstance(neighbours, np.ndarray):
+                neighbours = neighbours.reshape(-1).tolist()
+            vs.append(gkCpy.IntVector(neighbours))
+        adj_list.append(vs)
 
     return adj_mat, adj_list
 
